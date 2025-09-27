@@ -24,6 +24,15 @@ import JavaScriptCore
 }
 
 // MARK: - HammerTimer
+@objc extension Timer: @retroactive JSExport {}
+@objc extension Timer: @MainActor HammerTimerExports {
+    @objc nonisolated open override var description: String {
+        "lol"
+    }
+    @objc func start() {}
+    @objc func stop() {}
+}
+
 @objc class HammerTimer: NSObject, HammerTimerExports {
     let id: UUID = UUID()
     var timer: Timer?
@@ -51,7 +60,7 @@ import JavaScriptCore
                                      userInfo: nil,
                                      repeats: true)
         if let timer {
-            RunLoop.current.add(timer, forMode: .common) // ensure in common modes
+            RunLoop.current.add(timer, forMode: .common)
         }
     }
 
@@ -98,5 +107,36 @@ import JavaScriptCore
         }
         timer.start()
         return timer
+    }
+}
+
+@objc protocol HSTimerAPI: JSExport {
+    @objc(every::)
+    func every(_ interval: Double, block: JSValue) -> Timer
+    @objc func clear()
+}
+
+@objc class HSTimer: NSObject, HammerspoonModule, HSTimerAPI {
+    @objc var name = "Timer"
+    var timers: [Timer] = []
+
+    @objc func every(_ interval: Double, block: JSValue) -> Timer {
+        let timer = Timer.scheduledTimer(timeInterval: interval,
+                                         target: self,
+                                         selector: #selector(timerDidFire(_:)),
+                                         userInfo: nil,
+                                         repeats: true)
+        RunLoop.current.add(timer, forMode: .common)
+        return timer
+    }
+
+    @objc private func timerDidFire(_ someTimer: Timer) {
+        print("*** scheduledTimer block fired")
+//        block(someTimer)
+    }
+
+    @objc func clear() {
+        timers.forEach { $0.invalidate() }
+        timers = []
     }
 }

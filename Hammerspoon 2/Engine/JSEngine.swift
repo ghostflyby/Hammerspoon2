@@ -8,52 +8,31 @@
 import Foundation
 import JavaScriptCore
 
-// MARK: - Test Harness
-
-func runJSCTest() {
-    let engine = JSEngine.shared
-    try? engine.createContext()
-
-    // Inject TimerManager
-    let timerManager = HammerTimerManager()
-    engine.context?.setObject(timerManager, forKeyedSubscript: "timerManager" as (NSCopying & NSObjectProtocol))
-
-    // JS Script
-    let script = """
-    console.log("I AM JAVASCRIPT, WATCH ME RUN");
-    console.log("Manager: " + timerManager.description);
-    var timer = timerManager.every(2, function(timer) {
-        console.log("I AM IN THE TIMER: " + timer);
-    });
-    console.log("Timer scheduled: " + timer.description);
-    """
-
-    // Execute the JS code
-    engine.context?.evaluateScript(script)
-
-    print("*** DONE WITH JSCTEST: \(String(describing: engine.context?.exception)) ***")
+@objc protocol HammerspoonModule: JSExport {
+    @objc var name: String { get }
 }
 
 class JSEngine {
     static let shared = JSEngine()
 
-    var vm: JSVirtualMachine?
-    var context: JSContext?
+    var id = UUID()
+    private var vm: JSVirtualMachine?
+    private var context: JSContext?
 
-    func createContext() throws(HammerspoonError) {
-        vm = JSVirtualMachine()
-        guard vm != nil else {
-            throw HammerspoonError(.vmCreation, msg: "Unknown error (vm)")
+    subscript(key: String) -> Any? {
+        get {
+            context?.objectForKeyedSubscript(key as (NSCopying & NSObjectProtocol))
         }
-
-        context = JSContext(virtualMachine: vm)
-        guard context != nil else {
-            throw HammerspoonError(.vmCreation, msg: "Unknown error (context)")
+        set {
+            context?.setObject(newValue, forKeyedSubscript: key as (NSCopying & NSObjectProtocol))
         }
-
-        injectLogging()
     }
 
+    @discardableResult func eval(_ script: String) -> Any? {
+        return context?.evaluateScript(script)?.toObject()
+    }
+
+    // MARK: - Log handling
     func injectLogging() {
         // Provide console.log
         let consoleLog: @convention(block) (Any?) -> Void = { message in
@@ -70,15 +49,55 @@ class JSEngine {
         }
     }
 
+    // MARK: - JSContext Managing
+    func createContext() throws(HammerspoonError) {
+        AKTrace("createContext()")
+        vm = JSVirtualMachine()
+        guard vm != nil else {
+            throw HammerspoonError(.vmCreation, msg: "Unknown error (vm)")
+        }
+
+        context = JSContext(virtualMachine: vm)
+        guard context != nil else {
+            throw HammerspoonError(.vmCreation, msg: "Unknown error (context)")
+        }
+
+        context?.name = "Hammerspoon \(id)"
+        injectLogging()
+        injectModules()
+    }
+
     func deleteContext() {
+        AKTrace("deleteContext()")
         // FIXME: This will need to go through and cleanup any resources currently held by our modules
         context = nil
         vm = nil
     }
 
     func resetContext() throws {
+        AKTrace("resetContext()")
         deleteContext()
         try createContext()
+    }
+
+    // MARK: - Module registration
+    func register(_ name: String, object: any HammerspoonModule) {
+        guard self[name] == nil else {
+            AKError("Module '\(name)' already registered")
+            return
+        }
+
+        self[name] = object
+    }
+
+    func injectModules() {
+        let modules = [
+            "timer": HSTimer()
+        ]
+
+        for (module, object) in modules {
+            register(module, object: object)
+        }
     }
 }
 
