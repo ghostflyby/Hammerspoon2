@@ -8,10 +8,6 @@
 import Foundation
 import JavaScriptCore
 
-@objc protocol HammerspoonModule: JSExport {
-    @objc var name: String { get }
-}
-
 class JSEngine {
     static let shared = JSEngine()
 
@@ -21,9 +17,11 @@ class JSEngine {
 
     subscript(key: String) -> Any? {
         get {
-            context?.objectForKeyedSubscript(key as (NSCopying & NSObjectProtocol))
+            AKTrace("JSEngine subscript get for: \(key)")
+            return context?.objectForKeyedSubscript(key as (NSCopying & NSObjectProtocol))
         }
         set {
+            AKTrace("JSEngine subscript set for: \(key)")
             context?.setObject(newValue, forKeyedSubscript: key as (NSCopying & NSObjectProtocol))
         }
     }
@@ -64,7 +62,7 @@ class JSEngine {
 
         context?.name = "Hammerspoon \(id)"
         injectLogging()
-        injectModules()
+        self["hs"] = ModuleRoot()
     }
 
     func deleteContext() {
@@ -78,26 +76,6 @@ class JSEngine {
         AKTrace("resetContext()")
         deleteContext()
         try createContext()
-    }
-
-    // MARK: - Module registration
-    func register(_ name: String, object: any HammerspoonModule) {
-        guard self[name] == nil else {
-            AKError("Module '\(name)' already registered")
-            return
-        }
-
-        self[name] = object
-    }
-
-    func injectModules() {
-        let modules = [
-            "timer": HSTimer()
-        ]
-
-        for (module, object) in modules {
-            register(module, object: object)
-        }
     }
 }
 

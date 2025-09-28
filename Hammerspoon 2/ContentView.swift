@@ -20,9 +20,11 @@ func runJSCTest() {
     // JS Script
     let script = """
     console.log("I AM JAVASCRIPT, WATCH ME RUN");
-    console.log("Manager: " + timer);
-    console.log("Name: " + timer.name);
-    var timer = timer.every(2, function(timer) {
+    console.log("Root: " + hs);
+    console.log("Timer Module (subscript): " + hs["timer"]);
+    console.log("Timer Module (property): " + hs.timer);
+    console.log("Name: " + hs.timer.name);
+    var timer = hs.timer.every(2, function(timer) {
         console.log("I AM IN THE TIMER: " + timer);
     });
     console.log("Timer scheduled: " + timer.description);
