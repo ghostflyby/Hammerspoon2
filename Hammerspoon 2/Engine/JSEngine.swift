@@ -30,6 +30,11 @@ class JSEngine {
         return context?.evaluateScript(script)?.toObject()
     }
 
+    @discardableResult func evalFromURL(_ url: URL) throws -> Any? {
+        let script = try String(contentsOf: url, encoding: .utf8)
+        return eval(script)
+    }
+
     // MARK: - Log handling
     func injectLogging() {
         // Provide console.log
@@ -68,14 +73,21 @@ class JSEngine {
     func deleteContext() {
         AKTrace("deleteContext()")
         // FIXME: This will need to go through and cleanup any resources currently held by our modules
+        // FIXME: This method also needs to be aware if a partial-context exists, e.g. vm is !nil, but context is nil
         context = nil
         vm = nil
     }
 
     func resetContext() throws {
-        AKTrace("resetContext()")
-        deleteContext()
+        if hasContext() {
+            AKTrace("resetContext()")
+            deleteContext()
+        }
         try createContext()
+    }
+
+    func hasContext() -> Bool {
+        return vm != nil || context != nil
     }
 }
 

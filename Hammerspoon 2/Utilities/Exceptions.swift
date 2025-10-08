@@ -10,6 +10,7 @@ import Foundation
 struct HammerspoonError: Error, Equatable, CustomLocalizedStringResourceConvertible {
     enum ErrorKind: String {
         case vmCreation = "Creating JS VM"
+        case initNotFound = "init.js not found"
         case unknown = "Unknown"
     }
 

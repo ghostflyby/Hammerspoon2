@@ -9,9 +9,13 @@ import SwiftUI
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
-        AKTrace("applicationDidFinishLaunching")
-        let engine = JSEngine.shared
-        try? engine.createContext()
+        AKTrace("applicationDidFinishLaunching: Creating/booting shared manager")
+        let managerManager = ManagerManager.shared
+        do {
+            try managerManager.boot()
+        } catch {
+            fatalError(error.localizedDescription)
+        }
     }
 }
 
@@ -27,5 +31,6 @@ struct Hammerspoon_2App: App {
         Window("Console", id: "console") {
             ConsoleView()
         }
+        .restorationBehavior(.disabled)
     }
 }
