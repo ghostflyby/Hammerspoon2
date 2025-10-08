@@ -24,7 +24,7 @@ struct Hammerspoon_2App: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {
-        WindowGroup {
+        Window("Content", id: "content") {
             ContentView()
         }
 
@@ -32,5 +32,6 @@ struct Hammerspoon_2App: App {
             ConsoleView()
         }
         .restorationBehavior(.disabled)
+        .handlesExternalEvents(matching: ["openConsole", "closeConsole"])
     }
 }

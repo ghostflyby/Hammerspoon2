@@ -14,6 +14,8 @@ struct ConsoleView: View {
     @State var searchString: String = ""
     @State var searchPresented: Bool = false
 
+    @Environment(\.dismissWindow) var dismissWindow
+
     @AppStorage("minimumLogLevel") var minimumLogLevel: HammerspoonLogType = .Trace
 
     func styleForLogType(_ logType: HammerspoonLogType) -> any ShapeStyle {
@@ -76,6 +78,26 @@ struct ConsoleView: View {
             }
         }
         .searchable(text: $searchString, isPresented: $searchPresented)
+        .handlesExternalEvents(preferring: ["closeConsole"], allowing: [])
+        .onOpenURL { url in
+            if let command = url.host(percentEncoded: false) {
+                switch command {
+                case "openConsole":
+                    // This is handled by SwiftUI for us
+                    AKTrace("Ignoring openConsole")
+                    break
+                case "closeConsole":
+                    AKTrace("Handling closeConsole")
+                    Task { @MainActor in
+                        dismissWindow(id: "console")
+                    }
+                default:
+                    AKError("Unknown command: \(command)")
+                }
+            } else {
+                AKError("Unknown console event: \(url)")
+            }
+        }
     }
 }
 
