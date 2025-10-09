@@ -28,7 +28,7 @@ enum HammerspoonLogType: Int, CaseIterable, Identifiable {
         case .Error:
             return "Error"
         case .Console:
-            return "JS"
+            return "JavaScript"
         }
     }
 }
