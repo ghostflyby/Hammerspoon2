@@ -57,5 +57,9 @@ struct Hammerspoon_2App: App {
         }
         .restorationBehavior(.disabled)
         .handlesExternalEvents(matching: ["openConsole", "closeConsole"])
+
+        Settings() {
+            SettingsView()
+        }
     }
 }
