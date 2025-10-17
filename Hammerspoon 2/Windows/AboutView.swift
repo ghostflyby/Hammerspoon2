@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@_documentation(visibility: private)
 struct AboutView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     private var glowColor = Color(red: 0.984, green: 0.537, blue: 0.122, opacity: 0.6) // FB891F

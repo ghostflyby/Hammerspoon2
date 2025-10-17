@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+@_documentation(visibility: private)
 @Observable
 final class SettingsManager {
     static let shared = SettingsManager()

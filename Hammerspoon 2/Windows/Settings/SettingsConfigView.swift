@@ -8,11 +8,13 @@
 import SwiftUI
 import Sparkle
 
+@_documentation(visibility: private)
 enum ConfigFilePickerValues: String, CaseIterable, Identifiable {
     case url, select
     var id: Self { self }
 }
 
+@_documentation(visibility: private)
 struct SettingsConfigView: View {
     @State private var settingsManager = SettingsManager.shared
     @State private var configFilePicker: ConfigFilePickerValues = .url

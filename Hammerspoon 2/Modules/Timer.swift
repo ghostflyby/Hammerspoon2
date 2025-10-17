@@ -116,6 +116,7 @@ import JavaScriptCore
     @objc func clear()
 }
 
+@_documentation(visibility: private)
 @objc class HSTimer: NSObject, HSModule, HSTimerAPI {
     @objc var name = "Timer"
     var timers: [Timer:JSValue] = [:]

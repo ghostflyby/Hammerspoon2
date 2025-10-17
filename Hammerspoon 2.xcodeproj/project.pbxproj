@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4F488B302E97E79800A2B5F4 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 4F488B2F2E97E79800A2B5F4 /* Sparkle */; };
+		4FE3BB342EA301AE00C56330 /* JavaScript API.docc in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3BB332EA301AE00C56330 /* JavaScript API.docc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,6 +24,7 @@
 /* Begin PBXFileReference section */
 		4F5641832E8333830099EB4C /* Hammerspoon 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Hammerspoon 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F5641902E8333840099EB4C /* Hammerspoon 2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Hammerspoon 2Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FE3BB332EA301AE00C56330 /* JavaScript API.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = "JavaScript API.docc"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -60,6 +62,7 @@
 		4F56417A2E8333830099EB4C = {
 			isa = PBXGroup;
 			children = (
+				4FE3BB332EA301AE00C56330 /* JavaScript API.docc */,
 				4F5641852E8333830099EB4C /* Hammerspoon 2 */,
 				4F5641932E8333840099EB4C /* Hammerspoon 2Tests */,
 				4F5641842E8333830099EB4C /* Products */,
@@ -188,6 +191,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FE3BB342EA301AE00C56330 /* JavaScript API.docc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

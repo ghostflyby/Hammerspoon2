@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@_documentation(visibility: private)
 struct SettingsView: View {
     @State private var settingsManager = SettingsManager.shared
     @Environment(\.dismiss) var dismiss

@@ -26,9 +26,13 @@ import AppKit
     /// - Parameter pid: The PID to search for
     /// - Returns: The matching application, or nil if none matched
     @objc func matchingPID(_ pid: Int) -> NSRunningApplication?
+    /// Fetch the currently focused application
+    /// - Returns: The matching application, or nil if none matched
+    @objc func frontmost() -> NSRunningApplication?
 }
 // hs.application.matchingName("lol")
 
+@_documentation(visibility: private)
 @objc class HSApplications: NSObject, HSModule, HSApplicationsAPI {
     @objc var name = "Applications"
 
@@ -54,6 +58,10 @@ import AppKit
     @objc func matchingPID(_ pid: Int) -> NSRunningApplication? {
         let apps = NSWorkspace.shared.runningApplications
         return apps.first(where: { $0.processIdentifier == pid })
+    }
+
+    @objc func frontmost() -> NSRunningApplication? {
+        return NSWorkspace.shared.frontmostApplication
     }
 }
 

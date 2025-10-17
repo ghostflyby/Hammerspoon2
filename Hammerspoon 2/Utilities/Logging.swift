@@ -9,6 +9,7 @@ import Foundation
 import Synchronization
 import os
 
+@_documentation(visibility: private)
 enum HammerspoonLogType: Int, CaseIterable, Identifiable {
     case Trace = 0
     case Info
@@ -33,6 +34,7 @@ enum HammerspoonLogType: Int, CaseIterable, Identifiable {
     }
 }
 
+@_documentation(visibility: private)
 struct HammerspoonLogEntry: Identifiable, Equatable, Hashable {
     let id = UUID()
     let date = Date()
@@ -46,6 +48,7 @@ struct HammerspoonLogEntry: Identifiable, Equatable, Hashable {
     }
 }
 
+@_documentation(visibility: private)
 extension Logger {
     /// Using your bundle identifier is a great way to ensure a unique identifier.
     private static let subsystem = Bundle.main.bundleIdentifier!
@@ -54,6 +57,7 @@ extension Logger {
     static let Hammerspoon = Logger(subsystem: subsystem, category: "Hammerspoon")
 }
 
+@_documentation(visibility: private)
 @Observable
 @MainActor
 final class HammerspoonLog: Sendable {
@@ -74,32 +78,38 @@ final class HammerspoonLog: Sendable {
     }
 }
 
+@_documentation(visibility: private)
 func AKLog(_ level: HammerspoonLogType, _ msg: String) {
     Task { @MainActor in
         HammerspoonLog.shared.log(level, msg)
     }
 }
 
+@_documentation(visibility: private)
 func AKInfo(_ msg: String) {
     Logger.Hammerspoon.info("\(msg)")
     AKLog(.Info, msg)
 }
 
+@_documentation(visibility: private)
 func AKWarning(_ msg: String) {
     Logger.Hammerspoon.warning("\(msg)")
     AKLog(.Warning, msg)
 }
 
+@_documentation(visibility: private)
 func AKError(_ msg: String) {
     Logger.Hammerspoon.error("\(msg)")
     AKLog(.Error, msg)
 }
 
+@_documentation(visibility: private)
 func AKTrace(_ msg: String) {
     Logger.Hammerspoon.debug("\(msg)")
     AKLog(.Trace, msg)
 }
 
+@_documentation(visibility: private)
 func AKConsole(_ msg: String) {
     Logger.Hammerspoon.info("JS Console: \(msg)")
     AKLog(.Console, msg)

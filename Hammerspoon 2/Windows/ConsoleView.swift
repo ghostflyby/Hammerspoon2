@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@_documentation(visibility: private)
 struct ConsoleView: View {
     @State var logs = HammerspoonLog.shared
 

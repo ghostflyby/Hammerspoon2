@@ -14,6 +14,7 @@ import AppKit
     @objc func close()
 }
 
+@_documentation(visibility: private)
 @objc class HSConsole: NSObject, HSModule, HSConsoleAPI {
     @objc var name = "Console"
 

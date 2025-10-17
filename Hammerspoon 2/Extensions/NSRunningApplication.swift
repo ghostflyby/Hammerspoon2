@@ -10,14 +10,11 @@ import JavaScriptCore
 import Cocoa
 
 /// API provided by NSRunningApplication objects
+@_documentation(visibility: private)
 @objc protocol NSRunningApplicationExports: JSExport {
-    // MARK: - Hammerspoon provided API
-    /// POSIX Process Identifier
     @objc var pid: Int { get }
-    /// Bundle Identifier (e.g. com.apple.Safari)
     @objc var bundleID: String? { get }
 
-    // MARK: - macOS provided API
     @objc var isHidden: Bool { get }
     @objc var isActive: Bool { get }
 
@@ -25,7 +22,10 @@ import Cocoa
     @objc func unhide() -> Bool
 }
 
+@_documentation(visibility: private)
 @objc extension NSRunningApplication: @retroactive JSExport {}
+
+@_documentation(visibility: private)
 @objc extension NSRunningApplication: @MainActor NSRunningApplicationExports {
     @objc var pid: Int { Int(self.processIdentifier) }
     @objc var bundleID: String? { self.bundleIdentifier }

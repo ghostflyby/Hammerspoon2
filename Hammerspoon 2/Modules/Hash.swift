@@ -13,6 +13,7 @@ import JavaScriptCore
     @objc func base64Decode(raw: String) -> String?
 }
 
+@_documentation(visibility: private)
 @objc class HSHashing: NSObject, HSModule, HSHashingAPI {
     @objc var name = "Hashing"
 

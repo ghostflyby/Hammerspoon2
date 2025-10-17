@@ -7,6 +7,7 @@
 
 import Foundation
 
+@_documentation(visibility: private)
 struct HammerspoonError: Error, Equatable, CustomLocalizedStringResourceConvertible {
     enum ErrorKind: String {
         case vmCreation = "Creating JS VM"

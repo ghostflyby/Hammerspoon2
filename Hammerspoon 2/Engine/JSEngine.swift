@@ -8,6 +8,7 @@
 import Foundation
 import JavaScriptCore
 
+@_documentation(visibility: private)
 class JSEngine {
     static let shared = JSEngine()
 

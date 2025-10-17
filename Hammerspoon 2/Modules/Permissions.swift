@@ -13,6 +13,7 @@ import JavaScriptCore
     @objc func requestAccessibility()
 }
 
+@_documentation(visibility: private)
 @objc class HSPermissions: NSObject, HSModule, HSPermissionsAPI {
     @objc var name = "Permissions"
 

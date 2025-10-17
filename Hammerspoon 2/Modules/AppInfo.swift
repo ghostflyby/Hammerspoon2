@@ -18,6 +18,7 @@ import JavaScriptCore
     @objc var bundleIdentifier: String { get }
 }
 
+@_documentation(visibility: private)
 @objc class HSAppInfo: NSObject, HSModule, HSAppInfoAPI {
     @objc var name = "AppInfo"
 

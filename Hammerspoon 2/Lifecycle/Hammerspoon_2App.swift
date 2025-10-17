@@ -8,6 +8,7 @@
 import SwiftUI
 import Sparkle
 
+@_documentation(visibility: private)
 class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         AKTrace("applicationDidFinishLaunching: Creating/booting shared manager")
@@ -20,6 +21,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 
+@_documentation(visibility: private)
 @main
 struct Hammerspoon_2App: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate

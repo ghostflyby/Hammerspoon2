@@ -8,6 +8,7 @@
 import Foundation
 import AppKit
 
+@_documentation(visibility: private)
 class ManagerManager {
     static let shared = ManagerManager()
 

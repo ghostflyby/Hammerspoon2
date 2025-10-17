@@ -8,6 +8,7 @@
 import SwiftUI
 import Sparkle
 
+@_documentation(visibility: private)
 struct SettingsAdvancedView: View {
     @State private var settingsManager = SettingsManager.shared
     @State private var hiddenTrigger: Bool = false // FIXME: This is an ugly hack to make the Sparkle binding below update the UI correctly.

@@ -9,6 +9,7 @@ import SwiftUI
 
 // MARK: - Test Harness
 
+@_documentation(visibility: private)
 func runJSCTest() {
     let engine = JSEngine.shared
 //    try? engine.createContext()
@@ -37,6 +38,7 @@ func runJSCTest() {
     print("*** DONE WITH JSCTEST ***")
 }
 
+@_documentation(visibility: private)
 struct ContentView: View {
     var body: some View {
         VStack {

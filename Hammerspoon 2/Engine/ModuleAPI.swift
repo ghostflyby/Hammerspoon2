@@ -8,6 +8,7 @@
 import Foundation
 import JavaScriptCore
 
+@_documentation(visibility: private)
 @objc protocol HSModule: JSExport {
     @objc var name: String { get }
     init()

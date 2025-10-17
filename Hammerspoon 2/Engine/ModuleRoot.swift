@@ -8,6 +8,7 @@
 import Foundation
 import JavaScriptCore
 
+@_documentation(visibility: private)
 @objc protocol ModuleRootAPI: JSExport {
     @objc var appInfo: HSAppInfo { get }
     @objc var application: HSApplications { get }
@@ -18,6 +19,7 @@ import JavaScriptCore
     @objc var window: HSWindows { get }
 }
 
+@_documentation(visibility: private)
 @objc class ModuleRoot: NSObject, ModuleRootAPI {
     @objc var modules: [String: any HSModule] = [:]
 
