@@ -14,10 +14,11 @@ import JavaScriptCore
 }
 
 @_documentation(visibility: private)
-@objc class HSHashing: NSObject, HSModule, HSHashingAPI {
-    @objc var name = "Hashing"
-
-    required override init() {}
+@objc class HSHashing: HSModule, HSHashingAPI {
+    required init() {
+        super.init()
+        self.name = "hs.hash"
+    }
 
     @objc func base64Encode(raw: String) -> String {
         Data(raw.utf8).base64EncodedString()

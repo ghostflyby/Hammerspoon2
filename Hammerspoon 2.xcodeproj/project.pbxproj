@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F0BB59F2EA5114D0083A4D4 /* AXSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 4F0BB59E2EA5114D0083A4D4 /* AXSwift */; };
 		4F488B302E97E79800A2B5F4 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 4F488B2F2E97E79800A2B5F4 /* Sparkle */; };
 		4FE3BB342EA301AE00C56330 /* JavaScript API.docc in Sources */ = {isa = PBXBuildFile; fileRef = 4FE3BB332EA301AE00C56330 /* JavaScript API.docc */; };
 /* End PBXBuildFile section */
@@ -46,6 +47,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F488B302E97E79800A2B5F4 /* Sparkle in Frameworks */,
+				4F0BB59F2EA5114D0083A4D4 /* AXSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,6 +101,7 @@
 			name = "Hammerspoon 2";
 			packageProductDependencies = (
 				4F488B2F2E97E79800A2B5F4 /* Sparkle */,
+				4F0BB59E2EA5114D0083A4D4 /* AXSwift */,
 			);
 			productName = "Hammerspoon 2";
 			productReference = 4F5641832E8333830099EB4C /* Hammerspoon 2.app */;
@@ -157,6 +160,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				4F488B2E2E97E79800A2B5F4 /* XCRemoteSwiftPackageReference "Sparkle" */,
+				4F0BB59D2EA5114D0083A4D4 /* XCRemoteSwiftPackageReference "AXSwift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4F5641842E8333830099EB4C /* Products */;
@@ -502,6 +506,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		4F0BB59D2EA5114D0083A4D4 /* XCRemoteSwiftPackageReference "AXSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mredig/AXSwift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.2;
+			};
+		};
 		4F488B2E2E97E79800A2B5F4 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sparkle-project/Sparkle";
@@ -513,6 +525,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		4F0BB59E2EA5114D0083A4D4 /* AXSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4F0BB59D2EA5114D0083A4D4 /* XCRemoteSwiftPackageReference "AXSwift" */;
+			productName = AXSwift;
+		};
 		4F488B2F2E97E79800A2B5F4 /* Sparkle */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4F488B2E2E97E79800A2B5F4 /* XCRemoteSwiftPackageReference "Sparkle" */;

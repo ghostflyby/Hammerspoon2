@@ -15,10 +15,11 @@ import AppKit
 }
 
 @_documentation(visibility: private)
-@objc class HSConsole: NSObject, HSModule, HSConsoleAPI {
-    @objc var name = "Console"
-
-    required override init() {}
+@objc class HSConsole: HSModule, HSConsoleAPI {
+    required init() {
+        super.init()
+        self.name = "hs.console"
+    }
     
     @objc func open() {
         if let url = URL(string:"hammerspoon2://openConsole") {

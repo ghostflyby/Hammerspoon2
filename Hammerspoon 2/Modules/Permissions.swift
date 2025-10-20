@@ -14,10 +14,11 @@ import JavaScriptCore
 }
 
 @_documentation(visibility: private)
-@objc class HSPermissions: NSObject, HSModule, HSPermissionsAPI {
-    @objc var name = "Permissions"
-
-    required override init() {}
+@objc class HSPermissions: HSModule, HSPermissionsAPI {
+    required init() {
+        super.init()
+        self.name = "hs.permissions"
+    }
 
     @objc func checkAccessibility() -> Bool {
         return PermissionsManager.shared.check(.accessibility) == .trusted

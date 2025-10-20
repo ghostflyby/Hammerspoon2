@@ -19,9 +19,7 @@ import JavaScriptCore
 }
 
 @_documentation(visibility: private)
-@objc class HSAppInfo: NSObject, HSModule, HSAppInfoAPI {
-    @objc var name = "AppInfo"
-
+@objc class HSAppInfo: HSModule, HSAppInfoAPI {
     @objc var appName: String
     @objc var displayName: String
     @objc var version: String
@@ -30,7 +28,7 @@ import JavaScriptCore
     @objc var copyrightNotice: String
     @objc var bundleIdentifier: String
 
-    required override init() {
+    required init() {
         func readFromInfoPlist(withKey key: String) -> String? {
             return Bundle.main.infoDictionary?[key] as? String
         }
@@ -55,5 +53,8 @@ import JavaScriptCore
 
         /// The official bundle identifier defined in your project data.
         bundleIdentifier = readFromInfoPlist(withKey: "CFBundleIdentifier") ?? "(unknown bundle identifier)"
+
+        super.init()
+        self.name = "hs.appinfo"
     }
 }
