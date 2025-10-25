@@ -33,45 +33,37 @@ struct ConsoleView: View {
 
     var body: some View {
         VStack {
-//            Table(logs.entries.filter {
-//                if $0.logType.rawValue < minimumLogLevel.rawValue { return false }
-//                if searchString == "" {
-//                    return true
-//                } else {
-//                    return $0.msg.contains(searchString)
-//                }
-//            }, selection: $selectedRows) {
-//                TableColumn("Date", value: \.date.description)
-//                    .width(ideal: 150, max: 250)
-//                TableColumn("Level") { item in
-//                    Text(item.logType.asString)
-//                        .foregroundStyle(styleForLogType(item.logType))
-//                }
-//                    .width(ideal: 100, max: 150)
-//                TableColumn("Message") { item in
-//                    Text(item.msg)
-//                }
-//            }
-//            .alternatingRowBackgrounds(.disabled)
-//            .listRowSeparator(.hidden)
-            ScrollView {
-                VStack(alignment: .leading) {
-                    ForEach(logs.entries.filter {
-                        if $0.logType.rawValue < minimumLogLevel.rawValue { return false }
-                        if searchString == "" {
-                            return true
-                        } else {
-                            return $0.msg.contains(searchString)
+            ScrollViewReader { proxy in
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        ForEach(logs.entries.filter {
+                            if $0.logType.rawValue < minimumLogLevel.rawValue { return false }
+                            if searchString == "" {
+                                return true
+                            } else {
+                                return $0.msg.contains(searchString)
+                            }
+                        }) { entry in
+                            let date = entry.date.formatted(
+                                .verbatim(
+                                    "\(year: .defaultDigits)-\(month: .twoDigits)-\(day: .twoDigits) \(hour: .twoDigits(clock: .twentyFourHour, hourCycle: .zeroBased)):\(minute: .twoDigits):\(second: .twoDigits)",
+                                    locale: .autoupdatingCurrent, timeZone: .autoupdatingCurrent, calendar: .autoupdatingCurrent
+                                )
+                            )
+                            Text("\(date) - \(entry.logType.asString): \(entry.msg)")
+                                .id(entry.id)
+                                .multilineTextAlignment(.leading)
+                                .fontDesign(.monospaced)
+                                .textSelection(.enabled)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
-                    }) { entry in
-                        Text("\(entry.date.description) - \(entry.logType.asString): \(entry.msg)")
-                            .multilineTextAlignment(.leading)
-                            .textSelection(.enabled)
-                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
+                    .padding()
+                    .frame(maxWidth: .infinity)
                 }
-                .padding()
-                .frame(maxWidth: .infinity)
+                .onChange(of: logs.entries) {
+                    proxy.scrollTo(logs.entries.last?.id)
+                }
             }
 
             TextField(">", text: $evalString, prompt: Text("Javascript: >"))
