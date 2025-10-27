@@ -9,6 +9,7 @@ import Foundation
 import JavaScriptCore
 import AppKit
 import AXSwift
+import UniformTypeIdentifiers
 
 // MARK: - Declare our JavaScript API
 
@@ -28,7 +29,7 @@ import AXSwift
     /// Fetch the application that matches a POSIX PID
     /// - Parameter pid: The PID to search for
     /// - Returns: The matching application, or nil if none matched
-    @objc func matchingPID(_ pid: Int) -> HSApplication?
+    @objc func fromPID(_ pid: Int) -> HSApplication?
     /// Fetch the currently focused application
     /// - Returns: The matching application, or nil if none matched
     @objc func frontmost() -> HSApplication?
@@ -36,6 +37,11 @@ import AXSwift
     // NOTE: These are not documented because they are private API for our JavaScript code
     @objc(_addWatcher::) func _addWatcher(eventName: String, callback: JSValue)
     @objc(_removeWatcher:) func _removeWatcher(eventName: String)
+
+    @objc func applicationForBundleID(_ bundleID: String) -> String?
+    @objc func applicationsForBundleID(_ bundleID: String) -> [String]
+    @objc func applicationForFileType(_ fileType: String) -> String?
+    @objc func applicationsForFileType(_ fileType: String) -> [String]
 }
 
 // MARK: - Implementations
@@ -74,6 +80,7 @@ class HSApplicationWatcherObject {
         shutdown()
     }
 
+    // MARK: API relating to running applications
     @objc func runningApplications() -> [HSApplication] {
         let apps = NSWorkspace.shared.runningApplications.compactMap { $0.asHSApplication() }
         return apps
@@ -87,7 +94,7 @@ class HSApplicationWatcherObject {
         return NSWorkspace.shared.runningApplications.first(where: { $0.bundleIdentifier == bundleID })?.asHSApplication()
     }
 
-    @objc func matchingPID(_ pid: Int) -> HSApplication? {
+    @objc func fromPID(_ pid: Int) -> HSApplication? {
         return NSWorkspace.shared.runningApplications.first(where: { $0.processIdentifier == pid })?.asHSApplication()
     }
 
@@ -154,6 +161,48 @@ class HSApplicationWatcherObject {
             NSWorkspace.shared.notificationCenter.removeObserver(watcherObject as Any, name: event, object: nil)
             watchers.removeValue(forKey: event)
         }
+    }
+
+    // MARK: - API for application information
+
+    @objc func applicationForBundleID(_ bundleID: String) -> String? {
+        return NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID)?.path(percentEncoded: false)
+    }
+
+    @objc func applicationsForBundleID(_ bundleID: String) -> [String] {
+        return NSWorkspace.shared.urlsForApplications(withBundleIdentifier: bundleID).compactMap { $0.path(percentEncoded: false) }
+    }
+
+    private func fileTypeToUTType(_ fileType: String) -> UTType? {
+        var utType: UTType? = nil
+
+        utType = UTType(fileType)
+        if utType == nil {
+            utType = UTType(mimeType: fileType)
+        }
+        if utType == nil {
+            utType = UTType(filenameExtension: fileType)
+        }
+
+        return utType
+    }
+
+    @objc func applicationForFileType(_ fileType: String) -> String? {
+        guard let utType = fileTypeToUTType(fileType) else {
+            AKError("Unable to resolve file type: \(fileType)")
+            return nil
+        }
+
+        return NSWorkspace.shared.urlForApplication(toOpen: utType)?.path(percentEncoded: false)
+    }
+
+    @objc func applicationsForFileType(_ fileType: String) -> [String] {
+        guard let utType = fileTypeToUTType(fileType) else {
+            AKError("Unable to resolve file type: \(fileType)")
+            return []
+        }
+
+        return NSWorkspace.shared.urlsForApplications(toOpen: utType).compactMap { $0.path(percentEncoded: false) }
     }
 }
 
