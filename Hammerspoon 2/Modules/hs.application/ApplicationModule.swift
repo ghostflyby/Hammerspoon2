@@ -45,6 +45,9 @@ import UniformTypeIdentifiers
     @objc func applicationsForBundleID(_ bundleID: String) -> [String]
     @objc func applicationForFileType(_ fileType: String) -> String?
     @objc func applicationsForFileType(_ fileType: String) -> [String]
+
+    @objc func pathForBundleID(_ bundleID: String) -> String?
+    @objc func infoForBundlePath(_ bundlePath: String) -> [String: Any]?
 }
 
 // MARK: - Implementations
@@ -210,6 +213,21 @@ class HSApplicationWatcherObject {
         }
 
         return NSWorkspace.shared.urlsForApplications(toOpen: utType).compactMap { $0.path(percentEncoded: false) }
+    }
+
+    @objc func pathForBundleID(_ bundleID: String) -> String? {
+        guard let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) else {
+            return nil
+        }
+
+        return url.path(percentEncoded: false)
+    }
+
+    @objc func infoForBundlePath(_ bundlePath: String) -> [String: Any]? {
+        guard let app = Bundle(path: bundlePath) else {
+            return nil
+        }
+        return app.infoDictionary
     }
 }
 
