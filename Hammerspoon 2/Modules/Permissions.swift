@@ -24,7 +24,7 @@ import JavaScriptCore
     }
 
     @objc func checkAccessibility() -> Bool {
-        return PermissionsManager.shared.check(.accessibility) == .trusted
+        return PermissionsManager.shared.check(.accessibility)
     }
 
     @objc func requestAccessibility() {

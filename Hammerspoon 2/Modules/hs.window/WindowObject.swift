@@ -43,13 +43,13 @@ import AXSwift
     // MARK: - Geometry
 
     /// The window's position on screen {x: Int, y: Int}
-    @objc var position: [String: Int]? { get set }
+    @objc var position: HSPoint? { get set }
 
     /// The window's size {w: Int, h: Int}
-    @objc var size: [String: Int]? { get set }
+    @objc var size: HSSize? { get set }
 
     /// The window's frame {x: Int, y: Int, w: Int, h: Int}
-    @objc var frame: [String: Int]? { get set }
+    @objc var frame: HSRect? { get set }
 
     // MARK: - Actions
 
@@ -77,34 +77,9 @@ import AXSwift
     /// - Returns: true if successful
     @objc func close() -> Bool
 
-    // MARK: - Convenience Methods
-
-    /// Move the window to a specific position
-    /// - Parameters:
-    ///   - x: The x coordinate
-    ///   - y: The y coordinate
-    /// - Returns: true if successful
-    @objc func moveTo(_ x: Int, _ y: Int) -> Bool
-
-    /// Resize the window to a specific size
-    /// - Parameters:
-    ///   - w: The width
-    ///   - h: The height
-    /// - Returns: true if successful
-    @objc func resize(_ w: Int, _ h: Int) -> Bool
-
-    /// Set the window's frame in one operation
-    /// - Parameters:
-    ///   - x: The x coordinate
-    ///   - y: The y coordinate
-    ///   - w: The width
-    ///   - h: The height
-    /// - Returns: true if successful
-    @objc func setFrame(_ x: Int, _ y: Int, _ w: Int, _ h: Int) -> Bool
-
     /// Center the window on the screen
     /// - Returns: true if successful
-    @objc func centerOnScreen() -> Bool
+    @objc func centerOnScreen()
 
     // MARK: - Advanced
 
@@ -183,83 +158,70 @@ import AXSwift
     }
 
     @objc var isStandard: Bool {
-        guard let subrole: String = try? element.subrole() else {
+        guard let subrole = try? element.subrole() else {
             return false
         }
-        return subrole == "AXStandardWindow"
+        return subrole == .standardWindow
     }
 
     // MARK: - Geometry
 
-    @objc var position: [String: Int]? {
+    @objc var position: HSPoint? {
         get {
             guard let pos: CGPoint = try? element.attribute(.position) else {
                 return nil
             }
-            return ["x": Int(pos.x), "y": Int(pos.y)]
+            return pos.toBridge()
         }
         set {
-            guard let newValue = newValue,
-                  let x = newValue["x"],
-                  let y = newValue["y"] else {
+            guard let newValue = newValue else {
                 return
             }
 
             do {
-                try element.setAttribute(.position, value: CGPoint(x: x, y: y))
+                try element.setAttribute(.position, value: newValue.point)
             } catch {
                 AKError("Failed to set position: \(error.localizedDescription)")
             }
         }
     }
 
-    @objc var size: [String: Int]? {
+    @objc var size: HSSize? {
         get {
             guard let sz: CGSize = try? element.attribute(.size) else {
                 return nil
             }
-            return ["w": Int(sz.width), "h": Int(sz.height)]
+            return sz.toBridge()
         }
         set {
-            guard let newValue = newValue,
-                  let w = newValue["w"],
-                  let h = newValue["h"] else {
+            guard let newValue = newValue else {
                 return
             }
 
             do {
-                try element.setAttribute(.size, value: CGSize(width: w, height: h))
+                try element.setAttribute(.size, value: newValue.size)
             } catch {
                 AKError("Failed to set size: \(error.localizedDescription)")
             }
         }
     }
 
-    @objc var frame: [String: Int]? {
+    @objc var frame: HSRect? {
         get {
-            guard let pos = position, let sz = size else {
+            guard let frame: CGRect = try? element.attribute(.frame) else {
                 return nil
             }
 
-            return [
-                "x": pos["x"]!,
-                "y": pos["y"]!,
-                "w": sz["w"]!,
-                "h": sz["h"]!
-            ]
+            return frame.toBridge()
         }
         set {
-            guard let newValue = newValue,
-                  let x = newValue["x"],
-                  let y = newValue["y"],
-                  let w = newValue["w"],
-                  let h = newValue["h"] else {
+            guard let newValue = newValue else {
                 return
             }
 
             do {
-                try element.setAttribute(.position, value: CGPoint(x: x, y: y))
-                try element.setAttribute(.size, value: CGSize(width: w, height: h))
+                try element.setAttribute(.position, value: newValue.origin.point)
+                try element.setAttribute(.size, value: newValue.size.size)
             } catch {
                 AKError("Failed to set frame: \(error.localizedDescription)")
             }
@@ -334,55 +296,20 @@ import AXSwift
         }
     }
 
-    // MARK: - Convenience Methods
-
-    @objc func moveTo(_ x: Int, _ y: Int) -> Bool {
-        do {
-            try element.setAttribute(.position, value: CGPoint(x: x, y: y))
-            return true
-        } catch {
-            AKError("Failed to move window: \(error.localizedDescription)")
-            return false
-        }
-    }
-
-    @objc func resize(_ w: Int, _ h: Int) -> Bool {
-        do {
-            try element.setAttribute(.size, value: CGSize(width: w, height: h))
-            return true
-        } catch {
-            AKError("Failed to resize window: \(error.localizedDescription)")
-            return false
-        }
-    }
-
-    @objc func setFrame(_ x: Int, _ y: Int, _ w: Int, _ h: Int) -> Bool {
-        do {
-            try element.setAttribute(.position, value: CGPoint(x: x, y: y))
-            try element.setAttribute(.size, value: CGSize(width: w, height: h))
-            return true
-        } catch {
-            AKError("Failed to set frame: \(error.localizedDescription)")
-            return false
-        }
-    }
-
-    @objc func centerOnScreen() -> Bool {
+    @objc func centerOnScreen() {
         guard let screen = NSScreen.main else {
-            return false
+            return
         }
 
-        guard let sz = size,
-              let w = sz["w"],
-              let h = sz["h"] else {
-            return false
+        guard let sz = size else {
+            return
         }
 
         let screenFrame = screen.visibleFrame
-        let centerX = Int(screenFrame.midX) - w / 2
-        let centerY = Int(screenFrame.midY) - h / 2
+        let centerX = Int(screenFrame.midX) - Int(sz.w) / 2
+        let centerY = Int(screenFrame.midY) - Int(sz.h) / 2
 
-        return moveTo(centerX, centerY)
+        position = HSPoint(x: Double(centerX), y: Double(centerY))
     }
 
     // MARK: - Advanced

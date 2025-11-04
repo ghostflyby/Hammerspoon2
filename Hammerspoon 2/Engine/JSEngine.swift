@@ -100,8 +100,11 @@ class JSEngine {
         }
 
         context?.name = "Hammerspoon \(id)"
+
+        context?.injectGeometryBridges()
         injectLogging()
         injectEngineJS()
+
         self["hs"] = ModuleRoot()
     }
 

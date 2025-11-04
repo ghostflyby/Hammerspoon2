@@ -19,24 +19,21 @@ import AXSwift
     @objc func systemWideElement() -> HSAXElement?
 
     /// Get the accessibility element for an application
-    /// - Parameter pid: The process identifier of the application
-    /// - Returns: The application's AXElement, or nil if not found
-    @objc func applicationElement(_ pid: Int) -> HSAXElement?
-
-    /// Get the accessibility element at a specific screen position
     /// - Parameters:
-    ///   - x: The x coordinate
-    ///   - y: The y coordinate
+    ///   - element: An HSApplication object
+    /// - Returns: The AXElement for the application, or nil if accessibility is not available
+    @objc func applicationElement(_ element: HSApplication) -> HSAXElement?
+
+    /// Get the accessibility element for a window
+    /// - Parameters:
+    ///   - window: An HSWindow  object
+    /// - Returns: The AXElement for the window, or nil if accessibility is not available
+    @objc func windowElement(_ window: HSWindow) -> HSAXElement?
+    
+    /// Get the accessibility element at the specific screen position
+    /// - Parameter hsPoint: An HSPoint object containing screen coordinates
     /// - Returns: The AXElement at that position, or nil if none found
-    @objc func elementAtPosition(_ x: Int, _ y: Int) -> HSAXElement?
-
-    /// Check if the application has accessibility permissions
-    /// - Returns: true if accessibility is enabled, false otherwise
-    @objc func isAccessibilityEnabled() -> Bool
-
-    /// Request accessibility permissions (will prompt the user)
-    /// - Returns: true if accessibility is enabled after the request
-    @objc func requestAccessibility() -> Bool
+    @objc func elementAtPoint(_ point: HSPoint) -> HSAXElement?
 }
 
 // MARK: - Implementation
@@ -46,9 +43,8 @@ import AXSwift
 @objc class HSAXModule: NSObject, HSModuleAPI, HSAXModuleAPI {
     var name = "hs.ax"
 
-    override required init() {
-        super.init()
-    }
+    // MARK: - Module lifecycle
+    override required init() { super.init() }
 
     func shutdown() {
         // No cleanup needed for this module
@@ -59,50 +55,33 @@ import AXSwift
     }
 
     // MARK: - API Implementation
-
     @objc func systemWideElement() -> HSAXElement? {
         guard isAccessibilityEnabled() else {
             AKError("hs.ax.systemWideElement(): Accessibility permissions not granted")
             return nil
         }
 
-        do {
-            let systemWide = try SystemWideElement()
-            return HSAXElement(element: systemWide)
-        } catch {
-            AKError("hs.ax.systemWideElement(): Failed to get system-wide element: \(error.localizedDescription)")
-            return nil
-        }
+        return HSAXElement(element: SystemWideElement(AXUIElementCreateSystemWide()))
     }
 
-    @objc func applicationElement(_ pid: Int) -> HSAXElement? {
-        guard isAccessibilityEnabled() else {
-            AKError("hs.ax.applicationElement(): Accessibility permissions not granted")
-            return nil
-        }
-
-        guard let app = NSWorkspace.shared.runningApplications.first(where: { $0.processIdentifier == pid }) else {
-            AKError("hs.ax.applicationElement(): No application found with pid \(pid)")
-            return nil
-        }
-
-        guard let axApp = Application(app) else {
-            AKError("hs.ax.applicationElement(): Failed to create AX element for pid \(pid)")
-            return nil
-        }
-
-        return HSAXElement(element: axApp)
+    @objc func applicationElement(_ element: HSApplication) -> HSAXElement? {
+        return element.axElement()
     }
 
-    @objc func elementAtPosition(_ x: Int, _ y: Int) -> HSAXElement? {
+    @objc func windowElement(_ window: HSWindow) -> HSAXElement? {
+        return window.axElement()
+    }
+
+    @objc func elementAtPoint(_ point: HSPoint) -> HSAXElement? {
         guard isAccessibilityEnabled() else {
             AKError("hs.ax.elementAtPosition(): Accessibility permissions not granted")
             return nil
         }
 
+        let position = point.point
+
         do {
-            let systemWide = try SystemWideElement()
-            let position = CGPoint(x: x, y: y)
+            let systemWide = SystemWideElement(AXUIElementCreateSystemWide())
 
             if let element: UIElement = try systemWide.elementAtPosition(position) {
                 return HSAXElement(element: element)
@@ -110,17 +89,16 @@ import AXSwift
 
             return nil
         } catch {
-            AKError("hs.ax.elementAtPosition(): Failed to get element at (\(x), \(y)): \(error.localizedDescription)")
+            AKError("hs.ax.elementAtPosition(): Failed to get element at (\(position.x), \(position.y)): \(error.localizedDescription)")
             return nil
         }
     }
 
-    @objc func isAccessibilityEnabled() -> Bool {
-        return AXIsProcessTrusted()
+    func isAccessibilityEnabled() -> Bool {
+        return PermissionsManager.shared.check(.accessibility)
     }
 
-    @objc func requestAccessibility() -> Bool {
-        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true]
-        return AXIsProcessTrustedWithOptions(options as CFDictionary)
+    func requestAccessibility() {
+        PermissionsManager.shared.request(.accessibility)
     }
 }

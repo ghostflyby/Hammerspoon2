@@ -14,33 +14,35 @@ import UniformTypeIdentifiers
 // MARK: - Declare our JavaScript API
 
 /// Module for interacting with applications
-@objc protocol HSApplicationsAPI: JSExport {
+@objc protocol HSApplicationModuleAPI: JSExport {
     /// Fetch all running applications
     /// - Returns: An array of all currently running applications
     @objc func runningApplications() -> [HSApplication]
+
     /// Fetch the first application that matches a name
     /// - Parameter name: The applicaiton name to search for
     /// - Returns: The first matching application, or nil if none matched
     @objc func matchingName(_ name: String) -> HSApplication?
+
     /// Fetch the first application that matches a Bundle ID
     /// - Parameter bundleID: The identifier to search for
     /// - Returns: The first matching application, or nil if none matched
     @objc func matchingBundleID(_ bundleID: String) -> HSApplication?
+
     /// Fetch the application that matches a POSIX PID
     /// - Parameter pid: The PID to search for
     /// - Returns: The matching application, or nil if none matched
     @objc func fromPID(_ pid: Int) -> HSApplication?
+
     /// Fetch the currently focused application
     /// - Returns: The matching application, or nil if none matched
     @objc func frontmost() -> HSApplication?
+
     /// Fetch the application which currently owns the menu bar
     /// - Returns: The matching application, or nil if none matched
     @objc func menuBarOwner() -> HSApplication?
 
-    // NOTE: These are not documented because they are private API for our JavaScript code
-    @objc(_addWatcher::) func _addWatcher(eventName: String, callback: JSValue)
-    @objc(_removeWatcher:) func _removeWatcher(eventName: String)
-
+    // FIXME: Document these
     @objc func applicationForBundleID(_ bundleID: String) -> String?
     @objc func applicationsForBundleID(_ bundleID: String) -> [String]
     @objc func applicationForFileType(_ fileType: String) -> String?
@@ -48,6 +50,10 @@ import UniformTypeIdentifiers
 
     @objc func pathForBundleID(_ bundleID: String) -> String?
     @objc func infoForBundlePath(_ bundlePath: String) -> [String: Any]?
+
+    // NOTE: These are not documented because they are private API for our JavaScript code
+    @objc(_addWatcher::) func _addWatcher(eventName: String, callback: JSValue)
+    @objc(_removeWatcher:) func _removeWatcher(eventName: String)
 }
 
 // MARK: - Implementations
@@ -69,11 +75,13 @@ class HSApplicationWatcherObject {
 
 @_documentation(visibility: private)
 @MainActor
-@objc class HSApplicationModule: NSObject, HSModuleAPI, HSApplicationsAPI {
+@objc class HSApplicationModule: NSObject, HSModuleAPI, HSApplicationModuleAPI {
     var name = "hs.application"
     private var watchers: [NSNotification.Name:HSApplicationWatcherObject] = [:]
 
-    override required init() {}
+    // MARK: - Module lifecycle
+    override required init() { super.init() }
+
     func shutdown() {
         for eventName in watchers.keys {
             if let watcherObject = watchers[eventName] {
@@ -81,12 +89,13 @@ class HSApplicationWatcherObject {
             }
         }
     }
+
     isolated deinit {
         print("Deinit of \(name)")
         shutdown()
     }
 
-    // MARK: API relating to running applications
+    // MARK: - API relating to running applications
     @objc func runningApplications() -> [HSApplication] {
         let apps = NSWorkspace.shared.runningApplications.compactMap { $0.asHSApplication() }
         return apps

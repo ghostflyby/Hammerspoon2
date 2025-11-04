@@ -14,20 +14,30 @@ import AXSwift
 @objc protocol HSApplicationAPI: JSExport {
     /// POSIX Process Identifier
     @objc var pid: Int { get }
+
     /// Bundle Identifier (e.g. com.apple.Safari)
     @objc var bundleID: String? { get }
+
     /// The application's title
     @objc var title: String? { get }
+
     /// Location of the application on disk
     @objc var bundlePath: String? { get }
 
     /// Is the application hidden
     @objc var isHidden: Bool { get set }
+
     /// Is the application focused
     @objc var isActive: Bool { get }
 
+    /// Terminate the application
     @objc func kill() -> Bool
+
+    /// Force-terminate the application
     @objc func kill9() -> Bool
+
+    /// The application's HSAXElement object, for use with the hs.ax APIs
+    @objc func axElement() -> HSAXElement?
 }
 
 @_documentation(visibility: private)
@@ -64,5 +74,13 @@ import AXSwift
 
     @objc func kill9() -> Bool {
         return self.runningApplication.forceTerminate()
+    }
+
+    @objc func axElement() -> HSAXElement? {
+        guard let axApp = Application(self.runningApplication) else {
+            AKError("hs.application.axElement(): Failed to create AXElement for \(self.title ?? "unknown")")
+            return nil
+        }
+        return HSAXElement(element: axApp)
     }
 }

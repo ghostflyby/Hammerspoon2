@@ -13,7 +13,7 @@ import AXSwift
 // MARK: - Declare our JavaScript API
 
 /// Module for interacting with windows
-@objc protocol HSWindowsAPI: JSExport {
+@objc protocol HSWindowModuleAPI: JSExport {
     /// Get the currently focused window
     /// - Returns: The focused window, or nil if none
     @objc func focusedWindow() -> HSWindow?
@@ -27,9 +27,9 @@ import AXSwift
     @objc func visibleWindows() -> [HSWindow]
 
     /// Get windows for a specific application
-    /// - Parameter pid: The process identifier of the application
+    /// - Parameter app: An HSApplication object
     /// - Returns: An array of windows for that application
-    @objc func windowsForApp(_ pid: Int) -> [HSWindow]
+    @objc func windowsForApp(_ app: HSApplication) -> [HSWindow]
 
     /// Get all windows on a specific screen
     /// - Parameter screenIndex: The screen index (0 for main screen)
@@ -38,10 +38,9 @@ import AXSwift
 
     /// Get the window at a specific screen position
     /// - Parameters:
-    ///   - x: The x coordinate
-    ///   - y: The y coordinate
+    ///   - point: An HSPoint containing the coordinates
     /// - Returns: The topmost window at that position, or nil if none
-    @objc func windowAtPosition(_ x: Int, _ y: Int) -> HSWindow?
+    @objc func windowAtPoint(_ point: HSPoint) -> HSWindow?
 
     /// Get ordered windows (front to back)
     /// - Returns: An array of windows in z-order
@@ -52,12 +51,11 @@ import AXSwift
 
 @_documentation(visibility: private)
 @MainActor
-@objc class HSWindowModule: NSObject, HSModuleAPI, HSWindowsAPI {
+@objc class HSWindowModule: NSObject, HSModuleAPI, HSWindowModuleAPI {
     var name = "hs.window"
 
-    override required init() {
-        super.init()
-    }
+    // MARK: - Module lifecycle
+    override required init() { super.init() }
 
     func shutdown() {
         // No cleanup needed for this module
@@ -68,7 +66,6 @@ import AXSwift
     }
 
     // MARK: - Helper Methods
-
     private func checkAccessibility() -> Bool {
         guard AXIsProcessTrusted() else {
             AKError("hs.window: Accessibility permissions not granted")
@@ -133,16 +130,11 @@ import AXSwift
         return allWindows().filter { !$0.isMinimized }
     }
 
-    @objc func windowsForApp(_ pid: Int) -> [HSWindow] {
+    @objc func windowsForApp(_ app: HSApplication) -> [HSWindow] {
         guard checkAccessibility() else { return [] }
 
-        guard let app = NSWorkspace.shared.runningApplications.first(where: { $0.processIdentifier == pid }) else {
-            AKWarning("hs.window.windowsForApp(): No application found with pid \(pid)")
-            return []
-        }
-
-        let windowElements = getWindowElements(for: app)
-        return windowElements.map { HSWindow(element: $0, app: app) }
+        let windowElements = getWindowElements(for: app.runningApplication)
+        return windowElements.map { HSWindow(element: $0, app: app.runningApplication) }
     }
 
     @objc func windowsOnScreen(_ screenIndex: Int) -> [HSWindow] {
@@ -167,12 +159,12 @@ import AXSwift
         }
     }
 
-    @objc func windowAtPosition(_ x: Int, _ y: Int) -> HSWindow? {
+    @objc func windowAtPoint(_ point: HSPoint) -> HSWindow? {
         guard checkAccessibility() else { return nil }
 
         do {
-            let systemWide = try SystemWideElement()
-            let position = CGPoint(x: x, y: y)
+            let systemWide = SystemWideElement(AXUIElementCreateSystemWide())
+            let position = point.point
 
             guard let element: UIElement = try systemWide.elementAtPosition(position) else {
                 return nil
@@ -183,7 +175,7 @@ import AXSwift
             while let elem = current {
                 if let role = try? elem.role(), role == .window {
                     // Find the app for this window
-                    let pid = elem.pid
+                    let pid = try? elem.pid()
                     if let app = NSWorkspace.shared.runningApplications.first(where: { $0.processIdentifier == pid }) {
                         return HSWindow(element: elem, app: app)
                     }

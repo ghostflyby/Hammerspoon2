@@ -37,13 +37,13 @@ import AXSwift
     // MARK: - Geometry
 
     /// The element's position on screen
-    @objc var position: [String: Int]? { get set }
+    @objc var position: HSPoint? { get set }
 
     /// The element's size
-    @objc var size: [String: Int]? { get set }
+    @objc var size: HSSize? { get set }
 
     /// The element's frame (position and size combined)
-    @objc var frame: [String: Int]? { get }
+    @objc var frame: HSRect? { get set }
 
     // MARK: - Hierarchy
 
@@ -140,61 +140,64 @@ import AXSwift
 
     // MARK: - Geometry
 
-    @objc var position: [String: Int]? {
+    @objc var position: HSPoint? {
         get {
             guard let pos: CGPoint = try? element.attribute(.position) else {
                 return nil
             }
-            return ["x": Int(pos.x), "y": Int(pos.y)]
+            return pos.toBridge()
         }
         set {
-            guard let newValue = newValue,
-                  let x = newValue["x"],
-                  let y = newValue["y"] else {
+            guard let newValue = newValue else {
                 return
             }
 
             do {
-                try element.setAttribute(.position, value: CGPoint(x: x, y: y))
+                try element.setAttribute(.position, value: CGPoint(from: newValue))
             } catch {
                 AKError("Failed to set position: \(error.localizedDescription)")
             }
         }
     }
 
-    @objc var size: [String: Int]? {
+    @objc var size: HSSize? {
         get {
             guard let sz: CGSize = try? element.attribute(.size) else {
                 return nil
             }
-            return ["w": Int(sz.width), "h": Int(sz.height)]
+            return sz.toBridge()
         }
         set {
-            guard let newValue = newValue,
-                  let w = newValue["w"],
-                  let h = newValue["h"] else {
+            guard let newValue = newValue else {
                 return
             }
 
             do {
-                try element.setAttribute(.size, value: CGSize(width: w, height: h))
+                try element.setAttribute(.size, value: CGSize(from: newValue))
             } catch {
                 AKError("Failed to set size: \(error.localizedDescription)")
             }
         }
     }
 
-    @objc var frame: [String: Int]? {
-        guard let pos = position, let sz = size else {
-            return nil
+    @objc var frame: HSRect? {
+        get {
+            guard let frame: CGRect = try? element.attribute(.frame) else {
+                return nil
+            }
+            return frame.toBridge()
         }
-
-        return [
-            "x": pos["x"]!,
-            "y": pos["y"]!,
-            "w": sz["w"]!,
-            "h": sz["h"]!
-        ]
+        set {
+            guard let newValue = newValue else {
+                return
+            }
+            do {
+                try element.setAttribute(.position, value: newValue.origin.point)
+                try element.setAttribute(.size, value: newValue.size.size)
+            } catch {
+                AKError("Failed to set frame: \(error.localizedDescription)")
+            }
+        }
     }
 
     // MARK: - Hierarchy

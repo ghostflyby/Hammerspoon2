@@ -25,10 +25,17 @@ enum PermissionsType: Int {
 class PermissionsManager {
     static let shared = PermissionsManager()
 
-    func check(_ permType: PermissionsType) -> PermissionsState {
+    func state(_ permType: PermissionsType) -> PermissionsState {
         switch permType {
         case .accessibility:
             return AXIsProcessTrusted() ? .trusted : .notTrusted
+        }
+    }
+
+    func check(_ permType: PermissionsType) -> Bool {
+        switch permType {
+        case .accessibility:
+            return AXIsProcessTrusted()
         }
     }
 
