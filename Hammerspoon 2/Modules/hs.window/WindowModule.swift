@@ -147,16 +147,16 @@ import AXSwift
         let screen = screens[screenIndex]
         let screenFrame = screen.frame
 
-        return visibleWindows().filter { window in
-            guard let frame = window.frame,
-                  let x = frame["x"], let y = frame["y"],
-                  let w = frame["w"], let h = frame["h"] else {
+        let result = visibleWindows().filter { window in
+            guard let frame = window.frame else {
                 return false
             }
 
-            let windowRect = CGRect(x: x, y: y, width: w, height: h)
+            let windowRect = CGRect(x: frame.x, y: frame.y, width: frame.w, height: frame.h)
             return screenFrame.intersects(windowRect)
         }
+
+        return result
     }
 
     @objc func windowAtPoint(_ point: HSPoint) -> HSWindow? {
