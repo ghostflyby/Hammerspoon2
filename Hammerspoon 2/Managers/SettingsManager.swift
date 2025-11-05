@@ -66,3 +66,8 @@ final class SettingsManager {
         UserDefaults.standard.removeObject(forKey: Keys.consoleHistoryLength.rawValue)
     }
 }
+
+// MARK: - SettingsManagerProtocol Conformance
+extension SettingsManager: SettingsManagerProtocol {
+    // All required methods are already implemented in the class
+}

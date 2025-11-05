@@ -99,3 +99,8 @@ class JSEngine {
     }
 }
 
+// MARK: - JSEngineProtocol Conformance
+extension JSEngine: JSEngineProtocol {
+    // All required methods are already implemented in the class
+}
+
