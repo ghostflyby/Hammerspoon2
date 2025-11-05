@@ -19,17 +19,17 @@ import UniformTypeIdentifiers
     /// - Returns: An array of all currently running applications
     @objc func runningApplications() -> [HSApplication]
 
-    /// Fetch the first application that matches a name
+    /// Fetch the first running application that matches a name
     /// - Parameter name: The applicaiton name to search for
     /// - Returns: The first matching application, or nil if none matched
     @objc func matchingName(_ name: String) -> HSApplication?
 
-    /// Fetch the first application that matches a Bundle ID
+    /// Fetch the first running application that matches a Bundle ID
     /// - Parameter bundleID: The identifier to search for
     /// - Returns: The first matching application, or nil if none matched
     @objc func matchingBundleID(_ bundleID: String) -> HSApplication?
 
-    /// Fetch the application that matches a POSIX PID
+    /// Fetch the running application that matches a POSIX PID
     /// - Parameter pid: The PID to search for
     /// - Returns: The matching application, or nil if none matched
     @objc func fromPID(_ pid: Int) -> HSApplication?
@@ -42,14 +42,30 @@ import UniformTypeIdentifiers
     /// - Returns: The matching application, or nil if none matched
     @objc func menuBarOwner() -> HSApplication?
 
-    // FIXME: Document these
-    @objc func applicationForBundleID(_ bundleID: String) -> String?
-    @objc func applicationsForBundleID(_ bundleID: String) -> [String]
-    @objc func applicationForFileType(_ fileType: String) -> String?
-    @objc func applicationsForFileType(_ fileType: String) -> [String]
-
+    /// Fetch the filesystem path for an application
+    /// - Parameter bundleID: The application bundle identifier to search for (e.g. "com.apple.Safari")
+    /// - Returns: The application's filesystem path, or nil if it was not found
     @objc func pathForBundleID(_ bundleID: String) -> String?
+    
+    /// Fetch filesystem paths for an application
+    /// - Parameter bundleID: The application bundle identifier to search for (e.g. "com.apple.Safari")
+    /// - Returns: An array of strings containing any filesystem paths that were found
+    @objc func pathsForBundleID(_ bundleID: String) -> [String]
     @objc func infoForBundlePath(_ bundlePath: String) -> [String: Any]?
+    
+    /// Fetch filesystem path for an application able to open a given file type
+    /// - Parameter fileType: The file type to search for. This can be a UTType identifier, a MIME type, or a filename extension
+    /// - Returns: The path to an application for the given filetype, or il if none were found
+    @objc func pathForFileType(_ fileType: String) -> String?
+    
+    /// Fetch filesystem paths for applications able to open a given file type
+    /// - Parameter fileType: The file type to search for. This can be a UTType identifier, a MIME type, or a filename extension
+    /// - Returns: An array of strings containing the filesystem paths for any applications that were found
+    @objc func pathsForFileType(_ fileType: String) -> [String]
+    
+    /// Launch an application, or give it focus if it's already running
+    /// - Parameter bundleID: A bundle identifier for the app to launch/focus (e.g. "com.apple.Safari")
+    @objc func launchOrFocus(_ bundleID: String)
 
     // NOTE: These are not documented because they are private API for our JavaScript code
     @objc(_addWatcher::) func _addWatcher(eventName: String, callback: JSValue)
@@ -183,13 +199,19 @@ class HSApplicationWatcherObject {
     }
 
     // MARK: - API for application information
-
-    @objc func applicationForBundleID(_ bundleID: String) -> String? {
+    @objc func pathForBundleID(_ bundleID: String) -> String? {
         return NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID)?.path(percentEncoded: false)
     }
 
-    @objc func applicationsForBundleID(_ bundleID: String) -> [String] {
+    @objc func pathsForBundleID(_ bundleID: String) -> [String] {
         return NSWorkspace.shared.urlsForApplications(withBundleIdentifier: bundleID).compactMap { $0.path(percentEncoded: false) }
+    }
+
+    @objc func infoForBundlePath(_ bundlePath: String) -> [String: Any]? {
+        guard let app = Bundle(path: bundlePath) else {
+            return nil
+        }
+        return app.infoDictionary
     }
 
     private func fileTypeToUTType(_ fileType: String) -> UTType? {
@@ -206,7 +228,7 @@ class HSApplicationWatcherObject {
         return utType
     }
 
-    @objc func applicationForFileType(_ fileType: String) -> String? {
+    @objc func pathForFileType(_ fileType: String) -> String? {
         guard let utType = fileTypeToUTType(fileType) else {
             AKError("Unable to resolve file type: \(fileType)")
             return nil
@@ -215,7 +237,7 @@ class HSApplicationWatcherObject {
         return NSWorkspace.shared.urlForApplication(toOpen: utType)?.path(percentEncoded: false)
     }
 
-    @objc func applicationsForFileType(_ fileType: String) -> [String] {
+    @objc func pathsForFileType(_ fileType: String) -> [String] {
         guard let utType = fileTypeToUTType(fileType) else {
             AKError("Unable to resolve file type: \(fileType)")
             return []
@@ -224,19 +246,11 @@ class HSApplicationWatcherObject {
         return NSWorkspace.shared.urlsForApplications(toOpen: utType).compactMap { $0.path(percentEncoded: false) }
     }
 
-    @objc func pathForBundleID(_ bundleID: String) -> String? {
-        guard let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) else {
-            return nil
+    @objc func launchOrFocus(_ bundleID: String) {
+        guard let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) else {
+            return
         }
-
-        return url.path(percentEncoded: false)
-    }
-
-    @objc func infoForBundlePath(_ bundlePath: String) -> [String: Any]? {
-        guard let app = Bundle(path: bundlePath) else {
-            return nil
-        }
-        return app.infoDictionary
+        NSWorkspace.shared.openApplication(at: appURL, configuration: NSWorkspace.OpenConfiguration(), completionHandler: nil)
     }
 }
 
