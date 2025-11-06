@@ -303,7 +303,7 @@ struct JSEnhancementTests {
         }
 
         harness.eval("""
-        var searchDebounce = hs.timer.delayed(timer.seconds('200ms'), () => { __test_callback('performSearch') });
+        var searchDebounce = hs.timer.delayed(hs.timer.seconds('200ms'), () => { __test_callback('performSearch') });
 
         function onSearchTextChanged() {
             searchDebounce.start();
@@ -375,7 +375,7 @@ struct JSEnhancementTests {
             hs.timer.seconds('20ms')
         );
 
-        var timeoutTimer = hs.timer.doAfter(timer.seconds('500ms'), () => { __test_callback('onTimeout') });
+        var timeoutTimer = hs.timer.doAfter(hs.timer.seconds('500ms'), () => { __test_callback('onTimeout') });
         """)
 
         // Should complete before timeout

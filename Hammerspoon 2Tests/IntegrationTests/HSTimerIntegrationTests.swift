@@ -96,7 +96,7 @@ struct HSTimerIntegrationTests {
         }
 
         harness.eval("""
-        var manualTimer = timer.new(0.05, () => { __test_callback('manualCallback') }, false);
+        var manualTimer = hs.timer.new(0.05, () => { __test_callback('manualCallback') }, false);
         """)
 
         // Should not fire yet
@@ -265,19 +265,19 @@ struct HSTimerIntegrationTests {
 
         harness.eval("""
         var counter = 0;
-        var waitTimer = timer.waitUntil(
+        var waitTimer = hs.timer.waitUntil(
             function() { return counter >= 3; },
             () => { __test_callback('waitUntilAction') },
             0.02
         );
+
+        // Set counter to 3 after a delay using JavaScript timer
+        hs.timer.doAfter(0.1, function() {
+            counter = 3;
+        });
         """)
 
-        // Increment counter after a delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            _ = harness.eval("counter = 3")
-        }
-
-        let success = harness.waitFor(timeout: 0.3) { actionFired }
+        let success = harness.waitFor(timeout: 0.5) { actionFired }
         #expect(success, "waitUntil should fire when predicate becomes true")
 
         // Cleanup
@@ -296,7 +296,7 @@ struct HSTimerIntegrationTests {
 
         harness.eval("""
         var doUntilCounter = 0;
-        var doUntilTimer = timer.doUntil(
+        var doUntilTimer = hs.timer.doUntil(
             function() { return doUntilCounter >= 3; },
             function() {
                 __test_callback('doUntilAction');
@@ -325,7 +325,7 @@ struct HSTimerIntegrationTests {
         }
 
         harness.eval("""
-        var delayed = timer.delayed(0.1, () => { __test_callback('delayedCallback') });
+        var delayed = hs.timer.delayed(0.1, () => { __test_callback('delayedCallback') });
         """)
 
         // Start and restart multiple times (should only fire once)
@@ -371,7 +371,7 @@ struct HSTimerIntegrationTests {
         }
 
         harness.eval("""
-        var saveDebounce = timer.delayed(0.1, __test_callback('saveDocument'));
+        var saveDebounce = hs.timer.delayed(0.1, () => { __test_callback('saveDocument') });
 
         function onTextChanged() {
             saveDebounce.start();
@@ -406,7 +406,7 @@ struct HSTimerIntegrationTests {
         var attempts = 0;
         var maxAttempts = 5;
 
-        var pollTimer = timer.waitUntil(
+        var pollTimer = hs.timer.waitUntil(
             function() {
                 attempts++;
                 return attempts >= maxAttempts;
@@ -439,7 +439,7 @@ struct HSTimerIntegrationTests {
         harness.eval("""
         function performActionWithTimeout(action, timeoutSeconds) {
             var completed = false;
-            var timeoutTimer = timer.doAfter(timeoutSeconds, function() {
+            var timeoutTimer = hs.timer.doAfter(timeoutSeconds, function() {
                 if (!completed) {
                     __test_callback('onTimeout');
                 }
