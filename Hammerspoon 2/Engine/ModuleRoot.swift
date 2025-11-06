@@ -14,13 +14,13 @@ import JavaScriptCore
     @objc func reload()
 
     // Modules
-    @objc var appInfo: HSAppInfo { get }
+    @objc var appinfo: HSAppInfoModule { get }
     @objc var application: HSApplicationModule { get }
     @objc var ax: HSAXModule { get }
-    @objc var console: HSConsole { get }
-    @objc var permissions: HSPermissions { get }
-    @objc var timer: HSTimer { get }
-    @objc var hashing: HSHashing { get }
+    @objc var console: HSConsoleModule { get }
+    @objc var hashing: HSHashModule { get }
+    @objc var permissions: HSPermissionsModule { get }
+    @objc var timer: HSTimerModule { get }
     @objc var window: HSWindowModule { get }
 }
 
@@ -65,12 +65,12 @@ import JavaScriptCore
     }
 
     // Modules
-    @objc var appInfo: HSAppInfo { get { getOrCreate(name: "appInfo", type: HSAppInfo.self)}}
+    @objc var appinfo: HSAppInfoModule { get { getOrCreate(name: "appinfo", type: HSAppInfoModule.self)}}
     @objc var application: HSApplicationModule { get { getOrCreate(name: "application", type: HSApplicationModule.self)}}
     @objc var ax: HSAXModule { get { getOrCreate(name: "ax", type: HSAXModule.self)}}
-    @objc var console: HSConsole { get { getOrCreate(name: "console", type: HSConsole.self)}}
-    @objc var permissions: HSPermissions { get { getOrCreate(name: "permissions", type: HSPermissions.self)}}
-    @objc var timer: HSTimer { get { getOrCreate(name: "timer", type: HSTimer.self)}}
-    @objc var hashing: HSHashing { get { getOrCreate(name: "hashing", type: HSHashing.self)}}
+    @objc var console: HSConsoleModule { get { getOrCreate(name: "console", type: HSConsoleModule.self)}}
+    @objc var hashing: HSHashModule { get { getOrCreate(name: "hashing", type: HSHashModule.self)}}
+    @objc var permissions: HSPermissionsModule { get { getOrCreate(name: "permissions", type: HSPermissionsModule.self)}}
+    @objc var timer: HSTimerModule { get { getOrCreate(name: "timer", type: HSTimerModule.self)}}
     @objc var window: HSWindowModule { get { getOrCreate(name: "window", type: HSWindowModule.self)}}
 }
