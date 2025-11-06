@@ -34,7 +34,11 @@ final class SettingsManager {
             Keys.configLocation.rawValue: Keys.configLocation.defaultValue
         ])
     }
+}
 
+// MARK: - SettingsManagerProtocol Conformance
+extension SettingsManager: SettingsManagerProtocol {
+    // All required methods are already implemented in the class
     @ObservationIgnored
     var configLocation: URL {
         get {
