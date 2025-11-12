@@ -3,165 +3,101 @@
 
 "use strict";
 
-// FIXME: Consider adding API to introspect what watchers exist and what events they are watching
+// One-to-many event emitter for hs.ax events
+// Similar to ApplicationModuleWatcherEmitter, this allows multiple JavaScript listeners
+// for the same notification, while Swift only manages a single callback per app+notification
+class AXModuleWatcherEmitter {
+    #events = {}
 
-// Observer management - stores observers by PID and their emitters
-const observers = new Map(); // pid -> { observer, emitters: Map(element+notification -> emitter) }
+    constructor() {}
 
-// Helper to create a unique key for element+notification
-function makeWatcherKey(element, notification) {
-    // Use the element's pid and role/title as part of the key since we can't use object identity
-    const elementId = `${element.pid}_${element.role}_${element.title || 'notitle'}`;
-    return `${elementId}:${notification}`;
-}
+    #handleEvent(key, notification, element) {
+        if (Array.isArray(this.#events[key])) {
+            var listeners = this.#events[key].slice();
+            const length = listeners.length;
 
-// Event emitter for individual element+notification combinations
-class AXObserverEmitter {
-    #listeners = [];
-    #element = null;
-    #notification = null;
-    #observer = null;
-
-    constructor(element, notification, observer) {
-        this.#element = element;
-        this.#notification = notification;
-        this.#observer = observer;
-    }
-
-    handleEvent(observer, element, notification) {
-        const listeners = this.#listeners.slice();
-        for (let i = 0; i < listeners.length; i++) {
-            listeners[i].call(null, element, notification);
+            for (var i = 0; i < length; i++) {
+                listeners[i].apply(null, [notification, element]);
+            }
         }
     }
 
-    addListener(listener) {
+    on(application, notification, listener) {
         if (typeof listener !== 'function') {
             throw new Error("hs.ax.addWatcher(): The provided handler must be a function");
         }
 
-        if (this.#listeners.includes(listener)) {
-            console.error("hs.ax.addWatcher(): The provided handler is already registered.");
+        // Create a unique key for this application+notification combination
+        const key = `${application.pid}:${notification}`;
+
+        if (!Array.isArray(this.#events[key])) {
+            this.#events[key] = [];
+            // First listener for this app+notification - register with Swift
+            hs.ax._addWatcher(application, notification, (notif, elem) => {
+                this.#handleEvent(key, notif, elem);
+            });
+        }
+
+        if (this.#events[key].includes(listener)) {
+            console.error(`hs.ax.addWatcher(): The provided handler for '${notification}' is already registered.`);
             return;
         }
 
-        // If this is the first listener, add the watcher to the observer
-        if (this.#listeners.length === 0) {
-            this.#observer.addWatcher(this.#element, this.#notification);
+        this.#events[key].push(listener);
+    }
+
+    removeListener(application, notification, listener) {
+        const key = `${application.pid}:${notification}`;
+        var idx;
+
+        if (Array.isArray(this.#events[key])) {
+            idx = this.#events[key].indexOf(listener);
+
+            if (idx > -1) {
+                this.#events[key].splice(idx, 1);
+            }
+
+            // If no more listeners for this app+notification, remove from Swift
+            if (this.#events[key].length == 0) {
+                hs.ax._removeWatcher(application, notification);
+                delete this.#events[key];
+            }
         }
-
-        this.#listeners.push(listener);
-    }
-
-    removeListener(listener) {
-        const idx = this.#listeners.indexOf(listener);
-        if (idx > -1) {
-            this.#listeners.splice(idx, 1);
-        }
-
-        // If no more listeners, stop watching this notification
-        if (this.#listeners.length === 0) {
-            this.#observer.removeWatcher(this.#element, this.#notification);
-        }
-    }
-
-    hasListeners() {
-        return this.#listeners.length > 0;
-    }
-
-    get element() {
-        return this.#element;
-    }
-
-    get notification() {
-        return this.#notification;
     }
 }
 
+// Place an instance of the Watcher/Emitter class into the hs.ax namespace
+hs.ax._watcherEmitter = new AXModuleWatcherEmitter();
+
 // User-facing API for adding watchers
-hs.ax.addWatcher2 = function(application, notification, listener) {
-    if (!application || !notification || !listener) {
-        throw new Error("hs.ax.addWatcher(): application, notification, and listener are required");
+hs.ax.addWatcher = function(application, notification, listener) {
+    if (!application || !application.pid) {
+        throw new Error("hs.ax.addWatcher(): First argument must be an HSApplication object");
+    }
+    if (typeof notification !== 'string') {
+        throw new Error("hs.ax.addWatcher(): Second argument must be a notification string");
+    }
+    if (typeof listener !== 'function') {
+        throw new Error("hs.ax.addWatcher(): Third argument must be a callback function");
     }
 
-    const pid = application.pid;
-    const element = application.axElement();
-    if (pid < 0 || element == null) {
-        throw new Error("hs.ax.addWatcher(): Invalid HSApplication object");
-    }
-
-    // Get or create observer for this PID
-    if (!observers.has(pid)) {
-        const observer = hs.ax._createObserver(pid);
-        if (!observer) {
-            throw new Error(`hs.ax.addWatcher(): Failed to create observer for PID ${pid}`);
-        }
-
-        const observerData = {
-            observer: observer,
-            emitters: new Map()
-        };
-
-        // Set up a single callback that dispatches to all emitters
-        observer.callback((obs, elem, notif) => {
-            // Find all emitters that match this element+notification
-            for (const [key, emitter] of observerData.emitters) {
-                // Check if this emitter matches the notification
-                if (emitter.notification === notif) {
-                    emitter.handleEvent(obs, elem, notif);
-                }
-            }
-        });
-
-        // Start the observer
-        observer.start();
-
-        observers.set(pid, observerData);
-    }
-
-    const observerData = observers.get(pid);
-    const key = makeWatcherKey(element, notification);
-
-    // Get or create emitter for this element+notification
-    if (!observerData.emitters.has(key)) {
-        observerData.emitters.set(key, new AXObserverEmitter(element, notification, observerData.observer));
-    }
-
-    const emitter = observerData.emitters.get(key);
-    emitter.addListener(listener);
-};
+    hs.ax._watcherEmitter.on(application, notification, listener);
+}
 
 // User-facing API for removing watchers
-hs.ax.removeWatcher = function(element, notification, listener) {
-    if (!element || !notification || !listener) {
-        throw new Error("hs.ax.removeWatcher(): element, notification, and listener are required");
+hs.ax.removeWatcher = function(application, notification, listener) {
+    if (!application || !application.pid) {
+        throw new Error("hs.ax.removeWatcher(): First argument must be an HSApplication object");
+    }
+    if (typeof notification !== 'string') {
+        throw new Error("hs.ax.removeWatcher(): Second argument must be a notification string");
+    }
+    if (typeof listener !== 'function') {
+        throw new Error("hs.ax.removeWatcher(): Third argument must be a callback function");
     }
 
-    const pid = element.pid;
-    const observerData = observers.get(pid);
-
-    if (!observerData) {
-        return; // No observer for this PID
-    }
-
-    const key = makeWatcherKey(element, notification);
-    const emitter = observerData.emitters.get(key);
-
-    if (emitter) {
-        emitter.removeListener(listener);
-
-        // Clean up emitter if no more listeners
-        if (!emitter.hasListeners()) {
-            observerData.emitters.delete(key);
-        }
-
-        // Clean up observer if no more emitters
-        if (observerData.emitters.size === 0) {
-            observerData.observer.stop();
-            observers.delete(pid);
-        }
-    }
-};
+    hs.ax._watcherEmitter.removeListener(application, notification, listener);
+}
 
 // Convenience function to get the focused element
 hs.ax.focusedElement = function() {
@@ -170,7 +106,7 @@ hs.ax.focusedElement = function() {
         return null;
     }
 
-    const appElement = hs.ax.applicationElement(focusedApp.pid);
+    const appElement = hs.ax.applicationElement(focusedApp);
     if (!appElement) {
         return null;
     }
@@ -260,3 +196,16 @@ hs.ax.printHierarchy = function(element, depth = 0) {
         }
     }
 };
+
+// Example usage in user's init.js:
+//
+// const safari = hs.application.matchingBundleID("com.apple.Safari");
+//
+// function windowCreatedHandler(notification, element) {
+//     console.log("Safari window created:", element.title);
+// }
+//
+// hs.ax.addWatcher(safari, "AXWindowCreated", windowCreatedHandler);
+//
+// // Later, to remove:
+// hs.ax.removeWatcher(safari, "AXWindowCreated", windowCreatedHandler);
