@@ -14,7 +14,8 @@ extension JSContext {
         let typeBridges = [
             "HSPoint": HSPoint.self,
             "HSSize":  HSSize.self,
-            "HSRect":  HSRect.self
+            "HSRect":  HSRect.self,
+            "HSFont":  HSFont.self,
         ]
 
         typeBridges.forEach { key, value in

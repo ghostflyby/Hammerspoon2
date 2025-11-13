@@ -14,6 +14,7 @@ import JavaScriptCore
     @objc func reload()
 
     // Modules
+    @objc var alert: HSAlertModule { get }
     @objc var appinfo: HSAppInfoModule { get }
     @objc var application: HSApplicationModule { get }
     @objc var ax: HSAXModule { get }
@@ -65,6 +66,7 @@ import JavaScriptCore
     }
 
     // Modules
+    @objc var alert: HSAlertModule { get { getOrCreate(name: "alert", type: HSAlertModule.self)}}
     @objc var appinfo: HSAppInfoModule { get { getOrCreate(name: "appinfo", type: HSAppInfoModule.self)}}
     @objc var application: HSApplicationModule { get { getOrCreate(name: "application", type: HSApplicationModule.self)}}
     @objc var ax: HSAXModule { get { getOrCreate(name: "ax", type: HSAXModule.self)}}

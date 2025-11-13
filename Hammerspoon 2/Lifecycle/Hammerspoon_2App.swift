@@ -10,8 +10,12 @@ import Sparkle
 
 @_documentation(visibility: private)
 class AppDelegate: NSObject, NSApplicationDelegate {
+    static private(set) var instance: AppDelegate! = nil
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         AKTrace("applicationDidFinishLaunching: Creating/booting shared manager")
+
+        AppDelegate.instance = self
         let managerManager = ManagerManager.shared
         do {
             try managerManager.boot()
@@ -99,17 +103,5 @@ struct Hammerspoon_2App: App {
         Settings() {
             SettingsView()
         }
-
-        WindowGroup(id: "hs.alert", for: HSAlertObject.self) { $alertValue in
-            AlertView(message: $alertValue.wrappedValue ?? HSAlertObject(message: "UNKNOWN MESSAGE"))
-                .containerBackground(.clear, for: .window)
-//                .containerBackground(.thickMaterial, for: .window)
-                .windowResizeBehavior(.disabled)
-        }
-        .windowStyle(.hiddenTitleBar)
-        .windowLevel(.floating)
-        .windowBackgroundDragBehavior(.enabled)
-        .defaultLaunchBehavior(.suppressed)
-        .restorationBehavior(.disabled)
     }
 }
