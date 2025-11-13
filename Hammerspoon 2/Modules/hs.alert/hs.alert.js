@@ -8,6 +8,6 @@
 hs.alert.show = function(message) {
     var alert = hs.alert.newAlert()
     alert.message = message
-    alert.fontSize = new HSFont("title")
+    alert.font = HSFont.title()
     hs.alert.showAlert(alert)
 }

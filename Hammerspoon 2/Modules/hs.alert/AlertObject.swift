@@ -9,17 +9,17 @@ import Foundation
 import JavaScriptCore
 import SwiftUI
 
-@objc protocol HSAlertObjectAPI: JSExport {
+@objc protocol HSAlertAPI: JSExport {
     @objc var message: String { get set }
     @objc var expire: Int { get set }
-    @objc var fontSize: HSFont { get set }
+    @objc var font: HSFont { get set }
     @objc var padding: Int { get set }
 }
 
-@objc class HSAlertObject: NSObject, HSAlertObjectAPI {
+@objc class HSAlert: NSObject, HSAlertAPI {
     @objc var message: String = ""
     @objc var expire: Int = 5
-    @objc var fontSize: HSFont = HSFont(size: "body")
+    @objc var font: HSFont = HSFont.body()
     @objc var padding: Int = -1
 
     var swiftUIPadding: CGFloat? {
@@ -28,7 +28,8 @@ import SwiftUI
         }
         return CGFloat(padding)
     }
+
     var swiftUIFont: Font {
-        return fontSize.font
+        return font.font
     }
 }

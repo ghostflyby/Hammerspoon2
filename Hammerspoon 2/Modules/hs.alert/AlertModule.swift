@@ -15,8 +15,8 @@ import SwiftUI
 
 /// Module for accessing information about the Hammerspoon application itself
 @objc protocol HSAlertModuleAPI: JSExport {
-    @objc func newAlert() -> HSAlertObject
-    @objc func showAlert(_ alert: HSAlertObject)
+    @objc func newAlert() -> HSAlert
+    @objc func showAlert(_ alert: HSAlert)
 }
 
 // MARK: - Implementation
@@ -36,7 +36,7 @@ import SwiftUI
         print("Deinit of \(name)")
     }
 
-    func makeAlertWindow(for screen: NSScreen, message: HSAlertObject) -> NSWindow {
+    func makeAlertWindow(for screen: NSScreen, message: HSAlert) -> NSWindow {
         let window = NSWindow(contentRect: screen.visibleFrame, styleMask: [.borderless], backing: .buffered, defer: false)
 
         window.contentView = NSHostingView(rootView: AlertView(message: message))
@@ -49,11 +49,11 @@ import SwiftUI
         return window
     }
 
-    @objc func newAlert() -> HSAlertObject {
-        return HSAlertObject()
+    @objc func newAlert() -> HSAlert {
+        return HSAlert()
     }
 
-    @objc func showAlert(_ alert: HSAlertObject) {
+    @objc func showAlert(_ alert: HSAlert) {
         guard let screen = NSScreen.main else {
             AKError("Unable to find main screen for alert")
             return
@@ -65,9 +65,7 @@ import SwiftUI
         window.orderFrontRegardless()
 
         Task { @MainActor in
-            AKTrace("Sleeping alert for \(alert.expire)s")
             try? await Task.sleep(for: .seconds(alert.expire))
-            AKTrace("Closing alert")
             window.orderOut(nil)
         }
     }

@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct AlertView: View {
-    let message: HSAlertObject
+    let message: HSAlert
+
+    @State private var viewOpacity = 0.0
 
     var body: some View {
         VStack {
@@ -24,11 +26,23 @@ struct AlertView: View {
             }
             Spacer()
         }
+        .opacity(viewOpacity)
+        .task {
+            withAnimation(.linear(duration: 0.2)) {
+                viewOpacity = 1.0
+            }
+        }
+        .task {
+            try? await Task.sleep(for: .seconds(Double(message.expire) - 0.2))
+            withAnimation(.linear(duration: 0.2)) {
+                viewOpacity = 0.0
+            }
+        }
     }
 }
 
 #Preview("Alert") {
-    let alertObject = HSAlertObject()
+    let alertObject = HSAlert()
     alertObject.message = "TESTING"
     return AlertView(message: alertObject)
 }

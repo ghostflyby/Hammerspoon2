@@ -10,36 +10,118 @@ import JavaScriptCore
 import SwiftUI
 
 @objc protocol HSFontJSExports: JSExport {
-    @objc var sizes: [String] { get }
-    init(size: String)
+    // Text style static factory methods
+    static func body() -> HSFont
+    static func callout() -> HSFont
+    static func caption() -> HSFont
+    static func caption2() -> HSFont
+    static func footnote() -> HSFont
+    static func headline() -> HSFont
+    static func largeTitle() -> HSFont
+    static func subheadline() -> HSFont
+    static func title() -> HSFont
+    static func title2() -> HSFont
+    static func title3() -> HSFont
+
+    // System fonts
+    static func system(_ size: Double) -> HSFont
+    static func system(_ size: Double, weight: String) -> HSFont
+
+    // Custom fonts
+    static func custom(_ name: String, size: Double) -> HSFont
 }
 
 @objc class HSFont: NSObject, HSFontJSExports {
-    @objc var sizes = [
-        "body",
-        "title"
-    ]
-    var font: Font = .body
+    var font: Font
 
-    required init(size: String) {
-        guard sizes.contains(size) else {
-            AKError("Unknown font size: \(size)")
-            return
-        }
-        switch size {
-        case "body":
-            font = .body
-        case "caption":
-            font = .caption
-        case "title":
-            font = .title
-        case "title2":
-            font = .title2
-        case "title3":
-            font = .title3
-        // FIXME: Add more of these, or figure out a smarter way to do this
+    private init(font: Font) {
+        self.font = font
+        super.init()
+    }
+
+    // MARK: - Text Styles
+
+    @objc static func body() -> HSFont {
+        HSFont(font: .body)
+    }
+
+    @objc static func callout() -> HSFont {
+        HSFont(font: .callout)
+    }
+
+    @objc static func caption() -> HSFont {
+        HSFont(font: .caption)
+    }
+
+    @objc static func caption2() -> HSFont {
+        HSFont(font: .caption2)
+    }
+
+    @objc static func footnote() -> HSFont {
+        HSFont(font: .footnote)
+    }
+
+    @objc static func headline() -> HSFont {
+        HSFont(font: .headline)
+    }
+
+    @objc static func largeTitle() -> HSFont {
+        HSFont(font: .largeTitle)
+    }
+
+    @objc static func subheadline() -> HSFont {
+        HSFont(font: .subheadline)
+    }
+
+    @objc static func title() -> HSFont {
+        HSFont(font: .title)
+    }
+
+    @objc static func title2() -> HSFont {
+        HSFont(font: .title2)
+    }
+
+    @objc static func title3() -> HSFont {
+        HSFont(font: .title3)
+    }
+
+    // MARK: - System Fonts
+
+    @objc static func system(_ size: Double) -> HSFont {
+        HSFont(font: .system(size: size))
+    }
+
+    @objc static func system(_ size: Double, weight: String) -> HSFont {
+        let fontWeight: Font.Weight
+        switch weight.lowercased() {
+        case "ultralight":
+            fontWeight = .ultraLight
+        case "thin":
+            fontWeight = .thin
+        case "light":
+            fontWeight = .light
+        case "regular":
+            fontWeight = .regular
+        case "medium":
+            fontWeight = .medium
+        case "semibold":
+            fontWeight = .semibold
+        case "bold":
+            fontWeight = .bold
+        case "heavy":
+            fontWeight = .heavy
+        case "black":
+            fontWeight = .black
         default:
-            return
+            AKError("Unknown font weight: \(weight), using regular")
+            fontWeight = .regular
         }
+        return HSFont(font: .system(size: size, weight: fontWeight))
+    }
+
+    // MARK: - Custom Fonts
+
+    @objc static func custom(_ name: String, size: Double) -> HSFont {
+        HSFont(font: .custom(name, size: size))
     }
 }
