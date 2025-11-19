@@ -27,6 +27,12 @@ npm run docs:extract
 # Generate only HTML (from JSON)
 npm run docs:html
 
+# Check documentation coverage statistics
+npm run docs:coverage
+
+# Run validation tests
+npm run docs:test
+
 # Clean all generated documentation
 npm run docs:clean
 ```
