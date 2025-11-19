@@ -1,75 +1,58 @@
 /**
- * @module hs.console
+ * @namespace hs.console
  */
-
-/**
- * HSConsoleModuleAPI
- * @category module
- */
+globalThis['hs.console'] = {};
 
 /**
  * Open the console window
- * @memberof hs.console
- * @instance
+ *
  */
-function open() {}
+hs.console.open = function() {};
 
 /**
  * Close the console window
- * @memberof hs.console
- * @instance
+ *
  */
-function close() {}
+hs.console.close = function() {};
 
 /**
  * Clear all console output
- * @memberof hs.console
- * @instance
+ *
  */
-function clear() {}
+hs.console.clear = function() {};
 
 /**
  * Print a message to the console
-- Parameter message: The message to print
+ *
  * @param {string} message
- * @memberof hs.console
- * @instance
  */
-function print(message) {}
+hs.console.print = function(message) {};
 
 /**
  * Print a debug message to the console
-- Parameter message: The message to print
+ *
  * @param {string} message
- * @memberof hs.console
- * @instance
  */
-function debug(message) {}
+hs.console.debug = function(message) {};
 
 /**
  * Print an info message to the console
-- Parameter message: The message to print
+ *
  * @param {string} message
- * @memberof hs.console
- * @instance
  */
-function info(message) {}
+hs.console.info = function(message) {};
 
 /**
  * Print a warning message to the console
-- Parameter message: The message to print
+ *
  * @param {string} message
- * @memberof hs.console
- * @instance
  */
-function warning(message) {}
+hs.console.warning = function(message) {};
 
 /**
  * Print an error message to the console
-- Parameter message: The message to print
+ *
  * @param {string} message
- * @memberof hs.console
- * @instance
  */
-function error(message) {}
+hs.console.error = function(message) {};
 

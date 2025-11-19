@@ -1,108 +1,72 @@
 /**
- * @module hs.ax
+ * @namespace hs.ax
  */
-
-/**
- * HSAXElementAPI
- * @category object
- */
+globalThis['hs.ax'] = {};
 
 /**
  * The element's role (e.g., "AXWindow", "AXButton")
- * @memberof hs.ax
- * @instance
+ * @type {*}
  */
-var role;
-
-/**
- * HSAXModuleAPI
- * @category module
- */
+hs.ax.role;
 
 /**
  * Get the system-wide accessibility element
-- Returns: The system-wide AXElement, or nil if accessibility is not available
+ *
  * @returns {HSAXElement} The system-wide AXElement, or nil if accessibility is not available
- * @memberof hs.ax
- * @instance
  */
-function systemWideElement() {}
+hs.ax.systemWideElement = function() {};
 
 /**
  * Get the accessibility element for an application
-- Parameters:
-- element: An HSApplication object
-- Returns: The AXElement for the application, or nil if accessibility is not available
+ *
  * @param {HSApplication} element
  * @returns {HSAXElement} The AXElement for the application, or nil if accessibility is not available
- * @memberof hs.ax
- * @instance
  */
-function applicationElement(element) {}
+hs.ax.applicationElement = function(element) {};
 
 /**
  * Get the accessibility element for a window
-- Parameters:
-- window: An HSWindow  object
-- Returns: The AXElement for the window, or nil if accessibility is not available
+ *
  * @param {HSWindow} window
  * @returns {HSAXElement} The AXElement for the window, or nil if accessibility is not available
- * @memberof hs.ax
- * @instance
  */
-function windowElement(window) {}
+hs.ax.windowElement = function(window) {};
 
 /**
  * Get the accessibility element at the specific screen position
-- Parameter point: An HSPoint object containing screen coordinates
-- Returns: The AXElement at that position, or nil if none found
+ *
  * @param {HSPoint} point
  * @returns {HSAXElement} The AXElement at that position, or nil if none found
- * @memberof hs.ax
- * @instance
  */
-function elementAtPoint(point) {}
+hs.ax.elementAtPoint = function(point) {};
 
 /**
  * A dictionary containing all of the notification types that can be used with hs.ax.addWatcher()
- * @memberof hs.ax
- * @instance
+ * @type {*}
  */
-var notificationTypes;
+hs.ax.notificationTypes;
 
 /**
- * @memberof hs.ax
- * @function
  */
-hs.ax.addWatcher = function(application, notification, listener) {}
+hs.ax.addWatcher = function(application, notification, listener) {};
 
 /**
- * @memberof hs.ax
- * @function
  */
-hs.ax.removeWatcher = function(application, notification, listener) {}
+hs.ax.removeWatcher = function(application, notification, listener) {};
 
 /**
- * @memberof hs.ax
- * @function
  */
-hs.ax.focusedElement = function() {}
+hs.ax.focusedElement = function() {};
 
 /**
- * @memberof hs.ax
- * @function
  */
-hs.ax.findByRole = function(role, parent) {}
+hs.ax.findByRole = function(role, parent) {};
 
 /**
- * @memberof hs.ax
- * @function
  */
-hs.ax.findByTitle = function(title, parent) {}
+hs.ax.findByTitle = function(title, parent) {};
 
 /**
- * @memberof hs.ax
- * @function
  */
-hs.ax.printHierarchy = function(element, depth = 0) {}
+hs.ax.printHierarchy = function(element, depth = 0) {};
 

@@ -1,40 +1,24 @@
 /**
- * @module hs.alert
+ * @namespace hs.alert
  */
+globalThis['hs.alert'] = {};
 
 /**
- * HSAlertModuleAPI
- * @category module
+ * @returns {HSAlert}
  */
-
-/**
- * @returns {HSAlert} 
- * @memberof hs.alert
- * @instance
- */
-function newAlert() {}
+hs.alert.newAlert = function() {};
 
 /**
  * @param {HSAlert} alert
- * @memberof hs.alert
- * @instance
  */
-function showAlert(alert) {}
+hs.alert.showAlert = function(alert) {};
 
 /**
- * HSAlertAPI
- * @category object
+ * @type {*}
  */
+hs.alert.message;
 
 /**
- * @memberof hs.alert
- * @instance
  */
-var message;
-
-/**
- * @memberof hs.alert
- * @function
- */
-hs.alert.show = function(message) {}
+hs.alert.show = function(message) {};
 

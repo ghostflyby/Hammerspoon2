@@ -1,16 +1,11 @@
 /**
- * @module hs.appinfo
+ * @namespace hs.appinfo
  */
-
-/**
- * HSAppInfoModuleAPI
- * @category module
- */
+globalThis['hs.appinfo'] = {};
 
 /**
  * The application's internal name (e.g., "Hammerspoon 2")
- * @memberof hs.appinfo
- * @instance
+ * @type {*}
  */
-var appName;
+hs.appinfo.appName;
 

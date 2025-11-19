@@ -415,48 +415,100 @@ function processModule(moduleName, modulePath) {
 }
 
 /**
+ * Format DocC documentation to JSDoc format
+ * Converts Apple's DocC format (- Parameters:, - Returns:) to clean descriptions
+ */
+function formatDocCToJSDoc(documentation) {
+    if (!documentation) return '';
+    
+    const lines = documentation.split('\n');
+    const result = [];
+    let inParamsList = false;
+    
+    for (const line of lines) {
+        const trimmed = line.trim();
+        
+        // Skip parameter list headers and individual parameter lines
+        if (trimmed === '- Parameters:' || trimmed.startsWith('- Parameters:')) {
+            inParamsList = true;
+            continue;
+        }
+        
+        // Skip returns line (we handle this separately)
+        if (trimmed.startsWith('- Returns:')) {
+            break;
+        }
+        
+        // Skip individual parameter documentation (starts with "- paramName:")
+        if (inParamsList && trimmed.match(/^-\s+\w+:/)) {
+            continue;
+        }
+        
+        // If we hit a non-parameter line, we're out of the params list
+        if (inParamsList && !trimmed.startsWith('-')) {
+            inParamsList = false;
+        }
+        
+        // Skip Note: lines for now (could be added as @note in future)
+        if (trimmed.startsWith('- Note:')) {
+            continue;
+        }
+        
+        // Keep the main description line
+        if (!trimmed.startsWith('-') && trimmed) {
+            result.push(trimmed);
+        }
+    }
+    
+    return result.join(' ');
+}
+
+/**
  * Generate combined JSDoc-compatible file for a module
  */
 function generateCombinedJSDoc(moduleData) {
-    let output = `/**\n * @module ${moduleData.name}\n */\n\n`;
+    // Create namespace using bracket notation for names with dots
+    const namespaceVar = moduleData.name.includes('.') 
+        ? `globalThis['${moduleData.name}']` 
+        : moduleData.name;
+    
+    let output = `/**\n * @namespace ${moduleData.name}\n */\n`;
+    output += `${namespaceVar} = {};\n\n`;
     
     // Add Swift protocol methods as JSDoc
     for (const protocol of moduleData.swift.protocols) {
-        output += `/**\n * ${protocol.name}\n`;
-        if (protocol.category) {
-            output += ` * @category ${protocol.category}\n`;
-        }
-        output += ` */\n\n`;
-        
         // Add methods
         for (const method of protocol.methods) {
+            const cleanDoc = formatDocCToJSDoc(method.documentation);
+            const escapedName = escapeFunctionName(method.name);
+            
             output += `/**\n`;
-            if (method.documentation) {
-                output += ` * ${method.documentation}\n`;
+            if (cleanDoc) {
+                output += ` * ${cleanDoc}\n`;
+                output += ` *\n`;
             }
             for (const param of method.params) {
                 output += ` * @param {${swiftTypeToJSDoc(param.type)}} ${param.name}\n`;
             }
             if (method.returns) {
-                output += ` * @returns {${swiftTypeToJSDoc(method.returns.type)}} ${method.returns.description}\n`;
+                const returnDesc = method.returns.description || '';
+                output += ` * @returns {${swiftTypeToJSDoc(method.returns.type)}}${returnDesc ? ' ' + returnDesc : ''}\n`;
             }
-            output += ` * @memberof ${moduleData.name}\n`;
-            output += ` * @instance\n`;
             output += ` */\n`;
-            const escapedName = escapeFunctionName(method.name);
-            output += `function ${escapedName}(${method.params.map(p => p.name).join(', ')}) {}\n\n`;
+            output += `${moduleData.name}.${escapedName} = function(${method.params.map(p => p.name).join(', ')}) {};\n\n`;
         }
         
         // Add properties
         for (const prop of protocol.properties) {
+            const cleanDoc = formatDocCToJSDoc(prop.documentation);
+            
             output += `/**\n`;
-            if (prop.documentation) {
-                output += ` * ${prop.documentation}\n`;
+            if (cleanDoc) {
+                output += ` * ${cleanDoc}\n`;
             }
-            output += ` * @memberof ${moduleData.name}\n`;
-            output += ` * @instance\n`;
+            output += ` * @type {*}\n`;
             output += ` */\n`;
-            output += `var ${prop.name};\n\n`;
+            output += `${moduleData.name}.${prop.name};\n\n`;
         }
     }
     
@@ -465,14 +517,17 @@ function generateCombinedJSDoc(moduleData) {
         output += `/**\n`;
         if (func.documentation && func.documentation.description) {
             output += ` * ${func.documentation.description}\n`;
+            output += ` *\n`;
         }
         if (func.documentation && func.documentation.params) {
             for (const param of func.documentation.params) {
-                output += ` * @param {${param.type}} ${param.name} ${param.description}\n`;
+                const desc = param.description ? ' ' + param.description : '';
+                output += ` * @param {${param.type}} ${param.name}${desc}\n`;
             }
         }
         if (func.documentation && func.documentation.returns) {
-            output += ` * @returns {${func.documentation.returns.type}} ${func.documentation.returns.description}\n`;
+            const desc = func.documentation.returns.description ? ' ' + func.documentation.returns.description : '';
+            output += ` * @returns {${func.documentation.returns.type}}${desc}\n`;
         }
         if (func.documentation && func.documentation.examples && func.documentation.examples.length > 0) {
             output += ` * @example\n`;
@@ -480,10 +535,8 @@ function generateCombinedJSDoc(moduleData) {
                 output += ` * ${example}\n`;
             }
         }
-        output += ` * @memberof ${moduleData.name}\n`;
-        output += ` * @function\n`;
         output += ` */\n`;
-        output += `${func.name} = function(${func.params.join(', ')}) {}\n\n`;
+        output += `${func.name} = function(${func.params.join(', ')}) {};\n\n`;
     }
     
     return output;
