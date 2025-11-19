@@ -1,0 +1,265 @@
+{
+  "name": "hs.timer",
+  "swift": {
+    "protocols": [
+      {
+        "name": "HSTimerModuleAPI",
+        "type": "protocol",
+        "methods": [
+          {
+            "name": "new",
+            "signature": "func new(_ interval: TimeInterval, _ callback: JSValue, _ continueOnError: Bool) -> HSTimerObject",
+            "documentation": "Create a new timer\n- Parameters:\n- interval: The interval in seconds at which the timer should fire\n- callback: A JavaScript function to call when the timer fires\n- continueOnError: If true, the timer will continue running even if the callback throws an error\n- Returns: A timer object. Call start() to begin the timer.",
+            "params": [
+              {
+                "name": "interval",
+                "type": "TimeInterval"
+              },
+              {
+                "name": "callback",
+                "type": "JSValue"
+              },
+              {
+                "name": "continueOnError",
+                "type": "Bool"
+              }
+            ],
+            "returns": {
+              "type": "HSTimerObject",
+              "description": "A timer object. Call start() to begin the timer."
+            }
+          },
+          {
+            "name": "doAfter",
+            "signature": "func doAfter(_ seconds: TimeInterval, _ callback: JSValue) -> HSTimerObject",
+            "documentation": "Create and start a one-shot timer\n- Parameters:\n- seconds: Number of seconds to wait before firing\n- callback: A JavaScript function to call when the timer fires\n- Returns: A timer object (already started)",
+            "params": [
+              {
+                "name": "seconds",
+                "type": "TimeInterval"
+              },
+              {
+                "name": "callback",
+                "type": "JSValue"
+              }
+            ],
+            "returns": {
+              "type": "HSTimerObject",
+              "description": "A timer object (already started)"
+            }
+          },
+          {
+            "name": "doEvery",
+            "signature": "func doEvery(_ interval: TimeInterval, _ callback: JSValue) -> HSTimerObject",
+            "documentation": "Create and start a repeating timer\n- Parameters:\n- interval: The interval in seconds at which the timer should fire\n- callback: A JavaScript function to call when the timer fires\n- Returns: A timer object (already started)",
+            "params": [
+              {
+                "name": "interval",
+                "type": "TimeInterval"
+              },
+              {
+                "name": "callback",
+                "type": "JSValue"
+              }
+            ],
+            "returns": {
+              "type": "HSTimerObject",
+              "description": "A timer object (already started)"
+            }
+          },
+          {
+            "name": "usleep",
+            "signature": "func usleep(_ microseconds: UInt32)",
+            "documentation": "Create and start a timer that fires at a specific time\n- Parameters:\n- time: Seconds since midnight (local time) when the timer should first fire\n- repeatInterval: If provided, the timer will repeat at this interval. Pass 0 for one-shot.\n- callback: A JavaScript function to call when the timer fires\n- continueOnError: If true, the timer will continue running even if the callback throws an error\n- Returns: A timer object (already started)\nBlock execution for a specified number of microseconds (strongly discouraged)\n- Parameter microseconds: Number of microseconds to sleep\n- Note: This blocks the entire application and should be avoided. Use timers instead.",
+            "params": [
+              {
+                "name": "microseconds",
+                "type": "UInt32"
+              }
+            ],
+            "returns": null
+          },
+          {
+            "name": "secondsSinceEpoch",
+            "signature": "func secondsSinceEpoch() -> TimeInterval",
+            "documentation": "Get the current time as seconds since the UNIX epoch with sub-second precision\n- Returns: Fractional seconds since midnight, January 1, 1970 UTC",
+            "params": [],
+            "returns": {
+              "type": "TimeInterval",
+              "description": "Fractional seconds since midnight, January 1, 1970 UTC"
+            }
+          },
+          {
+            "name": "absoluteTime",
+            "signature": "func absoluteTime() -> UInt64",
+            "documentation": "Get the number of nanoseconds since the system was booted (excluding sleep time)\n- Returns: Nanoseconds since boot",
+            "params": [],
+            "returns": {
+              "type": "UInt64",
+              "description": "Nanoseconds since boot"
+            }
+          },
+          {
+            "name": "localTime",
+            "signature": "func localTime() -> TimeInterval",
+            "documentation": "Get the number of seconds since local midnight\n- Returns: Seconds since midnight in the local timezone",
+            "params": [],
+            "returns": {
+              "type": "TimeInterval",
+              "description": "Seconds since midnight in the local timezone"
+            }
+          }
+        ],
+        "properties": [],
+        "category": "module"
+      },
+      {
+        "name": "HSTimerObjectAPI",
+        "type": "protocol",
+        "methods": [],
+        "properties": [
+          {
+            "name": "interval",
+            "signature": "var interval: TimeInterval { get",
+            "documentation": "The timer's interval in seconds"
+          }
+        ],
+        "category": "object"
+      }
+    ],
+    "objects": []
+  },
+  "javascript": {
+    "functions": [
+      {
+        "name": "hs.timer.minutes",
+        "params": [
+          "n"
+        ],
+        "documentation": {
+          "description": "",
+          "params": [],
+          "returns": null
+        },
+        "type": "function"
+      },
+      {
+        "name": "hs.timer.hours",
+        "params": [
+          "n"
+        ],
+        "documentation": {
+          "description": "",
+          "params": [],
+          "returns": null
+        },
+        "type": "function"
+      },
+      {
+        "name": "hs.timer.days",
+        "params": [
+          "n"
+        ],
+        "documentation": {
+          "description": "",
+          "params": [],
+          "returns": null
+        },
+        "type": "function"
+      },
+      {
+        "name": "hs.timer.weeks",
+        "params": [
+          "n"
+        ],
+        "documentation": {
+          "description": "",
+          "params": [],
+          "returns": null
+        },
+        "type": "function"
+      },
+      {
+        "name": "hs.timer.seconds",
+        "params": [
+          "timeString"
+        ],
+        "documentation": {
+          "description": "",
+          "params": [],
+          "returns": null
+        },
+        "type": "function"
+      },
+      {
+        "name": "hs.timer.doUntil",
+        "params": [
+          "predicateFn",
+          "actionFn",
+          "checkInterval"
+        ],
+        "documentation": {
+          "description": "",
+          "params": [],
+          "returns": null
+        },
+        "type": "function"
+      },
+      {
+        "name": "hs.timer.doWhile",
+        "params": [
+          "predicateFn",
+          "actionFn",
+          "checkInterval"
+        ],
+        "documentation": {
+          "description": "",
+          "params": [],
+          "returns": null
+        },
+        "type": "function"
+      },
+      {
+        "name": "hs.timer.waitUntil",
+        "params": [
+          "predicateFn",
+          "actionFn",
+          "checkInterval"
+        ],
+        "documentation": {
+          "description": "",
+          "params": [],
+          "returns": null
+        },
+        "type": "function"
+      },
+      {
+        "name": "hs.timer.waitWhile",
+        "params": [
+          "predicateFn",
+          "actionFn",
+          "checkInterval"
+        ],
+        "documentation": {
+          "description": "",
+          "params": [],
+          "returns": null
+        },
+        "type": "function"
+      },
+      {
+        "name": "hs.timer.delayed",
+        "params": [
+          "delay",
+          "fn"
+        ],
+        "documentation": {
+          "description": "",
+          "params": [],
+          "returns": null
+        },
+        "type": "function"
+      }
+    ]
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "name": "hs.hash",
+  "swift": {
+    "protocols": [
+      {
+        "name": "HSHashModuleAPI",
+        "type": "protocol",
+        "methods": [
+          {
+            "name": "base64Encode",
+            "signature": "func base64Encode(_ data: String) -> String",
+            "documentation": "Encode a string to base64\n- Parameter raw: The string to encode\n- Returns: Base64 encoded string",
+            "params": [
+              {
+                "name": "data",
+                "type": "String"
+              }
+            ],
+            "returns": {
+              "type": "String",
+              "description": "Base64 encoded string"
+            }
+          },
+          {
+            "name": "base64Decode",
+            "signature": "func base64Decode(_ data: String) -> String?",
+            "documentation": "Decode a base64 string\n- Parameter raw: The base64 string to decode\n- Returns: Decoded string, or nil if the input is invalid",
+            "params": [
+              {
+                "name": "data",
+                "type": "String"
+              }
+            ],
+            "returns": {
+              "type": "String?",
+              "description": "Decoded string, or nil if the input is invalid"
+            }
+          },
+          {
+            "name": "md5",
+            "signature": "func md5(_ data: String) -> String",
+            "documentation": "Generate MD5 hash of a string\n- Parameter data: The string to hash\n- Returns: Hexadecimal MD5 hash",
+            "params": [
+              {
+                "name": "data",
+                "type": "String"
+              }
+            ],
+            "returns": {
+              "type": "String",
+              "description": "Hexadecimal MD5 hash"
+            }
+          },
+          {
+            "name": "sha1",
+            "signature": "func sha1(_ data: String) -> String",
+            "documentation": "Generate SHA1 hash of a string\n- Parameter data: The string to hash\n- Returns: Hexadecimal SHA1 hash",
+            "params": [
+              {
+                "name": "data",
+                "type": "String"
+              }
+            ],
+            "returns": {
+              "type": "String",
+              "description": "Hexadecimal SHA1 hash"
+            }
+          },
+          {
+            "name": "sha256",
+            "signature": "func sha256(_ data: String) -> String",
+            "documentation": "Generate SHA256 hash of a string\n- Parameter data: The string to hash\n- Returns: Hexadecimal SHA256 hash",
+            "params": [
+              {
+                "name": "data",
+                "type": "String"
+              }
+            ],
+            "returns": {
+              "type": "String",
+              "description": "Hexadecimal SHA256 hash"
+            }
+          },
+          {
+            "name": "sha512",
+            "signature": "func sha512(_ data: String) -> String",
+            "documentation": "Generate SHA512 hash of a string\n- Parameter data: The string to hash\n- Returns: Hexadecimal SHA512 hash",
+            "params": [
+              {
+                "name": "data",
+                "type": "String"
+              }
+            ],
+            "returns": {
+              "type": "String",
+              "description": "Hexadecimal SHA512 hash"
+            }
+          },
+          {
+            "name": "hmacMD5",
+            "signature": "func hmacMD5(_ key: String, _ data: String) -> String",
+            "documentation": "Generate HMAC-MD5 of a string with a key\n- Parameters:\n- key: The secret key\n- data: The data to authenticate\n- Returns: Hexadecimal HMAC-MD5",
+            "params": [
+              {
+                "name": "key",
+                "type": "String"
+              },
+              {
+                "name": "data",
+                "type": "String"
+              }
+            ],
+            "returns": {
+              "type": "String",
+              "description": "Hexadecimal HMAC-MD5"
+            }
+          },
+          {
+            "name": "hmacSHA1",
+            "signature": "func hmacSHA1(_ key: String, _ data: String) -> String",
+            "documentation": "Generate HMAC-SHA1 of a string with a key\n- Parameters:\n- key: The secret key\n- data: The data to authenticate\n- Returns: Hexadecimal HMAC-SHA1",
+            "params": [
+              {
+                "name": "key",
+                "type": "String"
+              },
+              {
+                "name": "data",
+                "type": "String"
+              }
+            ],
+            "returns": {
+              "type": "String",
+              "description": "Hexadecimal HMAC-SHA1"
+            }
+          },
+          {
+            "name": "hmacSHA256",
+            "signature": "func hmacSHA256(_ key: String, _ data: String) -> String",
+            "documentation": "Generate HMAC-SHA256 of a string with a key\n- Parameters:\n- key: The secret key\n- data: The data to authenticate\n- Returns: Hexadecimal HMAC-SHA256",
+            "params": [
+              {
+                "name": "key",
+                "type": "String"
+              },
+              {
+                "name": "data",
+                "type": "String"
+              }
+            ],
+            "returns": {
+              "type": "String",
+              "description": "Hexadecimal HMAC-SHA256"
+            }
+          },
+          {
+            "name": "hmacSHA512",
+            "signature": "func hmacSHA512(_ key: String, _ data: String) -> String",
+            "documentation": "Generate HMAC-SHA512 of a string with a key\n- Parameters:\n- key: The secret key\n- data: The data to authenticate\n- Returns: Hexadecimal HMAC-SHA512",
+            "params": [
+              {
+                "name": "key",
+                "type": "String"
+              },
+              {
+                "name": "data",
+                "type": "String"
+              }
+            ],
+            "returns": {
+              "type": "String",
+              "description": "Hexadecimal HMAC-SHA512"
+            }
+          }
+        ],
+        "properties": [],
+        "category": "module"
+      }
+    ],
+    "objects": []
+  },
+  "javascript": {
+    "functions": []
+  }
+}

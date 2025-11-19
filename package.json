@@ -1,0 +1,24 @@
+{
+  "name": "hammerspoon2-docs",
+  "version": "1.0.0",
+  "description": "Documentation extraction for Hammerspoon 2 JavaScript API",
+  "private": true,
+  "scripts": {
+    "docs:extract": "node scripts/extract-docs.js",
+    "docs:generate": "npm run docs:extract && npm run docs:html",
+    "docs:html": "jsdoc -c jsdoc.config.json",
+    "docs:clean": "rm -rf docs/api docs/json"
+  },
+  "devDependencies": {
+    "docdash": "^2.0.2",
+    "jsdoc": "^4.0.3",
+    "jsdoc-to-markdown": "^8.0.3"
+  },
+  "keywords": [
+    "hammerspoon",
+    "documentation",
+    "jsdoc"
+  ],
+  "author": "Hammerspoon",
+  "license": "MIT"
+}

@@ -1,0 +1,249 @@
+{
+  "name": "hs.application",
+  "swift": {
+    "protocols": [
+      {
+        "name": "HSApplicationModuleAPI",
+        "type": "protocol",
+        "methods": [
+          {
+            "name": "runningApplications",
+            "signature": "func runningApplications() -> [HSApplication]",
+            "documentation": "Fetch all running applications\n- Returns: An array of all currently running applications",
+            "params": [],
+            "returns": {
+              "type": "[HSApplication]",
+              "description": "An array of all currently running applications"
+            }
+          },
+          {
+            "name": "matchingName",
+            "signature": "func matchingName(_ name: String) -> HSApplication?",
+            "documentation": "Fetch the first running application that matches a name\n- Parameter name: The applicaiton name to search for\n- Returns: The first matching application, or nil if none matched",
+            "params": [
+              {
+                "name": "name",
+                "type": "String"
+              }
+            ],
+            "returns": {
+              "type": "HSApplication?",
+              "description": "The first matching application, or nil if none matched"
+            }
+          },
+          {
+            "name": "matchingBundleID",
+            "signature": "func matchingBundleID(_ bundleID: String) -> HSApplication?",
+            "documentation": "Fetch the first running application that matches a Bundle ID\n- Parameter bundleID: The identifier to search for\n- Returns: The first matching application, or nil if none matched",
+            "params": [
+              {
+                "name": "bundleID",
+                "type": "String"
+              }
+            ],
+            "returns": {
+              "type": "HSApplication?",
+              "description": "The first matching application, or nil if none matched"
+            }
+          },
+          {
+            "name": "fromPID",
+            "signature": "func fromPID(_ pid: Int) -> HSApplication?",
+            "documentation": "Fetch the running application that matches a POSIX PID\n- Parameter pid: The PID to search for\n- Returns: The matching application, or nil if none matched",
+            "params": [
+              {
+                "name": "pid",
+                "type": "Int"
+              }
+            ],
+            "returns": {
+              "type": "HSApplication?",
+              "description": "The matching application, or nil if none matched"
+            }
+          },
+          {
+            "name": "frontmost",
+            "signature": "func frontmost() -> HSApplication?",
+            "documentation": "Fetch the currently focused application\n- Returns: The matching application, or nil if none matched",
+            "params": [],
+            "returns": {
+              "type": "HSApplication?",
+              "description": "The matching application, or nil if none matched"
+            }
+          },
+          {
+            "name": "menuBarOwner",
+            "signature": "func menuBarOwner() -> HSApplication?",
+            "documentation": "Fetch the application which currently owns the menu bar\n- Returns: The matching application, or nil if none matched",
+            "params": [],
+            "returns": {
+              "type": "HSApplication?",
+              "description": "The matching application, or nil if none matched"
+            }
+          },
+          {
+            "name": "pathForBundleID",
+            "signature": "func pathForBundleID(_ bundleID: String) -> String?",
+            "documentation": "Fetch the filesystem path for an application\n- Parameter bundleID: The application bundle identifier to search for (e.g. \"com.apple.Safari\")\n- Returns: The application's filesystem path, or nil if it was not found",
+            "params": [
+              {
+                "name": "bundleID",
+                "type": "String"
+              }
+            ],
+            "returns": {
+              "type": "String?",
+              "description": "The application's filesystem path, or nil if it was not found"
+            }
+          },
+          {
+            "name": "pathsForBundleID",
+            "signature": "func pathsForBundleID(_ bundleID: String) -> [String]",
+            "documentation": "Fetch filesystem paths for an application\n- Parameter bundleID: The application bundle identifier to search for (e.g. \"com.apple.Safari\")\n- Returns: An array of strings containing any filesystem paths that were found",
+            "params": [
+              {
+                "name": "bundleID",
+                "type": "String"
+              }
+            ],
+            "returns": {
+              "type": "[String]",
+              "description": "An array of strings containing any filesystem paths that were found"
+            }
+          },
+          {
+            "name": "infoForBundlePath",
+            "signature": "func infoForBundlePath(_ bundlePath: String) -> [String: Any]?",
+            "documentation": "",
+            "params": [
+              {
+                "name": "bundlePath",
+                "type": "String"
+              }
+            ],
+            "returns": {
+              "type": "[String: Any]?",
+              "description": ""
+            }
+          },
+          {
+            "name": "pathForFileType",
+            "signature": "func pathForFileType(_ fileType: String) -> String?",
+            "documentation": "Fetch filesystem path for an application able to open a given file type\n- Parameter fileType: The file type to search for. This can be a UTType identifier, a MIME type, or a filename extension\n- Returns: The path to an application for the given filetype, or il if none were found",
+            "params": [
+              {
+                "name": "fileType",
+                "type": "String"
+              }
+            ],
+            "returns": {
+              "type": "String?",
+              "description": "The path to an application for the given filetype, or il if none were found"
+            }
+          },
+          {
+            "name": "pathsForFileType",
+            "signature": "func pathsForFileType(_ fileType: String) -> [String]",
+            "documentation": "Fetch filesystem paths for applications able to open a given file type\n- Parameter fileType: The file type to search for. This can be a UTType identifier, a MIME type, or a filename extension\n- Returns: An array of strings containing the filesystem paths for any applications that were found",
+            "params": [
+              {
+                "name": "fileType",
+                "type": "String"
+              }
+            ],
+            "returns": {
+              "type": "[String]",
+              "description": "An array of strings containing the filesystem paths for any applications that were found"
+            }
+          },
+          {
+            "name": "launchOrFocus",
+            "signature": "func launchOrFocus(_ bundleID: String)",
+            "documentation": "Launch an application, or give it focus if it's already running\n- Parameter bundleID: A bundle identifier for the app to launch/focus (e.g. \"com.apple.Safari\")",
+            "params": [
+              {
+                "name": "bundleID",
+                "type": "String"
+              }
+            ],
+            "returns": null
+          },
+          {
+            "name": "_addWatcher",
+            "signature": "func _addWatcher(eventName: String, callback: JSValue)",
+            "documentation": "",
+            "params": [
+              {
+                "name": "eventName",
+                "type": "String"
+              },
+              {
+                "name": "callback",
+                "type": "JSValue"
+              }
+            ],
+            "returns": null
+          },
+          {
+            "name": "_removeWatcher",
+            "signature": "func _removeWatcher(eventName: String)",
+            "documentation": "",
+            "params": [
+              {
+                "name": "eventName",
+                "type": "String"
+              }
+            ],
+            "returns": null
+          }
+        ],
+        "properties": [],
+        "category": "module"
+      },
+      {
+        "name": "HSApplicationAPI",
+        "type": "protocol",
+        "methods": [],
+        "properties": [
+          {
+            "name": "pid",
+            "signature": "var pid: Int { get",
+            "documentation": "POSIX Process Identifier"
+          }
+        ],
+        "category": "object"
+      }
+    ],
+    "objects": []
+  },
+  "javascript": {
+    "functions": [
+      {
+        "name": "hs.application.addWatcher",
+        "params": [
+          "event",
+          "listener"
+        ],
+        "documentation": {
+          "description": "",
+          "params": [],
+          "returns": null
+        },
+        "type": "function"
+      },
+      {
+        "name": "hs.application.removeWatcher",
+        "params": [
+          "event",
+          "listener"
+        ],
+        "documentation": {
+          "description": "",
+          "params": [],
+          "returns": null
+        },
+        "type": "function"
+      }
+    ]
+  }
+}

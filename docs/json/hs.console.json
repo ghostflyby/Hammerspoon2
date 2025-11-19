@@ -1,0 +1,100 @@
+{
+  "name": "hs.console",
+  "swift": {
+    "protocols": [
+      {
+        "name": "HSConsoleModuleAPI",
+        "type": "protocol",
+        "methods": [
+          {
+            "name": "open",
+            "signature": "func open()",
+            "documentation": "Open the console window",
+            "params": [],
+            "returns": null
+          },
+          {
+            "name": "close",
+            "signature": "func close()",
+            "documentation": "Close the console window",
+            "params": [],
+            "returns": null
+          },
+          {
+            "name": "clear",
+            "signature": "func clear()",
+            "documentation": "Clear all console output",
+            "params": [],
+            "returns": null
+          },
+          {
+            "name": "print",
+            "signature": "func print(_ message: String)",
+            "documentation": "Print a message to the console\n- Parameter message: The message to print",
+            "params": [
+              {
+                "name": "message",
+                "type": "String"
+              }
+            ],
+            "returns": null
+          },
+          {
+            "name": "debug",
+            "signature": "func debug(_ message: String)",
+            "documentation": "Print a debug message to the console\n- Parameter message: The message to print",
+            "params": [
+              {
+                "name": "message",
+                "type": "String"
+              }
+            ],
+            "returns": null
+          },
+          {
+            "name": "info",
+            "signature": "func info(_ message: String)",
+            "documentation": "Print an info message to the console\n- Parameter message: The message to print",
+            "params": [
+              {
+                "name": "message",
+                "type": "String"
+              }
+            ],
+            "returns": null
+          },
+          {
+            "name": "warning",
+            "signature": "func warning(_ message: String)",
+            "documentation": "Print a warning message to the console\n- Parameter message: The message to print",
+            "params": [
+              {
+                "name": "message",
+                "type": "String"
+              }
+            ],
+            "returns": null
+          },
+          {
+            "name": "error",
+            "signature": "func error(_ message: String)",
+            "documentation": "Print an error message to the console\n- Parameter message: The message to print",
+            "params": [
+              {
+                "name": "message",
+                "type": "String"
+              }
+            ],
+            "returns": null
+          }
+        ],
+        "properties": [],
+        "category": "module"
+      }
+    ],
+    "objects": []
+  },
+  "javascript": {
+    "functions": []
+  }
+}

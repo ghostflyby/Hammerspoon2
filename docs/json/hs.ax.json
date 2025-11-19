@@ -1,0 +1,171 @@
+{
+  "name": "hs.ax",
+  "swift": {
+    "protocols": [
+      {
+        "name": "HSAXElementAPI",
+        "type": "protocol",
+        "methods": [],
+        "properties": [
+          {
+            "name": "role",
+            "signature": "var role: String? { get",
+            "documentation": "The element's role (e.g., \"AXWindow\", \"AXButton\")"
+          }
+        ],
+        "category": "object"
+      },
+      {
+        "name": "HSAXModuleAPI",
+        "type": "protocol",
+        "methods": [
+          {
+            "name": "systemWideElement",
+            "signature": "func systemWideElement() -> HSAXElement?",
+            "documentation": "Get the system-wide accessibility element\n- Returns: The system-wide AXElement, or nil if accessibility is not available",
+            "params": [],
+            "returns": {
+              "type": "HSAXElement?",
+              "description": "The system-wide AXElement, or nil if accessibility is not available"
+            }
+          },
+          {
+            "name": "applicationElement",
+            "signature": "func applicationElement(_ element: HSApplication) -> HSAXElement?",
+            "documentation": "Get the accessibility element for an application\n- Parameters:\n- element: An HSApplication object\n- Returns: The AXElement for the application, or nil if accessibility is not available",
+            "params": [
+              {
+                "name": "element",
+                "type": "HSApplication"
+              }
+            ],
+            "returns": {
+              "type": "HSAXElement?",
+              "description": "The AXElement for the application, or nil if accessibility is not available"
+            }
+          },
+          {
+            "name": "windowElement",
+            "signature": "func windowElement(_ window: HSWindow) -> HSAXElement?",
+            "documentation": "Get the accessibility element for a window\n- Parameters:\n- window: An HSWindow  object\n- Returns: The AXElement for the window, or nil if accessibility is not available",
+            "params": [
+              {
+                "name": "window",
+                "type": "HSWindow"
+              }
+            ],
+            "returns": {
+              "type": "HSAXElement?",
+              "description": "The AXElement for the window, or nil if accessibility is not available"
+            }
+          },
+          {
+            "name": "elementAtPoint",
+            "signature": "func elementAtPoint(_ point: HSPoint) -> HSAXElement?",
+            "documentation": "Get the accessibility element at the specific screen position\n- Parameter point: An HSPoint object containing screen coordinates\n- Returns: The AXElement at that position, or nil if none found",
+            "params": [
+              {
+                "name": "point",
+                "type": "HSPoint"
+              }
+            ],
+            "returns": {
+              "type": "HSAXElement?",
+              "description": "The AXElement at that position, or nil if none found"
+            }
+          }
+        ],
+        "properties": [
+          {
+            "name": "notificationTypes",
+            "signature": "var notificationTypes: [String: String] { get",
+            "documentation": "A dictionary containing all of the notification types that can be used with hs.ax.addWatcher()"
+          }
+        ],
+        "category": "module"
+      }
+    ],
+    "objects": []
+  },
+  "javascript": {
+    "functions": [
+      {
+        "name": "hs.ax.addWatcher",
+        "params": [
+          "application",
+          "notification",
+          "listener"
+        ],
+        "documentation": {
+          "description": "",
+          "params": [],
+          "returns": null
+        },
+        "type": "function"
+      },
+      {
+        "name": "hs.ax.removeWatcher",
+        "params": [
+          "application",
+          "notification",
+          "listener"
+        ],
+        "documentation": {
+          "description": "",
+          "params": [],
+          "returns": null
+        },
+        "type": "function"
+      },
+      {
+        "name": "hs.ax.focusedElement",
+        "params": [],
+        "documentation": {
+          "description": "",
+          "params": [],
+          "returns": null
+        },
+        "type": "function"
+      },
+      {
+        "name": "hs.ax.findByRole",
+        "params": [
+          "role",
+          "parent"
+        ],
+        "documentation": {
+          "description": "",
+          "params": [],
+          "returns": null
+        },
+        "type": "function"
+      },
+      {
+        "name": "hs.ax.findByTitle",
+        "params": [
+          "title",
+          "parent"
+        ],
+        "documentation": {
+          "description": "",
+          "params": [],
+          "returns": null
+        },
+        "type": "function"
+      },
+      {
+        "name": "hs.ax.printHierarchy",
+        "params": [
+          "element",
+          "depth = 0"
+        ],
+        "documentation": {
+          "description": "",
+          "params": [],
+          "returns": null
+        },
+        "type": "function"
+      }
+    ]
+  }
+}

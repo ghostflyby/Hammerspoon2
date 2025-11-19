@@ -1,0 +1,24 @@
+{
+  "name": "hs.appinfo",
+  "swift": {
+    "protocols": [
+      {
+        "name": "HSAppInfoModuleAPI",
+        "type": "protocol",
+        "methods": [],
+        "properties": [
+          {
+            "name": "appName",
+            "signature": "var appName: String { get",
+            "documentation": "The application's internal name (e.g., \"Hammerspoon 2\")"
+          }
+        ],
+        "category": "module"
+      }
+    ],
+    "objects": []
+  },
+  "javascript": {
+    "functions": []
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "name": "hs.alert",
+  "swift": {
+    "protocols": [
+      {
+        "name": "HSAlertModuleAPI",
+        "type": "protocol",
+        "methods": [
+          {
+            "name": "newAlert",
+            "signature": "func newAlert() -> HSAlert",
+            "documentation": "",
+            "params": [],
+            "returns": {
+              "type": "HSAlert",
+              "description": ""
+            }
+          },
+          {
+            "name": "showAlert",
+            "signature": "func showAlert(_ alert: HSAlert)",
+            "documentation": "",
+            "params": [
+              {
+                "name": "alert",
+                "type": "HSAlert"
+              }
+            ],
+            "returns": null
+          }
+        ],
+        "properties": [],
+        "category": "module"
+      },
+      {
+        "name": "HSAlertAPI",
+        "type": "protocol",
+        "methods": [],
+        "properties": [
+          {
+            "name": "message",
+            "signature": "var message: String { get set",
+            "documentation": ""
+          }
+        ],
+        "category": "object"
+      }
+    ],
+    "objects": []
+  },
+  "javascript": {
+    "functions": [
+      {
+        "name": "hs.alert.show",
+        "params": [
+          "message"
+        ],
+        "documentation": {
+          "description": "",
+          "params": [],
+          "returns": null
+        },
+        "type": "function"
+      }
+    ]
+  }
+}

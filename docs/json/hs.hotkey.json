@@ -1,0 +1,108 @@
+{
+  "name": "hs.hotkey",
+  "swift": {
+    "protocols": [
+      {
+        "name": "HSHotkeyModuleAPI",
+        "type": "protocol",
+        "methods": [
+          {
+            "name": "bind",
+            "signature": "func bind(_ mods: JSValue, _ key: String, _ callbackPressed: JSValue, _ callbackReleased: JSValue) -> HSHotkeyObject?",
+            "documentation": "Bind a hotkey\n- Parameters:\n- mods: An array of modifier key strings (e.g., [\"cmd\", \"shift\"])\n- key: The key name or character (e.g., \"a\", \"space\", \"return\")\n- callbackPressed: A JavaScript function to call when the hotkey is pressed\n- callbackReleased: A JavaScript function to call when the hotkey is released\n- Returns: A hotkey object, or nil if binding failed",
+            "params": [
+              {
+                "name": "mods",
+                "type": "JSValue"
+              },
+              {
+                "name": "key",
+                "type": "String"
+              },
+              {
+                "name": "callbackPressed",
+                "type": "JSValue"
+              },
+              {
+                "name": "callbackReleased",
+                "type": "JSValue"
+              }
+            ],
+            "returns": {
+              "type": "HSHotkeyObject?",
+              "description": "A hotkey object, or nil if binding failed"
+            }
+          },
+          {
+            "name": "getKeyCodeMap",
+            "signature": "func getKeyCodeMap() -> [String: UInt32]",
+            "documentation": "Bind a hotkey with a message description\n- Parameters:\n- mods: An array of modifier key strings\n- key: The key name or character\n- message: A description of what this hotkey does (currently unused, for future features)\n- callbackPressed: A JavaScript function to call when the hotkey is pressed\n- callbackReleased: A JavaScript function to call when the hotkey is released\n- Returns: A hotkey object, or nil if binding failed\nGet the system-wide mapping of key names to key codes\n- Returns: A dictionary mapping key names to numeric key codes",
+            "params": [],
+            "returns": {
+              "type": "[String: UInt32]",
+              "description": "A hotkey object, or nil if binding failed"
+            }
+          },
+          {
+            "name": "getModifierMap",
+            "signature": "func getModifierMap() -> [String: UInt32]",
+            "documentation": "Get the mapping of modifier names to modifier flags\n- Returns: A dictionary mapping modifier names to their numeric values",
+            "params": [],
+            "returns": {
+              "type": "[String: UInt32]",
+              "description": "A dictionary mapping modifier names to their numeric values"
+            }
+          }
+        ],
+        "properties": [],
+        "category": "module"
+      },
+      {
+        "name": "HSHotkeyObjectAPI",
+        "type": "protocol",
+        "methods": [
+          {
+            "name": "enable",
+            "signature": "func enable() -> Bool",
+            "documentation": "Enable the hotkey",
+            "params": [],
+            "returns": {
+              "type": "Bool",
+              "description": ""
+            }
+          },
+          {
+            "name": "disable",
+            "signature": "func disable()",
+            "documentation": "Disable the hotkey",
+            "params": [],
+            "returns": null
+          },
+          {
+            "name": "isEnabled",
+            "signature": "func isEnabled() -> Bool",
+            "documentation": "Check if the hotkey is currently enabled",
+            "params": [],
+            "returns": {
+              "type": "Bool",
+              "description": ""
+            }
+          },
+          {
+            "name": "delete",
+            "signature": "func delete()",
+            "documentation": "Delete the hotkey (disables and clears callbacks)",
+            "params": [],
+            "returns": null
+          }
+        ],
+        "properties": [],
+        "category": "object"
+      }
+    ],
+    "objects": []
+  },
+  "javascript": {
+    "functions": []
+  }
+}
