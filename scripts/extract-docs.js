@@ -44,6 +44,7 @@ function parseSwiftFile(filePath) {
         // Extract doc comments and method/property signatures
         const lines = protocolBody.split('\n');
         let currentDoc = [];
+        let pendingObjcSelector = false;  // Track if we saw @objc(selector) on previous line
         
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i].trim();
@@ -59,94 +60,111 @@ function parseSwiftFile(filePath) {
                 continue;
             }
             
-            // Parse @objc methods
+            // Check for @objc with custom selector on its own line (e.g., @objc(doAt::::))
+            if (line.match(/^@objc\([^)]+\)$/) && !line.includes('func') && !line.includes('var')) {
+                pendingObjcSelector = true;
+                continue;
+            }
+            
+            // Parse methods - either @objc func, or bare func after @objc(selector)
+            let methodMatch = null;
             if (line.startsWith('@objc')) {
-                const methodMatch = line.match(/@objc(?:\([^)]*\))?\s+(?:func\s+(\w+)|var\s+(\w+))/);
+                methodMatch = line.match(/@objc(?:\([^)]*\))?\s+(?:func\s+(\w+)|var\s+(\w+))/);
+            } else if (pendingObjcSelector && line.startsWith('func ')) {
+                // This is a func following @objc(selector) on the previous line
+                methodMatch = line.match(/func\s+(\w+)/);
                 if (methodMatch) {
-                    if (methodMatch[1]) {
-                        // It's a method
-                        const methodName = methodMatch[1];
-                        let fullSignature = line;
-                        
-                        // Handle multi-line method signatures - look for the closing )
-                        let j = i;
-                        let parenDepth = 0;
-                        let foundStart = false;
-                        
-                        // Count parentheses to find the end of the method signature
-                        for (let k = 0; k < line.length; k++) {
-                            if (line[k] === '(') {
-                                parenDepth++;
-                                foundStart = true;
-                            } else if (line[k] === ')') {
-                                parenDepth--;
-                            }
-                        }
-                        
-                        // Continue reading lines if we haven't closed all parentheses
-                        while (foundStart && parenDepth > 0 && j + 1 < lines.length) {
-                            j++;
-                            const nextLine = lines[j].trim();
-                            fullSignature += ' ' + nextLine;
-                            
-                            for (let k = 0; k < nextLine.length; k++) {
-                                if (nextLine[k] === '(') parenDepth++;
-                                else if (nextLine[k] === ')') parenDepth--;
-                            }
-                        }
-                        
-                        // If there's a return type arrow, capture up to the return type
-                        if (fullSignature.includes('->')) {
-                            // Continue until we find a type that ends the signature
-                            while (j + 1 < lines.length) {
-                                const nextLine = lines[j + 1].trim();
-                                // Stop if we hit another @objc or empty line
-                                if (nextLine.startsWith('@objc') || nextLine.startsWith('///') || !nextLine) {
-                                    break;
-                                }
-                                // Stop if the line seems to be starting a new declaration
-                                if (nextLine.match(/^(var|func|@)/)) {
-                                    break;
-                                }
-                                j++;
-                                fullSignature += ' ' + nextLine;
-                                // If we hit a complete type (ends with something like ']' or '?' or a word)
-                                if (nextLine.match(/[\w\?\]\>]$/)) {
-                                    break;
-                                }
-                            }
-                        }
-                        
-                        // Clean up the signature - remove everything after the return type
-                        fullSignature = fullSignature.replace(/@objc(?:\([^)]*\))?\s*/, '').trim();
-                        
-                        // Try to extract just the function signature without trailing junk
-                        const cleanSigMatch = fullSignature.match(/(func\s+\w+[^@]*?)(?=\s*@|$)/);
-                        if (cleanSigMatch) {
-                            fullSignature = cleanSigMatch[1].trim();
-                        }
-                        
-                        protocol.methods.push({
-                            name: methodName,
-                            signature: fullSignature,
-                            documentation: currentDoc.join('\n'),
-                            params: extractParams(fullSignature),
-                            returns: extractReturns(fullSignature, currentDoc)
-                        });
-                        
-                        // Move i forward if we read multiple lines
-                        i = j;
-                    } else if (methodMatch[2]) {
-                        // It's a property
-                        const propName = methodMatch[2];
-                        protocol.properties.push({
-                            name: propName,
-                            signature: line.replace(/@objc\s*/, ''),
-                            documentation: currentDoc.join('\n')
-                        });
-                    }
-                    currentDoc = [];
+                    // Reformat to look like a normal @objc match result
+                    methodMatch = [line, methodMatch[1], undefined];
                 }
+            }
+            
+            pendingObjcSelector = false;  // Reset after processing
+            
+            if (methodMatch) {
+                if (methodMatch[1]) {
+                    // It's a method
+                    const methodName = methodMatch[1];
+                    let fullSignature = line;
+                    
+                    // Handle multi-line method signatures - look for the closing )
+                    let j = i;
+                    let parenDepth = 0;
+                    let foundStart = false;
+                    
+                    // Count parentheses to find the end of the method signature
+                    for (let k = 0; k < line.length; k++) {
+                        if (line[k] === '(') {
+                            parenDepth++;
+                            foundStart = true;
+                        } else if (line[k] === ')') {
+                            parenDepth--;
+                        }
+                    }
+                    
+                    // Continue reading lines if we haven't closed all parentheses
+                    while (foundStart && parenDepth > 0 && j + 1 < lines.length) {
+                        j++;
+                        const nextLine = lines[j].trim();
+                        fullSignature += ' ' + nextLine;
+                        
+                        for (let k = 0; k < nextLine.length; k++) {
+                            if (nextLine[k] === '(') parenDepth++;
+                            else if (nextLine[k] === ')') parenDepth--;
+                        }
+                    }
+                    
+                    // If there's a return type arrow, capture up to the return type
+                    if (fullSignature.includes('->')) {
+                        // Continue until we find a type that ends the signature
+                        while (j + 1 < lines.length) {
+                            const nextLine = lines[j + 1].trim();
+                            // Stop if we hit another @objc or empty line
+                            if (nextLine.startsWith('@objc') || nextLine.startsWith('///') || !nextLine) {
+                                break;
+                            }
+                            // Stop if the line seems to be starting a new declaration
+                            if (nextLine.match(/^(var|func|@)/)) {
+                                break;
+                            }
+                            j++;
+                            fullSignature += ' ' + nextLine;
+                            // If we hit a complete type (ends with something like ']' or '?' or a word)
+                            if (nextLine.match(/[\w\?\]\>]$/)) {
+                                break;
+                            }
+                        }
+                    }
+                    
+                    // Clean up the signature - remove everything after the return type
+                    fullSignature = fullSignature.replace(/@objc(?:\([^)]*\))?\s*/, '').trim();
+                    
+                    // Try to extract just the function signature without trailing junk
+                    const cleanSigMatch = fullSignature.match(/(func\s+\w+[^@]*?)(?=\s*@|$)/);
+                    if (cleanSigMatch) {
+                        fullSignature = cleanSigMatch[1].trim();
+                    }
+                    
+                    protocol.methods.push({
+                        name: methodName,
+                        signature: fullSignature,
+                        documentation: currentDoc.join('\n'),
+                        params: extractParams(fullSignature),
+                        returns: extractReturns(fullSignature, currentDoc)
+                    });
+                    
+                    // Move i forward if we read multiple lines
+                    i = j;
+                } else if (methodMatch[2]) {
+                    // It's a property
+                    const propName = methodMatch[2];
+                    protocol.properties.push({
+                        name: propName,
+                        signature: line.replace(/@objc\s*/, ''),
+                        documentation: currentDoc.join('\n')
+                    });
+                }
+                currentDoc = [];
             }
         }
         

@@ -68,9 +68,36 @@
             }
           },
           {
+            "name": "doAt",
+            "signature": "func doAt(_ time: TimeInterval, _ repeatInterval: TimeInterval, _ callback: JSValue, _ continueOnError: Bool) -> HSTimerObject",
+            "documentation": "Create and start a timer that fires at a specific time\n- Parameters:\n- time: Seconds since midnight (local time) when the timer should first fire\n- repeatInterval: If provided, the timer will repeat at this interval. Pass 0 for one-shot.\n- callback: A JavaScript function to call when the timer fires\n- continueOnError: If true, the timer will continue running even if the callback throws an error\n- Returns: A timer object (already started)",
+            "params": [
+              {
+                "name": "time",
+                "type": "TimeInterval"
+              },
+              {
+                "name": "repeatInterval",
+                "type": "TimeInterval"
+              },
+              {
+                "name": "callback",
+                "type": "JSValue"
+              },
+              {
+                "name": "continueOnError",
+                "type": "Bool"
+              }
+            ],
+            "returns": {
+              "type": "HSTimerObject",
+              "description": "A timer object (already started)"
+            }
+          },
+          {
             "name": "usleep",
             "signature": "func usleep(_ microseconds: UInt32)",
-            "documentation": "Create and start a timer that fires at a specific time\n- Parameters:\n- time: Seconds since midnight (local time) when the timer should first fire\n- repeatInterval: If provided, the timer will repeat at this interval. Pass 0 for one-shot.\n- callback: A JavaScript function to call when the timer fires\n- continueOnError: If true, the timer will continue running even if the callback throws an error\n- Returns: A timer object (already started)\nBlock execution for a specified number of microseconds (strongly discouraged)\n- Parameter microseconds: Number of microseconds to sleep\n- Note: This blocks the entire application and should be avoided. Use timers instead.",
+            "documentation": "Block execution for a specified number of microseconds (strongly discouraged)\n- Parameter microseconds: Number of microseconds to sleep\n- Note: This blocks the entire application and should be avoided. Use timers instead.",
             "params": [
               {
                 "name": "microseconds",

@@ -37,9 +37,23 @@ hs.permissions.requestScreenRecording = function() {};
 hs.permissions.checkCamera = function() {};
 
 /**
- * Request Camera permission (shows system dialog if not granted) Check if the app has Microphone permission
+ * Request Camera permission (shows system dialog if not granted)
+ *
+ * @param {JSValue} callback
+ */
+hs.permissions.requestCamera = function(callback) {};
+
+/**
+ * Check if the app has Microphone permission
  *
  * @returns {boolean} true if permission is granted, false otherwise
  */
 hs.permissions.checkMicrophone = function() {};
+
+/**
+ * Request Microphone permission (shows system dialog if not granted)
+ *
+ * @param {JSValue} callback
+ */
+hs.permissions.requestMicrophone = function(callback) {};
 

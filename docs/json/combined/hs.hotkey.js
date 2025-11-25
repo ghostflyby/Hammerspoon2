@@ -17,7 +17,19 @@ hs.hotkey.bind = function(mods, key, callbackPressed, callbackReleased) {};
 /**
  * Bind a hotkey with a message description
  *
- * @returns {Object<String, UInt32>} A hotkey object, or nil if binding failed
+ * @param {JSValue} mods
+ * @param {string} key
+ * @param {string} message
+ * @param {JSValue} callbackPressed
+ * @param {JSValue} callbackReleased
+ * @returns {HSHotkeyObject} A hotkey object, or nil if binding failed
+ */
+hs.hotkey.bindSpec = function(mods, key, message, callbackPressed, callbackReleased) {};
+
+/**
+ * Get the system-wide mapping of key names to key codes
+ *
+ * @returns {Object<String, UInt32>} A dictionary mapping key names to numeric key codes
  */
 hs.hotkey.getKeyCodeMap = function() {};
 

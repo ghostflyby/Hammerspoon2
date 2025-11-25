@@ -51,14 +51,38 @@
             }
           },
           {
+            "name": "requestCamera",
+            "signature": "func requestCamera(_ callback: JSValue?)",
+            "documentation": "Request Camera permission (shows system dialog if not granted)\n- Parameter callback: Optional callback that receives true if granted, false if denied",
+            "params": [
+              {
+                "name": "callback",
+                "type": "JSValue?"
+              }
+            ],
+            "returns": null
+          },
+          {
             "name": "checkMicrophone",
             "signature": "func checkMicrophone() -> Bool",
-            "documentation": "Request Camera permission (shows system dialog if not granted)\n- Parameter callback: Optional callback that receives true if granted, false if denied\nCheck if the app has Microphone permission\n- Returns: true if permission is granted, false otherwise",
+            "documentation": "Check if the app has Microphone permission\n- Returns: true if permission is granted, false otherwise",
             "params": [],
             "returns": {
               "type": "Bool",
               "description": "true if permission is granted, false otherwise"
             }
+          },
+          {
+            "name": "requestMicrophone",
+            "signature": "func requestMicrophone(_ callback: JSValue?)",
+            "documentation": "Request Microphone permission (shows system dialog if not granted)\n- Parameter callback: Optional callback that receives true if granted, false if denied",
+            "params": [
+              {
+                "name": "callback",
+                "type": "JSValue?"
+              }
+            ],
+            "returns": null
           }
         ],
         "properties": [],

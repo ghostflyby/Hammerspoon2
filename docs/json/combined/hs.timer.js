@@ -34,6 +34,17 @@ hs.timer.doEvery = function(interval, callback) {};
 /**
  * Create and start a timer that fires at a specific time
  *
+ * @param {number} time
+ * @param {number} repeatInterval
+ * @param {JSValue} callback
+ * @param {boolean} continueOnError
+ * @returns {HSTimerObject} A timer object (already started)
+ */
+hs.timer.doAt = function(time, repeatInterval, callback, continueOnError) {};
+
+/**
+ * Block execution for a specified number of microseconds (strongly discouraged)
+ *
  * @param {number} microseconds
  */
 hs.timer.usleep = function(microseconds) {};

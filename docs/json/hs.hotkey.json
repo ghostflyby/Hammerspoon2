@@ -34,13 +34,44 @@
             }
           },
           {
+            "name": "bindSpec",
+            "signature": "func bindSpec(_ mods: JSValue, _ key: String, _ message: String?, _ callbackPressed: JSValue, _ callbackReleased: JSValue) -> HSHotkeyObject?",
+            "documentation": "Bind a hotkey with a message description\n- Parameters:\n- mods: An array of modifier key strings\n- key: The key name or character\n- message: A description of what this hotkey does (currently unused, for future features)\n- callbackPressed: A JavaScript function to call when the hotkey is pressed\n- callbackReleased: A JavaScript function to call when the hotkey is released\n- Returns: A hotkey object, or nil if binding failed",
+            "params": [
+              {
+                "name": "mods",
+                "type": "JSValue"
+              },
+              {
+                "name": "key",
+                "type": "String"
+              },
+              {
+                "name": "message",
+                "type": "String?"
+              },
+              {
+                "name": "callbackPressed",
+                "type": "JSValue"
+              },
+              {
+                "name": "callbackReleased",
+                "type": "JSValue"
+              }
+            ],
+            "returns": {
+              "type": "HSHotkeyObject?",
+              "description": "A hotkey object, or nil if binding failed"
+            }
+          },
+          {
             "name": "getKeyCodeMap",
             "signature": "func getKeyCodeMap() -> [String: UInt32]",
-            "documentation": "Bind a hotkey with a message description\n- Parameters:\n- mods: An array of modifier key strings\n- key: The key name or character\n- message: A description of what this hotkey does (currently unused, for future features)\n- callbackPressed: A JavaScript function to call when the hotkey is pressed\n- callbackReleased: A JavaScript function to call when the hotkey is released\n- Returns: A hotkey object, or nil if binding failed\nGet the system-wide mapping of key names to key codes\n- Returns: A dictionary mapping key names to numeric key codes",
+            "documentation": "Get the system-wide mapping of key names to key codes\n- Returns: A dictionary mapping key names to numeric key codes",
             "params": [],
             "returns": {
               "type": "[String: UInt32]",
-              "description": "A hotkey object, or nil if binding failed"
+              "description": "A dictionary mapping key names to numeric key codes"
             }
           },
           {
