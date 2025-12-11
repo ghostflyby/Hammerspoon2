@@ -56,10 +56,125 @@ hs.window.windowAtPoint = function(point) {};
 hs.window.orderedWindows = function() {};
 
 /**
+ * Focus this window
+ *
+ * @returns {boolean} true if successful
+ */
+hs.window.focus = function() {};
+
+/**
+ * Minimize this window
+ *
+ * @returns {boolean} true if successful
+ */
+hs.window.minimize = function() {};
+
+/**
+ * Unminimize this window
+ *
+ * @returns {boolean} true if successful
+ */
+hs.window.unminimize = function() {};
+
+/**
+ * Raise this window to the front
+ *
+ * @returns {boolean} true if successful
+ */
+hs.window.raise = function() {};
+
+/**
+ * Toggle fullscreen mode
+ *
+ * @returns {boolean} true if successful
+ */
+hs.window.toggleFullscreen = function() {};
+
+/**
+ * Close this window
+ *
+ * @returns {boolean} true if successful
+ */
+hs.window.close = function() {};
+
+/**
+ * Center the window on the screen
+ *
+ */
+hs.window.centerOnScreen = function() {};
+
+/**
+ * Get the underlying AXElement
+ *
+ * @returns {HSAXElement} The accessibility element for this window
+ */
+hs.window.axElement = function() {};
+
+/**
  * The window's title
  * @type {*}
  */
 hs.window.title;
+
+/**
+ * The application that owns this window
+ * @type {*}
+ */
+hs.window.application;
+
+/**
+ * The process ID of the application that owns this window
+ * @type {*}
+ */
+hs.window.pid;
+
+/**
+ * Whether the window is minimized
+ * @type {*}
+ */
+hs.window.isMinimized;
+
+/**
+ * Whether the window is visible (not minimized or hidden)
+ * @type {*}
+ */
+hs.window.isVisible;
+
+/**
+ * Whether the window is focused
+ * @type {*}
+ */
+hs.window.isFocused;
+
+/**
+ * Whether the window is fullscreen
+ * @type {*}
+ */
+hs.window.isFullscreen;
+
+/**
+ * Whether the window is standard (has a titlebar)
+ * @type {*}
+ */
+hs.window.isStandard;
+
+/**
+ * The window's position on screen {x: Int, y: Int}
+ * @type {*}
+ */
+hs.window.position;
+
+/**
+ * The window's size {w: Int, h: Int}
+ * @type {*}
+ */
+hs.window.size;
+
+/**
+ * The window's frame {x: Int, y: Int, w: Int, h: Int}
+ * @type {*}
+ */
+hs.window.frame;
 
 /**
  */

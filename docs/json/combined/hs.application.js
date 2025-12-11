@@ -105,10 +105,85 @@ hs.application._addWatcher = function(eventName, callback) {};
 hs.application._removeWatcher = function(eventName) {};
 
 /**
+ * Terminate the application
+ *
+ * @returns {boolean}
+ */
+hs.application.kill = function() {};
+
+/**
+ * Force-terminate the application
+ *
+ * @returns {boolean}
+ */
+hs.application.kill9 = function() {};
+
+/**
+ * The application's HSAXElement object, for use with the hs.ax APIs
+ *
+ * @returns {HSAXElement}
+ */
+hs.application.axElement = function() {};
+
+/**
  * POSIX Process Identifier
  * @type {*}
  */
 hs.application.pid;
+
+/**
+ * Bundle Identifier (e.g. com.apple.Safari)
+ * @type {*}
+ */
+hs.application.bundleID;
+
+/**
+ * The application's title
+ * @type {*}
+ */
+hs.application.title;
+
+/**
+ * Location of the application on disk
+ * @type {*}
+ */
+hs.application.bundlePath;
+
+/**
+ * Is the application hidden
+ * @type {*}
+ */
+hs.application.isHidden;
+
+/**
+ * Is the application focused
+ * @type {*}
+ */
+hs.application.isActive;
+
+/**
+ * The main window of this application, or nil if there is no main window
+ * @type {*}
+ */
+hs.application.mainWindow;
+
+/**
+ * The focused window of this application, or nil if there is no focused window
+ * @type {*}
+ */
+hs.application.focusedWindow;
+
+/**
+ * All windows of this application
+ * @type {*}
+ */
+hs.application.allWindows;
+
+/**
+ * All visible (ie non-hidden) windows of this application
+ * @type {*}
+ */
+hs.application.visibleWindows;
 
 /**
  */

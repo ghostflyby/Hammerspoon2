@@ -203,12 +203,88 @@
       {
         "name": "HSApplicationAPI",
         "type": "protocol",
-        "methods": [],
+        "methods": [
+          {
+            "name": "kill",
+            "signature": "func kill() -> Bool",
+            "documentation": "Terminate the application",
+            "params": [],
+            "returns": {
+              "type": "Bool",
+              "description": ""
+            }
+          },
+          {
+            "name": "kill9",
+            "signature": "func kill9() -> Bool",
+            "documentation": "Force-terminate the application",
+            "params": [],
+            "returns": {
+              "type": "Bool",
+              "description": ""
+            }
+          },
+          {
+            "name": "axElement",
+            "signature": "func axElement() -> HSAXElement?",
+            "documentation": "The application's HSAXElement object, for use with the hs.ax APIs",
+            "params": [],
+            "returns": {
+              "type": "HSAXElement?",
+              "description": ""
+            }
+          }
+        ],
         "properties": [
           {
             "name": "pid",
-            "signature": "var pid: Int { get",
+            "signature": "var pid: Int { get }",
             "documentation": "POSIX Process Identifier"
+          },
+          {
+            "name": "bundleID",
+            "signature": "var bundleID: String? { get }",
+            "documentation": "Bundle Identifier (e.g. com.apple.Safari)"
+          },
+          {
+            "name": "title",
+            "signature": "var title: String? { get }",
+            "documentation": "The application's title"
+          },
+          {
+            "name": "bundlePath",
+            "signature": "var bundlePath: String? { get }",
+            "documentation": "Location of the application on disk"
+          },
+          {
+            "name": "isHidden",
+            "signature": "var isHidden: Bool { get set }",
+            "documentation": "Is the application hidden"
+          },
+          {
+            "name": "isActive",
+            "signature": "var isActive: Bool { get }",
+            "documentation": "Is the application focused"
+          },
+          {
+            "name": "mainWindow",
+            "signature": "var mainWindow: HSWindow? { get }",
+            "documentation": "The main window of this application, or nil if there is no main window"
+          },
+          {
+            "name": "focusedWindow",
+            "signature": "var focusedWindow: HSWindow? { get }",
+            "documentation": "The focused window of this application, or nil if there is no focused window"
+          },
+          {
+            "name": "allWindows",
+            "signature": "var allWindows: [HSWindow] { get }",
+            "documentation": "All windows of this application"
+          },
+          {
+            "name": "visibleWindows",
+            "signature": "var visibleWindows: [HSWindow] { get }",
+            "documentation": "All visible (ie non-hidden) windows of this application"
           }
         ],
         "category": "object"

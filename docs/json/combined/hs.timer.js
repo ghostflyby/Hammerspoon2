@@ -71,10 +71,55 @@ hs.timer.absoluteTime = function() {};
 hs.timer.localTime = function() {};
 
 /**
+ * Start the timer
+ *
+ */
+hs.timer.start = function() {};
+
+/**
+ * Stop the timer
+ *
+ */
+hs.timer.stop = function() {};
+
+/**
+ * Immediately fire the timer's callback
+ *
+ */
+hs.timer.fire = function() {};
+
+/**
+ * Check if the timer is currently running
+ *
+ * @returns {boolean} true if the timer is running, false otherwise
+ */
+hs.timer.running = function() {};
+
+/**
+ * Get the number of seconds until the timer next fires
+ *
+ * @returns {number} Seconds until next trigger, or a negative value if the timer is not running
+ */
+hs.timer.nextTrigger = function() {};
+
+/**
+ * Set when the timer should next fire
+ *
+ * @param {number} seconds
+ */
+hs.timer.setNextTrigger = function(seconds) {};
+
+/**
  * The timer's interval in seconds
  * @type {*}
  */
 hs.timer.interval;
+
+/**
+ * Whether the timer repeats
+ * @type {*}
+ */
+hs.timer.repeats;
 
 /**
  */

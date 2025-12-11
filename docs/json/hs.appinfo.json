@@ -9,8 +9,48 @@
         "properties": [
           {
             "name": "appName",
-            "signature": "var appName: String { get",
+            "signature": "var appName: String { get }",
             "documentation": "The application's internal name (e.g., \"Hammerspoon 2\")"
+          },
+          {
+            "name": "displayName",
+            "signature": "var displayName: String { get }",
+            "documentation": "The application's display name shown to users"
+          },
+          {
+            "name": "version",
+            "signature": "var version: String { get }",
+            "documentation": "The application's version string (e.g., \"2.0.0\")"
+          },
+          {
+            "name": "build",
+            "signature": "var build: String { get }",
+            "documentation": "The application's build number"
+          },
+          {
+            "name": "minimumOSVersion",
+            "signature": "var minimumOSVersion: String { get }",
+            "documentation": "The minimum macOS version required to run this application"
+          },
+          {
+            "name": "copyrightNotice",
+            "signature": "var copyrightNotice: String { get }",
+            "documentation": "The copyright notice for this application"
+          },
+          {
+            "name": "bundleIdentifier",
+            "signature": "var bundleIdentifier: String { get }",
+            "documentation": "The application's bundle identifier (e.g., \"com.hammerspoon.Hammerspoon-2\")"
+          },
+          {
+            "name": "bundlePath",
+            "signature": "var bundlePath: String { get }",
+            "documentation": "The filesystem path to the application bundle"
+          },
+          {
+            "name": "resourcePath",
+            "signature": "var resourcePath: String { get }",
+            "documentation": "The filesystem path to the application's resource directory"
           }
         ],
         "category": "module"

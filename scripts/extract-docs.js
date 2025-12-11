@@ -26,17 +26,39 @@ function parseSwiftFile(filePath) {
     const content = fs.readFileSync(filePath, 'utf8');
     const protocols = [];
     
-    // Find all @objc protocol definitions that extend JSExport
-    const protocolRegex = /@objc\s+protocol\s+(\w+)\s*:\s*JSExport\s*\{([^}]+(?:\{[^}]*\}[^}]*)*)\}/gs;
+    // Find all @objc protocol definitions that extend JSExport or HSTypeAPI
+    // We need to manually handle brace matching because protocols can have nested braces
+    const protocolStartRegex = /@objc\s+protocol\s+(\w+)\s*:\s*([^{]+)\{/g;
     let match;
     
-    while ((match = protocolRegex.exec(content)) !== null) {
+    while ((match = protocolStartRegex.exec(content)) !== null) {
         const protocolName = match[1];
-        const protocolBody = match[2];
+        const inheritanceList = match[2].trim();
+        
+        // Only process protocols that extend JSExport or HSTypeAPI
+        if (!inheritanceList.includes('JSExport') && !inheritanceList.includes('HSTypeAPI')) {
+            continue;
+        }
+        
+        // Find matching closing brace for the protocol
+        let braceCount = 1;
+        let pos = match.index + match[0].length;
+        const bodyStart = pos;
+        
+        while (braceCount > 0 && pos < content.length) {
+            if (content[pos] === '{') braceCount++;
+            else if (content[pos] === '}') braceCount--;
+            pos++;
+        }
+        
+        const protocolBody = content.substring(bodyStart, pos - 1);
+        
+        // Check if this is a type definition (extends HSTypeAPI)
+        const isType = inheritanceList.includes('HSTypeAPI');
         
         const protocol = {
             name: protocolName,
-            type: 'protocol',
+            type: isType ? 'typedef' : 'protocol',
             methods: [],
             properties: []
         };
@@ -228,6 +250,18 @@ function splitParams(str) {
     }
     
     return parts;
+}
+
+/**
+ * Extract property type from Swift property signature
+ */
+function extractPropertyType(signature) {
+    // Match: var propertyName: Type { get } or var propertyName: Type { get set }
+    const typeMatch = signature.match(/var\s+\w+\s*:\s*([^{]+)/);
+    if (typeMatch) {
+        return typeMatch[1].trim();
+    }
+    return '*'; // Default to any type if we can't parse it
 }
 
 /**
@@ -493,8 +527,38 @@ function generateCombinedJSDoc(moduleData) {
     let output = `/**\n * @namespace ${moduleData.name}\n */\n`;
     output += `${namespaceVar} = {};\n\n`;
     
-    // Add Swift protocol methods as JSDoc
+    // First, generate @typedef for any type protocols (those extending HSTypeAPI)
     for (const protocol of moduleData.swift.protocols) {
+        if (protocol.type === 'typedef') {
+            // Extract the type name from the protocol name (e.g., HSAlertAPI -> HSAlert)
+            // The actual type name should be the protocol name minus 'API' suffix
+            const typeName = protocol.name.replace(/API$/, '');
+            
+            output += `/**\n`;
+            output += ` * @typedef {Object} ${typeName}\n`;
+            
+            // Add property definitions
+            for (const prop of protocol.properties) {
+                const cleanDoc = formatDocCToJSDoc(prop.documentation);
+                const propType = swiftTypeToJSDoc(extractPropertyType(prop.signature));
+                output += ` * @property {${propType}} ${prop.name}`;
+                if (cleanDoc) {
+                    output += ` - ${cleanDoc}`;
+                }
+                output += `\n`;
+            }
+            
+            output += ` */\n\n`;
+        }
+    }
+    
+    // Add Swift protocol methods as JSDoc (skip typedef protocols for method generation)
+    for (const protocol of moduleData.swift.protocols) {
+        // Skip typedef protocols - they've been handled above
+        if (protocol.type === 'typedef') {
+            continue;
+        }
+        
         // Add methods
         for (const method of protocol.methods) {
             const cleanDoc = formatDocCToJSDoc(method.documentation);

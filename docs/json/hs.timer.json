@@ -143,12 +143,71 @@
       {
         "name": "HSTimerObjectAPI",
         "type": "protocol",
-        "methods": [],
+        "methods": [
+          {
+            "name": "start",
+            "signature": "func start()",
+            "documentation": "Start the timer",
+            "params": [],
+            "returns": null
+          },
+          {
+            "name": "stop",
+            "signature": "func stop()",
+            "documentation": "Stop the timer",
+            "params": [],
+            "returns": null
+          },
+          {
+            "name": "fire",
+            "signature": "func fire()",
+            "documentation": "Immediately fire the timer's callback",
+            "params": [],
+            "returns": null
+          },
+          {
+            "name": "running",
+            "signature": "func running() -> Bool",
+            "documentation": "Check if the timer is currently running\n- Returns: true if the timer is running, false otherwise",
+            "params": [],
+            "returns": {
+              "type": "Bool",
+              "description": "true if the timer is running, false otherwise"
+            }
+          },
+          {
+            "name": "nextTrigger",
+            "signature": "func nextTrigger() -> TimeInterval",
+            "documentation": "Get the number of seconds until the timer next fires\n- Returns: Seconds until next trigger, or a negative value if the timer is not running",
+            "params": [],
+            "returns": {
+              "type": "TimeInterval",
+              "description": "Seconds until next trigger, or a negative value if the timer is not running"
+            }
+          },
+          {
+            "name": "setNextTrigger",
+            "signature": "func setNextTrigger(_ seconds: TimeInterval)",
+            "documentation": "Set when the timer should next fire\n- Parameter seconds: Number of seconds from now when the timer should fire",
+            "params": [
+              {
+                "name": "seconds",
+                "type": "TimeInterval"
+              }
+            ],
+            "returns": null
+          }
+        ],
         "properties": [
           {
             "name": "interval",
-            "signature": "var interval: TimeInterval { get",
+            "signature": "var interval: TimeInterval { get }",
             "documentation": "The timer's interval in seconds"
+          },
+          {
+            "name": "repeats",
+            "signature": "var repeats: Bool { get }",
+            "documentation": "Whether the timer repeats"
           }
         ],
         "category": "object"

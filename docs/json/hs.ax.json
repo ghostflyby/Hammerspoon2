@@ -5,12 +5,177 @@
       {
         "name": "HSAXElementAPI",
         "type": "protocol",
-        "methods": [],
+        "methods": [
+          {
+            "name": "children",
+            "signature": "func children() -> [HSAXElement]",
+            "documentation": "The element's children",
+            "params": [],
+            "returns": {
+              "type": "[HSAXElement]",
+              "description": ""
+            }
+          },
+          {
+            "name": "childAtIndex",
+            "signature": "func childAtIndex(_ index: Int) -> HSAXElement?",
+            "documentation": "Get a specific child by index",
+            "params": [
+              {
+                "name": "index",
+                "type": "Int"
+              }
+            ],
+            "returns": {
+              "type": "HSAXElement?",
+              "description": ""
+            }
+          },
+          {
+            "name": "attributeNames",
+            "signature": "func attributeNames() -> [String]",
+            "documentation": "Get all available attribute names",
+            "params": [],
+            "returns": {
+              "type": "[String]",
+              "description": ""
+            }
+          },
+          {
+            "name": "attributeValue",
+            "signature": "func attributeValue(_ attribute: String) -> Any?",
+            "documentation": "Get the value of a specific attribute",
+            "params": [
+              {
+                "name": "attribute",
+                "type": "String"
+              }
+            ],
+            "returns": {
+              "type": "Any?",
+              "description": ""
+            }
+          },
+          {
+            "name": "setAttributeValue",
+            "signature": "func setAttributeValue(_ attribute: String, value: Any) -> Bool",
+            "documentation": "Set the value of a specific attribute",
+            "params": [
+              {
+                "name": "attribute",
+                "type": "String"
+              },
+              {
+                "name": "value",
+                "type": "Any"
+              }
+            ],
+            "returns": {
+              "type": "Bool",
+              "description": ""
+            }
+          },
+          {
+            "name": "isAttributeSettable",
+            "signature": "func isAttributeSettable(_ attribute: String) -> Bool",
+            "documentation": "Check if an attribute is settable",
+            "params": [
+              {
+                "name": "attribute",
+                "type": "String"
+              }
+            ],
+            "returns": {
+              "type": "Bool",
+              "description": ""
+            }
+          },
+          {
+            "name": "actionNames",
+            "signature": "func actionNames() -> [String]",
+            "documentation": "Get all available action names",
+            "params": [],
+            "returns": {
+              "type": "[String]",
+              "description": ""
+            }
+          },
+          {
+            "name": "performAction",
+            "signature": "func performAction(_ action: String) -> Bool",
+            "documentation": "Perform a specific action",
+            "params": [
+              {
+                "name": "action",
+                "type": "String"
+              }
+            ],
+            "returns": {
+              "type": "Bool",
+              "description": ""
+            }
+          }
+        ],
         "properties": [
           {
             "name": "role",
-            "signature": "var role: String? { get",
+            "signature": "var role: String? { get }",
             "documentation": "The element's role (e.g., \"AXWindow\", \"AXButton\")"
+          },
+          {
+            "name": "subrole",
+            "signature": "var subrole: String? { get }",
+            "documentation": "The element's subrole"
+          },
+          {
+            "name": "title",
+            "signature": "var title: String? { get }",
+            "documentation": "The element's title"
+          },
+          {
+            "name": "value",
+            "signature": "var value: Any? { get }",
+            "documentation": "The element's value"
+          },
+          {
+            "name": "elementDescription",
+            "signature": "var elementDescription: String? { get }",
+            "documentation": "The element's description"
+          },
+          {
+            "name": "isEnabled",
+            "signature": "var isEnabled: Bool { get }",
+            "documentation": "Whether the element is enabled"
+          },
+          {
+            "name": "isFocused",
+            "signature": "var isFocused: Bool { get set }",
+            "documentation": "Whether the element is focused"
+          },
+          {
+            "name": "position",
+            "signature": "var position: HSPoint? { get set }",
+            "documentation": "The element's position on screen"
+          },
+          {
+            "name": "size",
+            "signature": "var size: HSSize? { get set }",
+            "documentation": "The element's size"
+          },
+          {
+            "name": "frame",
+            "signature": "var frame: HSRect? { get set }",
+            "documentation": "The element's frame (position and size combined)"
+          },
+          {
+            "name": "parent",
+            "signature": "var parent: HSAXElement? { get }",
+            "documentation": "The element's parent"
+          },
+          {
+            "name": "pid",
+            "signature": "var pid: Int { get }",
+            "documentation": "Get the process ID of the application that owns this element"
           }
         ],
         "category": "object"
@@ -73,12 +238,48 @@
               "type": "HSAXElement?",
               "description": "The AXElement at that position, or nil if none found"
             }
+          },
+          {
+            "name": "_addWatcher",
+            "signature": "func _addWatcher(_ application: HSApplication, notification: String, callback: JSValue)",
+            "documentation": "",
+            "params": [
+              {
+                "name": "application",
+                "type": "HSApplication"
+              },
+              {
+                "name": "notification",
+                "type": "String"
+              },
+              {
+                "name": "callback",
+                "type": "JSValue"
+              }
+            ],
+            "returns": null
+          },
+          {
+            "name": "_removeWatcher",
+            "signature": "func _removeWatcher(_ application: HSApplication, notification: String)",
+            "documentation": "",
+            "params": [
+              {
+                "name": "application",
+                "type": "HSApplication"
+              },
+              {
+                "name": "notification",
+                "type": "String"
+              }
+            ],
+            "returns": null
           }
         ],
         "properties": [
           {
             "name": "notificationTypes",
-            "signature": "var notificationTypes: [String: String] { get",
+            "signature": "var notificationTypes: [String: String] { get }",
             "documentation": "A dictionary containing all of the notification types that can be used with hs.ax.addWatcher()"
           }
         ],

@@ -46,16 +46,30 @@
       },
       {
         "name": "HSAlertAPI",
-        "type": "protocol",
+        "type": "typedef",
         "methods": [],
         "properties": [
           {
             "name": "message",
-            "signature": "var message: String { get set",
+            "signature": "var message: String { get set }",
             "documentation": "The message to display in an alert"
+          },
+          {
+            "name": "expire",
+            "signature": "var expire: Int { get set }",
+            "documentation": "How many seconds the alert should be shown for"
+          },
+          {
+            "name": "font",
+            "signature": "var font: HSFont { get set }",
+            "documentation": "An HSFont describing the font to use in the alert"
+          },
+          {
+            "name": "padding",
+            "signature": "var padding: Int { get set }",
+            "documentation": "How many points of padding to use in the alert"
           }
-        ],
-        "category": "object"
+        ]
       }
     ],
     "objects": []

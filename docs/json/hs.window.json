@@ -98,12 +98,140 @@
       {
         "name": "HSWindowAPI",
         "type": "protocol",
-        "methods": [],
+        "methods": [
+          {
+            "name": "focus",
+            "signature": "func focus() -> Bool",
+            "documentation": "Focus this window\n- Returns: true if successful",
+            "params": [],
+            "returns": {
+              "type": "Bool",
+              "description": "true if successful"
+            }
+          },
+          {
+            "name": "minimize",
+            "signature": "func minimize() -> Bool",
+            "documentation": "Minimize this window\n- Returns: true if successful",
+            "params": [],
+            "returns": {
+              "type": "Bool",
+              "description": "true if successful"
+            }
+          },
+          {
+            "name": "unminimize",
+            "signature": "func unminimize() -> Bool",
+            "documentation": "Unminimize this window\n- Returns: true if successful",
+            "params": [],
+            "returns": {
+              "type": "Bool",
+              "description": "true if successful"
+            }
+          },
+          {
+            "name": "raise",
+            "signature": "func raise() -> Bool",
+            "documentation": "Raise this window to the front\n- Returns: true if successful",
+            "params": [],
+            "returns": {
+              "type": "Bool",
+              "description": "true if successful"
+            }
+          },
+          {
+            "name": "toggleFullscreen",
+            "signature": "func toggleFullscreen() -> Bool",
+            "documentation": "Toggle fullscreen mode\n- Returns: true if successful",
+            "params": [],
+            "returns": {
+              "type": "Bool",
+              "description": "true if successful"
+            }
+          },
+          {
+            "name": "close",
+            "signature": "func close() -> Bool",
+            "documentation": "Close this window\n- Returns: true if successful",
+            "params": [],
+            "returns": {
+              "type": "Bool",
+              "description": "true if successful"
+            }
+          },
+          {
+            "name": "centerOnScreen",
+            "signature": "func centerOnScreen()",
+            "documentation": "Center the window on the screen\n- Returns: true if successful",
+            "params": [],
+            "returns": null
+          },
+          {
+            "name": "axElement",
+            "signature": "func axElement() -> HSAXElement",
+            "documentation": "Get the underlying AXElement\n- Returns: The accessibility element for this window",
+            "params": [],
+            "returns": {
+              "type": "HSAXElement",
+              "description": "The accessibility element for this window"
+            }
+          }
+        ],
         "properties": [
           {
             "name": "title",
-            "signature": "var title: String? { get",
+            "signature": "var title: String? { get }",
             "documentation": "The window's title"
+          },
+          {
+            "name": "application",
+            "signature": "var application: HSApplication? { get }",
+            "documentation": "The application that owns this window"
+          },
+          {
+            "name": "pid",
+            "signature": "var pid: Int { get }",
+            "documentation": "The process ID of the application that owns this window"
+          },
+          {
+            "name": "isMinimized",
+            "signature": "var isMinimized: Bool { get set }",
+            "documentation": "Whether the window is minimized"
+          },
+          {
+            "name": "isVisible",
+            "signature": "var isVisible: Bool { get }",
+            "documentation": "Whether the window is visible (not minimized or hidden)"
+          },
+          {
+            "name": "isFocused",
+            "signature": "var isFocused: Bool { get }",
+            "documentation": "Whether the window is focused"
+          },
+          {
+            "name": "isFullscreen",
+            "signature": "var isFullscreen: Bool { get set }",
+            "documentation": "Whether the window is fullscreen"
+          },
+          {
+            "name": "isStandard",
+            "signature": "var isStandard: Bool { get }",
+            "documentation": "Whether the window is standard (has a titlebar)"
+          },
+          {
+            "name": "position",
+            "signature": "var position: HSPoint? { get set }",
+            "documentation": "The window's position on screen {x: Int, y: Int}"
+          },
+          {
+            "name": "size",
+            "signature": "var size: HSSize? { get set }",
+            "documentation": "The window's size {w: Int, h: Int}"
+          },
+          {
+            "name": "frame",
+            "signature": "var frame: HSRect? { get set }",
+            "documentation": "The window's frame {x: Int, y: Int, w: Int, h: Int}"
           }
         ],
         "category": "object"
