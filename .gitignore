@@ -37,6 +37,6 @@ package-lock.json
 
 # Documentation artifacts (keep the generated docs for now, but they could be regenerated)
 # Uncomment these if you want to exclude generated docs from git:
-# docs/api/
-# docs/json/
+docs/api/
+docs/json/
 

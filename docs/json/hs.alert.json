@@ -9,21 +9,33 @@
           {
             "name": "newAlert",
             "signature": "func newAlert() -> HSAlert",
-            "documentation": "",
+            "documentation": "Create a new HSAlert object\n- Returns: An HSAlert object",
             "params": [],
             "returns": {
               "type": "HSAlert",
-              "description": ""
+              "description": "An HSAlert object"
             }
           },
           {
             "name": "showAlert",
             "signature": "func showAlert(_ alert: HSAlert)",
-            "documentation": "",
+            "documentation": "Show an HSAlert object\n- Parameter alert: The HSAlert object to show",
             "params": [
               {
                 "name": "alert",
                 "type": "HSAlert"
+              }
+            ],
+            "returns": null
+          },
+          {
+            "name": "show",
+            "signature": "func show(_ message: String)",
+            "documentation": "Show an alert to the user\n- Parameter message: The text to include in the alert",
+            "params": [
+              {
+                "name": "message",
+                "type": "String"
               }
             ],
             "returns": null
@@ -40,7 +52,7 @@
           {
             "name": "message",
             "signature": "var message: String { get set",
-            "documentation": ""
+            "documentation": "The message to display in an alert"
           }
         ],
         "category": "object"
@@ -49,19 +61,6 @@
     "objects": []
   },
   "javascript": {
-    "functions": [
-      {
-        "name": "hs.alert.show",
-        "params": [
-          "message"
-        ],
-        "documentation": {
-          "description": "",
-          "params": [],
-          "returns": null
-        },
-        "type": "function"
-      }
-    ]
+    "functions": []
   }
 }

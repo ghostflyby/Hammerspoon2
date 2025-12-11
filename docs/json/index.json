@@ -3,7 +3,7 @@
     {
       "name": "hs.alert",
       "swiftProtocols": 2,
-      "javascriptFunctions": 1
+      "javascriptFunctions": 0
     },
     {
       "name": "hs.appinfo",
@@ -51,5 +51,5 @@
       "javascriptFunctions": 6
     }
   ],
-  "generatedAt": "2025-11-25T11:15:09.611Z"
+  "generatedAt": "2025-12-11T19:19:41.712Z"
 }
