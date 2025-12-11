@@ -9,6 +9,7 @@ import Foundation
 import JavaScriptCore
 import SwiftUI
 
+/// An object for use with hs.alert API
 @objc protocol HSAlertAPI: HSTypeAPI, JSExport {
     /// The message to display in an alert
     @objc var message: String { get set }

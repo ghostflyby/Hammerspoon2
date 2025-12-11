@@ -9,8 +9,11 @@ import Foundation
 import JavaScriptCore
 import SwiftUI
 
-@objc protocol HSFontJSExports: JSExport {
+/// A font object
+@objc protocol HSFontJSExports: HSTypeAPI, JSExport {
     // Text style static factory methods
+    /// Body text style
+    /// - Returns: An HSFont object
     static func body() -> HSFont
     static func callout() -> HSFont
     static func caption() -> HSFont
@@ -24,6 +27,9 @@ import SwiftUI
     static func title3() -> HSFont
 
     // System fonts
+    /// The system font in a custom size
+    /// - Parameter size: The font size in points
+    /// - Returns: An HSFont object
     static func system(_ size: Double) -> HSFont
     static func system(_ size: Double, weight: String) -> HSFont
 
@@ -32,6 +38,7 @@ import SwiftUI
 }
 
 @objc class HSFont: NSObject, HSFontJSExports {
+    @objc var typeName = "HSFont"
     var font: Font
 
     private init(font: Font) {
