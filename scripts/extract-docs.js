@@ -35,31 +35,52 @@ function parseSwiftFile(filePath) {
     while ((match = protocolStartRegex.exec(content)) !== null) {
         const protocolName = match[1];
         const inheritanceList = match[2].trim();
-        
+
         // Only process protocols that extend JSExport or HSTypeAPI
         if (!inheritanceList.includes('JSExport') && !inheritanceList.includes('HSTypeAPI')) {
             continue;
         }
-        
+
+        // Extract protocol-level documentation (comments before @objc protocol)
+        const beforeProtocol = content.substring(0, match.index);
+        const beforeLines = beforeProtocol.split('\n');
+        const protocolDoc = [];
+
+        // Walk backwards from the protocol definition to collect /// comments
+        for (let i = beforeLines.length - 1; i >= 0; i--) {
+            const line = beforeLines[i].trim();
+            if (line.startsWith('///')) {
+                protocolDoc.unshift(line.replace(/^\/\/\/\s*/, ''));
+            } else if (line && !line.startsWith('//')) {
+                // Stop if we hit a non-comment, non-empty line
+                break;
+            }
+        }
+
+        const rawProtocolDoc = protocolDoc.join('\n');
+        const protocolDescription = formatDocCToJSDoc(rawProtocolDoc);
+
         // Find matching closing brace for the protocol
         let braceCount = 1;
         let pos = match.index + match[0].length;
         const bodyStart = pos;
-        
+
         while (braceCount > 0 && pos < content.length) {
             if (content[pos] === '{') braceCount++;
             else if (content[pos] === '}') braceCount--;
             pos++;
         }
-        
+
         const protocolBody = content.substring(bodyStart, pos - 1);
-        
+
         // Check if this is a type definition (extends HSTypeAPI)
         const isType = inheritanceList.includes('HSTypeAPI');
-        
+
         const protocol = {
             name: protocolName,
             type: isType ? 'typedef' : 'protocol',
+            rawDocumentation: rawProtocolDoc,
+            description: protocolDescription,
             methods: [],
             properties: []
         };
@@ -193,7 +214,7 @@ function parseSwiftFile(filePath) {
                         signature: fullSignature,
                         rawDocumentation: rawDoc,
                         description: formatDocCToJSDoc(rawDoc),
-                        params: extractParams(fullSignature),
+                        params: extractParams(fullSignature, currentDoc),
                         returns: extractReturns(fullSignature, currentDoc)
                     });
                     
@@ -221,9 +242,49 @@ function parseSwiftFile(filePath) {
 }
 
 /**
- * Extract parameters from a Swift function signature
+ * Extract parameter descriptions from documentation
  */
-function extractParams(signature) {
+function extractParamDescriptions(docLines) {
+    const descriptions = {};
+    let inParams = false;
+
+    for (const line of docLines) {
+        const trimmed = line.trim();
+
+        // Check for Parameters section (with or without colon)
+        if (trimmed === '- Parameters:' || trimmed === '- Parameters') {
+            inParams = true;
+            continue;
+        }
+
+        // Check for single Parameter
+        const singleParamMatch = trimmed.match(/^-\s+Parameter\s+(\w+)\s*:\s*(.+)$/);
+        if (singleParamMatch) {
+            descriptions[singleParamMatch[1]] = singleParamMatch[2].trim();
+            continue;
+        }
+
+        // If we're in Parameters section, look for individual parameters
+        if (inParams) {
+            const paramMatch = trimmed.match(/^-\s+(\w+)\s*:\s*(.+)$/);
+            if (paramMatch) {
+                descriptions[paramMatch[1]] = paramMatch[2].trim();
+                continue;
+            }
+            // Stop if we hit a non-parameter line (unless it's a continuation)
+            if (trimmed.startsWith('- ') && !trimmed.match(/^-\s+\w+\s*:/)) {
+                inParams = false;
+            }
+        }
+    }
+
+    return descriptions;
+}
+
+/**
+ * Extract parameters from a Swift function signature and documentation
+ */
+function extractParams(signature, docLines = []) {
     const params = [];
     // Match both func and init signatures
     const funcMatch = signature.match(/(?:func\s+\w+|init)\s*\(([^)]*)\)/);
@@ -232,15 +293,20 @@ function extractParams(signature) {
     const paramsStr = funcMatch[1];
     if (!paramsStr.trim()) return params;
 
+    // Extract parameter descriptions from documentation
+    const descriptions = extractParamDescriptions(docLines);
+
     // Split by comma, but be careful of nested generics/closures
     const parts = splitParams(paramsStr);
 
     for (const part of parts) {
         const paramMatch = part.match(/(?:_\s+)?(\w+)\s*:\s*([^=]+)/);
         if (paramMatch) {
+            const paramName = paramMatch[1];
             params.push({
-                name: paramMatch[1],
-                type: paramMatch[2].trim()
+                name: paramName,
+                type: paramMatch[2].trim(),
+                description: descriptions[paramName] || ''
             });
         }
     }
@@ -297,9 +363,21 @@ function extractReturns(signature, docLines) {
     // Matches: -> Type, -> [Type], -> [Key: Value], -> Type?
     const returnMatch = signature.match(/->\s*(.+?)(?=\s*(?:@|$|\/\/|\{))/);
     if (returnMatch) {
+        // Look for return description in documentation
+        let returnDesc = '';
+        for (const line of docLines) {
+            const trimmed = line.trim();
+            // Match both "Returns:" and "- Returns:"
+            const descMatch = trimmed.match(/^-?\s*Returns?\s*:\s*(.+)$/);
+            if (descMatch) {
+                returnDesc = descMatch[1].trim();
+                break;
+            }
+        }
+
         return {
             type: returnMatch[1].trim(),
-            description: docLines.find(line => line.includes('Returns:'))?.replace(/.*Returns:\s*/, '') || ''
+            description: returnDesc
         };
     }
     return null;

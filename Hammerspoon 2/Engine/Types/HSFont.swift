@@ -9,7 +9,7 @@ import Foundation
 import JavaScriptCore
 import SwiftUI
 
-/// A font object
+/// This is a JavaScript object used to represent macOS fonts. It includes a variety of static methods that can instantiate the various font sizes commonly used with UI elements, and also includes static methods for instantiating the system font at various sizes/weights, or any custom font available on the system.
 @objc protocol HSFontAPI: HSTypeAPI, JSExport {
     /// Body text style
     /// - Returns: An HSFont object
@@ -59,9 +59,19 @@ import SwiftUI
     /// - Parameter size: The font size in points
     /// - Returns: An HSFont object
     @objc static func system(_ size: Double) -> HSFont
+    
+    /// The system font in a custom size with a choice of weights
+    /// - Parameters:
+    ///   - size: The font size in points
+    ///   - weight: The font weight as a string (e.g. "ultralight", "thin", "light", "regular", "medium", "semibold", "bold", "heavy", "black")
+    /// - Returns: An HSFont object
     @objc static func system(_ size: Double, weight: String) -> HSFont
 
-    // Custom fonts
+    /// A font present on the system at a given size
+    /// - Parameters:
+    ///   - name: A string containing the name of the font to instantiate
+    ///   - size: The font size in points
+    /// - Returns: An HSFont object
     @objc static func custom(_ name: String, size: Double) -> HSFont
 }
 
