@@ -32,3 +32,10 @@ hs.alert.showAlert = function(alert) {};
  */
 hs.alert.show = function(message) {};
 
+/**
+ * Do a lol
+ *
+ * @returns {string} lol
+ */
+hs.alert.lol = function() {};
+

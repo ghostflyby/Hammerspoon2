@@ -47,7 +47,18 @@
       {
         "name": "HSAlertAPI",
         "type": "typedef",
-        "methods": [],
+        "methods": [
+          {
+            "name": "lol",
+            "signature": "func lol() -> String",
+            "documentation": "Do a lol\n- Returns: lol",
+            "params": [],
+            "returns": {
+              "type": "String",
+              "description": "lol"
+            }
+          }
+        ],
         "properties": [
           {
             "name": "message",

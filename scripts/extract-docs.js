@@ -16,6 +16,7 @@ const fs = require('fs');
 const path = require('path');
 
 const MODULES_DIR = path.join(__dirname, '..', 'Hammerspoon 2', 'Modules');
+const TYPES_DIR = path.join(__dirname, '..', 'Hammerspoon 2', 'Engine', 'Types');
 const OUTPUT_JSON_DIR = path.join(__dirname, '..', 'docs', 'json');
 const OUTPUT_COMBINED_DIR = path.join(OUTPUT_JSON_DIR, 'combined');
 
@@ -67,31 +68,34 @@ function parseSwiftFile(filePath) {
         const lines = protocolBody.split('\n');
         let currentDoc = [];
         let pendingObjcSelector = false;  // Track if we saw @objc(selector) on previous line
-        
+
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i].trim();
-            
+
             // Collect documentation comments
             if (line.startsWith('///')) {
                 currentDoc.push(line.replace(/^\/\/\/\s*/, ''));
                 continue;
             }
-            
-            // Skip empty lines
-            if (!line) {
+
+            // Skip empty lines and single-line comments
+            if (!line || line.startsWith('//')) {
                 continue;
             }
-            
+
             // Check for @objc with custom selector on its own line (e.g., @objc(doAt::::))
             if (line.match(/^@objc\([^)]+\)$/) && !line.includes('func') && !line.includes('var')) {
                 pendingObjcSelector = true;
                 continue;
             }
-            
-            // Parse methods - either @objc func, or bare func after @objc(selector)
+
+            // Parse methods and properties
+            // Match @objc func/var, bare func/var (for protocol declarations), or func after @objc(selector)
             let methodMatch = null;
+
             if (line.startsWith('@objc')) {
-                methodMatch = line.match(/@objc(?:\([^)]*\))?\s+(?:func\s+(\w+)|var\s+(\w+))/);
+                // @objc func or @objc var
+                methodMatch = line.match(/@objc(?:\([^)]*\))?\s+(?:(?:static\s+)?func\s+(\w+)|var\s+(\w+))/);
             } else if (pendingObjcSelector && line.startsWith('func ')) {
                 // This is a func following @objc(selector) on the previous line
                 methodMatch = line.match(/func\s+(\w+)/);
@@ -99,8 +103,14 @@ function parseSwiftFile(filePath) {
                     // Reformat to look like a normal @objc match result
                     methodMatch = [line, methodMatch[1], undefined];
                 }
+            } else if (line.match(/^(?:static\s+)?func\s+\w+/) || line.match(/^var\s+\w+/)) {
+                // Bare function or property declaration in protocol (no @objc needed)
+                methodMatch = line.match(/^(?:static\s+)?func\s+(\w+)|^var\s+(\w+)/);
+            } else if (line.match(/^init\(/)) {
+                // Constructor/initializer
+                methodMatch = ['init', 'init', undefined];
             }
-            
+
             pendingObjcSelector = false;  // Reset after processing
             
             if (methodMatch) {
@@ -137,7 +147,10 @@ function parseSwiftFile(filePath) {
                     }
                     
                     // If there's a return type arrow, capture up to the return type
-                    if (fullSignature.includes('->')) {
+                    // Check if the signature already looks complete (has -> followed by a type)
+                    const hasCompleteReturn = fullSignature.match(/->\s*\w+(\?|\])?(\s|$)/);
+
+                    if (fullSignature.includes('->') && !hasCompleteReturn) {
                         // Continue until we find a type that ends the signature
                         while (j + 1 < lines.length) {
                             const nextLine = lines[j + 1].trim();
@@ -146,7 +159,7 @@ function parseSwiftFile(filePath) {
                                 break;
                             }
                             // Stop if the line seems to be starting a new declaration
-                            if (nextLine.match(/^(var|func|@)/)) {
+                            if (nextLine.match(/^(var|func|@|static)/)) {
                                 break;
                             }
                             j++;
@@ -158,13 +171,20 @@ function parseSwiftFile(filePath) {
                         }
                     }
                     
-                    // Clean up the signature - remove everything after the return type
+                    // Clean up the signature - remove @objc but keep static
                     fullSignature = fullSignature.replace(/@objc(?:\([^)]*\))?\s*/, '').trim();
-                    
+
                     // Try to extract just the function signature without trailing junk
-                    const cleanSigMatch = fullSignature.match(/(func\s+\w+[^@]*?)(?=\s*@|$)/);
+                    // Stop at the next function/variable declaration
+                    const cleanSigMatch = fullSignature.match(/((?:static\s+)?func\s+\w+.*?->\s*\S+?)(?=\s+(?:static\s+)?(?:func|var)|$)/);
                     if (cleanSigMatch) {
                         fullSignature = cleanSigMatch[1].trim();
+                    } else {
+                        // Try without return type (for functions without return values)
+                        const noReturnMatch = fullSignature.match(/((?:static\s+)?func\s+\w+\s*\([^)]*\))(?=\s+(?:static\s+)?(?:func|var)|$)/);
+                        if (noReturnMatch) {
+                            fullSignature = noReturnMatch[1].trim();
+                        }
                     }
                     
                     protocol.methods.push({
@@ -201,15 +221,16 @@ function parseSwiftFile(filePath) {
  */
 function extractParams(signature) {
     const params = [];
-    const funcMatch = signature.match(/func\s+\w+\s*\(([^)]*)\)/);
+    // Match both func and init signatures
+    const funcMatch = signature.match(/(?:func\s+\w+|init)\s*\(([^)]*)\)/);
     if (!funcMatch) return params;
-    
+
     const paramsStr = funcMatch[1];
     if (!paramsStr.trim()) return params;
-    
+
     // Split by comma, but be careful of nested generics/closures
     const parts = splitParams(paramsStr);
-    
+
     for (const part of parts) {
         const paramMatch = part.match(/(?:_\s+)?(\w+)\s*:\s*([^=]+)/);
         if (paramMatch) {
@@ -219,7 +240,7 @@ function extractParams(signature) {
             });
         }
     }
-    
+
     return params;
 }
 
@@ -428,7 +449,7 @@ function escapeFunctionName(name) {
  */
 function processModule(moduleName, modulePath) {
     console.log(`Processing module: ${moduleName}`);
-    
+
     const moduleData = {
         name: moduleName,
         swift: {
@@ -439,16 +460,16 @@ function processModule(moduleName, modulePath) {
             functions: []
         }
     };
-    
+
     // Find all Swift and JavaScript files in the module directory
     const files = fs.readdirSync(modulePath);
-    
+
     for (const file of files) {
         const filePath = path.join(modulePath, file);
-        
+
         if (file.endsWith('.swift')) {
             const protocols = parseSwiftFile(filePath);
-            
+
             // Categorize as Module or Object based on naming convention
             if (file.includes('Module.swift')) {
                 moduleData.swift.protocols.push(...protocols.map(p => ({ ...p, category: 'module' })));
@@ -462,8 +483,33 @@ function processModule(moduleName, modulePath) {
             moduleData.javascript.functions.push(...functions);
         }
     }
-    
+
     return moduleData;
+}
+
+/**
+ * Process the Engine/Types directory
+ */
+function processTypes(typesPath) {
+    console.log('Processing types from Engine/Types');
+
+    const typesData = {
+        name: 'Types',
+        swift: {
+            protocols: []
+        }
+    };
+
+    // Find all Swift files in the types directory
+    const files = fs.readdirSync(typesPath).filter(f => f.endsWith('.swift'));
+
+    for (const file of files) {
+        const filePath = path.join(typesPath, file);
+        const protocols = parseSwiftFile(filePath);
+        typesData.swift.protocols.push(...protocols.map(p => ({ ...p, category: 'type' })));
+    }
+
+    return typesData;
 }
 
 /**
@@ -520,23 +566,23 @@ function formatDocCToJSDoc(documentation) {
  */
 function generateCombinedJSDoc(moduleData) {
     // Create namespace using bracket notation for names with dots
-    const namespaceVar = moduleData.name.includes('.') 
-        ? `globalThis['${moduleData.name}']` 
+    const namespaceVar = moduleData.name.includes('.')
+        ? `globalThis['${moduleData.name}']`
         : moduleData.name;
-    
+
     let output = `/**\n * @namespace ${moduleData.name}\n */\n`;
     output += `${namespaceVar} = {};\n\n`;
-    
+
     // First, generate @typedef for any type protocols (those extending HSTypeAPI)
     for (const protocol of moduleData.swift.protocols) {
         if (protocol.type === 'typedef') {
             // Extract the type name from the protocol name (e.g., HSAlertAPI -> HSAlert)
             // The actual type name should be the protocol name minus 'API' suffix
             const typeName = protocol.name.replace(/API$/, '');
-            
+
             output += `/**\n`;
             output += ` * @typedef {Object} ${typeName}\n`;
-            
+
             // Add property definitions
             for (const prop of protocol.properties) {
                 const cleanDoc = formatDocCToJSDoc(prop.documentation);
@@ -547,23 +593,18 @@ function generateCombinedJSDoc(moduleData) {
                 }
                 output += `\n`;
             }
-            
+
             output += ` */\n\n`;
         }
     }
-    
-    // Add Swift protocol methods as JSDoc (skip typedef protocols for method generation)
+
+    // Add Swift protocol methods as JSDoc
     for (const protocol of moduleData.swift.protocols) {
-        // Skip typedef protocols - they've been handled above
-        if (protocol.type === 'typedef') {
-            continue;
-        }
-        
-        // Add methods
+        // Add methods (including those from typedef protocols)
         for (const method of protocol.methods) {
             const cleanDoc = formatDocCToJSDoc(method.documentation);
             const escapedName = escapeFunctionName(method.name);
-            
+
             output += `/**\n`;
             if (cleanDoc) {
                 output += ` * ${cleanDoc}\n`;
@@ -579,21 +620,23 @@ function generateCombinedJSDoc(moduleData) {
             output += ` */\n`;
             output += `${moduleData.name}.${escapedName} = function(${method.params.map(p => p.name).join(', ')}) {};\n\n`;
         }
-        
-        // Add properties
-        for (const prop of protocol.properties) {
-            const cleanDoc = formatDocCToJSDoc(prop.documentation);
-            
-            output += `/**\n`;
-            if (cleanDoc) {
-                output += ` * ${cleanDoc}\n`;
+
+        // Add properties (but skip properties from typedef protocols since they're in the @typedef)
+        if (protocol.type !== 'typedef') {
+            for (const prop of protocol.properties) {
+                const cleanDoc = formatDocCToJSDoc(prop.documentation);
+
+                output += `/**\n`;
+                if (cleanDoc) {
+                    output += ` * ${cleanDoc}\n`;
+                }
+                output += ` * @type {*}\n`;
+                output += ` */\n`;
+                output += `${moduleData.name}.${prop.name};\n\n`;
             }
-            output += ` * @type {*}\n`;
-            output += ` */\n`;
-            output += `${moduleData.name}.${prop.name};\n\n`;
         }
     }
-    
+
     // Add JavaScript functions
     for (const func of moduleData.javascript.functions) {
         output += `/**\n`;
@@ -620,7 +663,125 @@ function generateCombinedJSDoc(moduleData) {
         output += ` */\n`;
         output += `${func.name} = function(${func.params.join(', ')}) {};\n\n`;
     }
-    
+
+    return output;
+}
+
+/**
+ * Generate JSDoc-compatible file for global types (from Engine/Types)
+ */
+function generateTypesJSDoc(typesData) {
+    let output = '// Global Type Definitions\n\n';
+
+    for (const protocol of typesData.swift.protocols) {
+        // Extract the class/type name from the protocol name
+        // HSFontAPI -> HSFont, HSPointJSExports -> HSPoint
+        const typeName = protocol.name.replace(/(API|JSExports?)$/, '');
+
+        if (protocol.type === 'typedef') {
+            // HSTypeAPI protocols: These have static methods and should be documented as classes
+            output += `/**\n`;
+            output += ` * @class ${typeName}\n`;
+            output += ` */\n`;
+            output += `class ${typeName} {}\n\n`;
+
+            // Add static methods
+            for (const method of protocol.methods) {
+                const cleanDoc = formatDocCToJSDoc(method.documentation);
+                const escapedName = escapeFunctionName(method.name);
+
+                output += `/**\n`;
+                if (cleanDoc) {
+                    output += ` * ${cleanDoc}\n`;
+                    output += ` *\n`;
+                }
+                for (const param of method.params) {
+                    output += ` * @param {${swiftTypeToJSDoc(param.type)}} ${param.name}\n`;
+                }
+                if (method.returns) {
+                    const returnDesc = method.returns.description || '';
+                    output += ` * @returns {${swiftTypeToJSDoc(method.returns.type)}}${returnDesc ? ' ' + returnDesc : ''}\n`;
+                }
+                output += ` */\n`;
+                output += `${typeName}.${escapedName} = function(${method.params.map(p => p.name).join(', ')}) {};\n\n`;
+            }
+
+            // Add properties as typedef if any
+            if (protocol.properties.length > 0) {
+                output += `/**\n`;
+                output += ` * @typedef {Object} ${typeName}Instance\n`;
+                for (const prop of protocol.properties) {
+                    const cleanDoc = formatDocCToJSDoc(prop.documentation);
+                    const propType = swiftTypeToJSDoc(extractPropertyType(prop.signature));
+                    output += ` * @property {${propType}} ${prop.name}`;
+                    if (cleanDoc) {
+                        output += ` - ${cleanDoc}`;
+                    }
+                    output += `\n`;
+                }
+                output += ` */\n\n`;
+            }
+        } else {
+            // Regular JSExport protocols: These are instance classes with constructors
+            output += `/**\n`;
+            output += ` * @class ${typeName}\n`;
+
+            // Add properties to the class documentation
+            for (const prop of protocol.properties) {
+                const cleanDoc = formatDocCToJSDoc(prop.documentation);
+                const propType = swiftTypeToJSDoc(extractPropertyType(prop.signature));
+                output += ` * @property {${propType}} ${prop.name}`;
+                if (cleanDoc) {
+                    output += ` - ${cleanDoc}`;
+                }
+                output += `\n`;
+            }
+            output += ` */\n`;
+            output += `class ${typeName} {\n`;
+
+            // Add constructor if there are methods (look for init)
+            const initMethod = protocol.methods.find(m => m.name === 'init');
+            if (initMethod) {
+                output += `    /**\n`;
+                const cleanDoc = formatDocCToJSDoc(initMethod.documentation);
+                if (cleanDoc) {
+                    output += `     * ${cleanDoc}\n`;
+                    output += `     *\n`;
+                }
+                for (const param of initMethod.params) {
+                    output += `     * @param {${swiftTypeToJSDoc(param.type)}} ${param.name}\n`;
+                }
+                output += `     */\n`;
+                output += `    constructor(${initMethod.params.map(p => p.name).join(', ')}) {}\n\n`;
+            }
+
+            // Add other methods
+            for (const method of protocol.methods) {
+                if (method.name === 'init') continue; // Skip init, already handled as constructor
+
+                const cleanDoc = formatDocCToJSDoc(method.documentation);
+                const escapedName = escapeFunctionName(method.name);
+
+                output += `    /**\n`;
+                if (cleanDoc) {
+                    output += `     * ${cleanDoc}\n`;
+                    output += `     *\n`;
+                }
+                for (const param of method.params) {
+                    output += `     * @param {${swiftTypeToJSDoc(param.type)}} ${param.name}\n`;
+                }
+                if (method.returns) {
+                    const returnDesc = method.returns.description || '';
+                    output += `     * @returns {${swiftTypeToJSDoc(method.returns.type)}}${returnDesc ? ' ' + returnDesc : ''}\n`;
+                }
+                output += `     */\n`;
+                output += `    ${escapedName}(${method.params.map(p => p.name).join(', ')}) {}\n\n`;
+            }
+
+            output += `}\n\n`;
+        }
+    }
+
     return output;
 }
 
@@ -629,7 +790,7 @@ function generateCombinedJSDoc(moduleData) {
  */
 function main() {
     console.log('Extracting Hammerspoon 2 API Documentation...\n');
-    
+
     // Ensure output directories exist
     if (!fs.existsSync(OUTPUT_JSON_DIR)) {
         fs.mkdirSync(OUTPUT_JSON_DIR, { recursive: true });
@@ -637,46 +798,76 @@ function main() {
     if (!fs.existsSync(OUTPUT_COMBINED_DIR)) {
         fs.mkdirSync(OUTPUT_COMBINED_DIR, { recursive: true });
     }
-    
+
     // Find all module directories
     const moduleDirs = fs.readdirSync(MODULES_DIR)
         .filter(name => name.startsWith('hs.'))
         .filter(name => fs.statSync(path.join(MODULES_DIR, name)).isDirectory());
-    
+
     const allModules = [];
-    
+
     for (const moduleName of moduleDirs) {
         const modulePath = path.join(MODULES_DIR, moduleName);
         const moduleData = processModule(moduleName, modulePath);
-        
+
         allModules.push(moduleData);
-        
+
         // Save individual module JSON
         const jsonPath = path.join(OUTPUT_JSON_DIR, `${moduleName}.json`);
         fs.writeFileSync(jsonPath, JSON.stringify(moduleData, null, 2));
         console.log(`  ✓ Saved JSON: ${jsonPath}`);
-        
+
         // Save combined JSDoc file
         const combinedJSDoc = generateCombinedJSDoc(moduleData);
         const combinedPath = path.join(OUTPUT_COMBINED_DIR, `${moduleName}.js`);
         fs.writeFileSync(combinedPath, combinedJSDoc);
         console.log(`  ✓ Saved combined: ${combinedPath}`);
     }
-    
-    // Save index of all modules
+
+    // Process Engine/Types directory if it exists
+    let typesData = null;
+    if (fs.existsSync(TYPES_DIR)) {
+        console.log('\n'); // Add spacing
+        typesData = processTypes(TYPES_DIR);
+
+        // Save types JSON
+        const typesJsonPath = path.join(OUTPUT_JSON_DIR, 'types.json');
+        fs.writeFileSync(typesJsonPath, JSON.stringify(typesData, null, 2));
+        console.log(`  ✓ Saved JSON: ${typesJsonPath}`);
+
+        // Save combined types JSDoc file
+        const typesJSDoc = generateTypesJSDoc(typesData);
+        const typesCombinedPath = path.join(OUTPUT_COMBINED_DIR, 'types.js');
+        fs.writeFileSync(typesCombinedPath, typesJSDoc);
+        console.log(`  ✓ Saved combined: ${typesCombinedPath}`);
+    }
+
+    // Save index of all modules and types
     const indexPath = path.join(OUTPUT_JSON_DIR, 'index.json');
-    fs.writeFileSync(indexPath, JSON.stringify({
+    const indexData = {
         modules: allModules.map(m => ({
             name: m.name,
             swiftProtocols: m.swift.protocols.length,
             javascriptFunctions: m.javascript.functions.length
         })),
         generatedAt: new Date().toISOString()
-    }, null, 2));
+    };
+
+    if (typesData) {
+        indexData.types = {
+            count: typesData.swift.protocols.length,
+            protocols: typesData.swift.protocols.map(p => p.name)
+        };
+    }
+
+    fs.writeFileSync(indexPath, JSON.stringify(indexData, null, 2));
     console.log(`\n✓ Saved module index: ${indexPath}`);
-    
+
     console.log(`\n✅ Documentation extraction complete!`);
     console.log(`   - Processed ${allModules.length} modules`);
+    if (typesData) {
+        console.log(`   - Processed ${typesData.swift.protocols.length} types`);
+    }
     console.log(`   - JSON files: docs/json/`);
     console.log(`   - Combined JSDoc: docs/json/combined/`);
 }

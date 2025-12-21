@@ -19,6 +19,10 @@ import SwiftUI
     @objc var font: HSFont { get set }
     /// How many points of padding to use in the alert
     @objc var padding: Int { get set }
+    
+    /// Do a lol
+    /// - Returns: lol
+    @objc func lol() -> String
 }
 
 @objc class HSAlert: NSObject, HSAlertAPI {
@@ -38,5 +42,9 @@ import SwiftUI
 
     var swiftUIFont: Font {
         return font.font
+    }
+
+    @objc func lol() -> String {
+        return "lol"
     }
 }

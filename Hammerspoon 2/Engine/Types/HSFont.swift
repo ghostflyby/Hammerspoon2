@@ -11,30 +11,58 @@ import SwiftUI
 
 /// A font object
 @objc protocol HSFontAPI: HSTypeAPI, JSExport {
-    // Text style static factory methods
     /// Body text style
     /// - Returns: An HSFont object
-    static func body() -> HSFont
-    static func callout() -> HSFont
-    static func caption() -> HSFont
-    static func caption2() -> HSFont
-    static func footnote() -> HSFont
-    static func headline() -> HSFont
-    static func largeTitle() -> HSFont
-    static func subheadline() -> HSFont
-    static func title() -> HSFont
-    static func title2() -> HSFont
-    static func title3() -> HSFont
+    @objc static func body() -> HSFont
 
-    // System fonts
+    /// Callout text style
+    /// - Returns: An HSFont object
+    @objc static func callout() -> HSFont
+
+    /// Caption text style
+    /// - Returns: An HSFont object
+    @objc static func caption() -> HSFont
+
+    /// Caption2 text style
+    /// - Returns: An HSFont object
+    @objc static func caption2() -> HSFont
+
+    /// Footnote text style
+    /// - Returns: An HSFont object
+    @objc static func footnote() -> HSFont
+
+    /// Headline text style
+    /// - Returns: An HSFont object
+    @objc static func headline() -> HSFont
+
+    /// Large Title text style
+    /// - Returns: An HSFont object
+    @objc static func largeTitle() -> HSFont
+
+    /// Sub-headline text style
+    /// - Returns: An HSFont object
+    @objc static func subheadline() -> HSFont
+
+    /// Title text style
+    /// - Returns: An HSFont object
+    @objc static func title() -> HSFont
+
+    /// Title2 text style
+    /// - Returns: An HSFont object
+    @objc static func title2() -> HSFont
+
+    /// Title3 text style
+    /// - Returns: An HSFont object
+    @objc static func title3() -> HSFont
+
     /// The system font in a custom size
     /// - Parameter size: The font size in points
     /// - Returns: An HSFont object
-    static func system(_ size: Double) -> HSFont
-    static func system(_ size: Double, weight: String) -> HSFont
+    @objc static func system(_ size: Double) -> HSFont
+    @objc static func system(_ size: Double, weight: String) -> HSFont
 
     // Custom fonts
-    static func custom(_ name: String, size: Double) -> HSFont
+    @objc static func custom(_ name: String, size: Double) -> HSFont
 }
 
 @objc class HSFont: NSObject, HSFontAPI {
