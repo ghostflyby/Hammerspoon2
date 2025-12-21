@@ -36,13 +36,13 @@ function analyzeModule(moduleFile) {
         stats.swift.totalProperties += protocol.properties.length;
         
         for (const method of protocol.methods) {
-            if (method.documentation && method.documentation.trim().length > 0) {
+            if (method.description && method.description.trim().length > 0) {
                 stats.swift.documentedMethods++;
             }
         }
-        
+
         for (const prop of protocol.properties) {
-            if (prop.documentation && prop.documentation.trim().length > 0) {
+            if (prop.description && prop.description.trim().length > 0) {
                 stats.swift.documentedProperties++;
             }
         }

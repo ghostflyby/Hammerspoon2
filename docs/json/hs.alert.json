@@ -9,7 +9,8 @@
           {
             "name": "newAlert",
             "signature": "func newAlert() -> HSAlert",
-            "documentation": "Create a new HSAlert object\n- Returns: An HSAlert object",
+            "rawDocumentation": "Create a new HSAlert object\n- Returns: An HSAlert object",
+            "description": "Create a new HSAlert object",
             "params": [],
             "returns": {
               "type": "HSAlert",
@@ -19,7 +20,8 @@
           {
             "name": "showAlert",
             "signature": "func showAlert(_ alert: HSAlert)",
-            "documentation": "Show an HSAlert object\n- Parameter alert: The HSAlert object to show",
+            "rawDocumentation": "Show an HSAlert object\n- Parameter alert: The HSAlert object to show",
+            "description": "Show an HSAlert object",
             "params": [
               {
                 "name": "alert",
@@ -31,7 +33,8 @@
           {
             "name": "show",
             "signature": "func show(_ message: String)",
-            "documentation": "Show an alert to the user\n- Parameter message: The text to include in the alert",
+            "rawDocumentation": "Show an alert to the user\n- Parameter message: The text to include in the alert",
+            "description": "Show an alert to the user",
             "params": [
               {
                 "name": "message",
@@ -51,7 +54,8 @@
           {
             "name": "lol",
             "signature": "func lol() -> String",
-            "documentation": "Do a lol\n- Returns: lol",
+            "rawDocumentation": "Do a lol\n- Returns: lol",
+            "description": "Do a lol",
             "params": [],
             "returns": {
               "type": "String",
@@ -63,22 +67,26 @@
           {
             "name": "message",
             "signature": "var message: String { get set }",
-            "documentation": "The message to display in an alert"
+            "rawDocumentation": "The message to display in an alert",
+            "description": "The message to display in an alert"
           },
           {
             "name": "expire",
             "signature": "var expire: Int { get set }",
-            "documentation": "How many seconds the alert should be shown for"
+            "rawDocumentation": "How many seconds the alert should be shown for",
+            "description": "How many seconds the alert should be shown for"
           },
           {
             "name": "font",
             "signature": "var font: HSFont { get set }",
-            "documentation": "An HSFont describing the font to use in the alert"
+            "rawDocumentation": "An HSFont describing the font to use in the alert",
+            "description": "An HSFont describing the font to use in the alert"
           },
           {
             "name": "padding",
             "signature": "var padding: Int { get set }",
-            "documentation": "How many points of padding to use in the alert"
+            "rawDocumentation": "How many points of padding to use in the alert",
+            "description": "How many points of padding to use in the alert"
           }
         ]
       }

@@ -9,7 +9,8 @@
           {
             "name": "base64Encode",
             "signature": "func base64Encode(_ data: String) -> String",
-            "documentation": "Encode a string to base64\n- Parameter raw: The string to encode\n- Returns: Base64 encoded string",
+            "rawDocumentation": "Encode a string to base64\n- Parameter raw: The string to encode\n- Returns: Base64 encoded string",
+            "description": "Encode a string to base64",
             "params": [
               {
                 "name": "data",
@@ -24,7 +25,8 @@
           {
             "name": "base64Decode",
             "signature": "func base64Decode(_ data: String) -> String?",
-            "documentation": "Decode a base64 string\n- Parameter raw: The base64 string to decode\n- Returns: Decoded string, or nil if the input is invalid",
+            "rawDocumentation": "Decode a base64 string\n- Parameter raw: The base64 string to decode\n- Returns: Decoded string, or nil if the input is invalid",
+            "description": "Decode a base64 string",
             "params": [
               {
                 "name": "data",
@@ -39,7 +41,8 @@
           {
             "name": "md5",
             "signature": "func md5(_ data: String) -> String",
-            "documentation": "Generate MD5 hash of a string\n- Parameter data: The string to hash\n- Returns: Hexadecimal MD5 hash",
+            "rawDocumentation": "Generate MD5 hash of a string\n- Parameter data: The string to hash\n- Returns: Hexadecimal MD5 hash",
+            "description": "Generate MD5 hash of a string",
             "params": [
               {
                 "name": "data",
@@ -54,7 +57,8 @@
           {
             "name": "sha1",
             "signature": "func sha1(_ data: String) -> String",
-            "documentation": "Generate SHA1 hash of a string\n- Parameter data: The string to hash\n- Returns: Hexadecimal SHA1 hash",
+            "rawDocumentation": "Generate SHA1 hash of a string\n- Parameter data: The string to hash\n- Returns: Hexadecimal SHA1 hash",
+            "description": "Generate SHA1 hash of a string",
             "params": [
               {
                 "name": "data",
@@ -69,7 +73,8 @@
           {
             "name": "sha256",
             "signature": "func sha256(_ data: String) -> String",
-            "documentation": "Generate SHA256 hash of a string\n- Parameter data: The string to hash\n- Returns: Hexadecimal SHA256 hash",
+            "rawDocumentation": "Generate SHA256 hash of a string\n- Parameter data: The string to hash\n- Returns: Hexadecimal SHA256 hash",
+            "description": "Generate SHA256 hash of a string",
             "params": [
               {
                 "name": "data",
@@ -84,7 +89,8 @@
           {
             "name": "sha512",
             "signature": "func sha512(_ data: String) -> String",
-            "documentation": "Generate SHA512 hash of a string\n- Parameter data: The string to hash\n- Returns: Hexadecimal SHA512 hash",
+            "rawDocumentation": "Generate SHA512 hash of a string\n- Parameter data: The string to hash\n- Returns: Hexadecimal SHA512 hash",
+            "description": "Generate SHA512 hash of a string",
             "params": [
               {
                 "name": "data",
@@ -99,7 +105,8 @@
           {
             "name": "hmacMD5",
             "signature": "func hmacMD5(_ key: String, _ data: String) -> String",
-            "documentation": "Generate HMAC-MD5 of a string with a key\n- Parameters:\n- key: The secret key\n- data: The data to authenticate\n- Returns: Hexadecimal HMAC-MD5",
+            "rawDocumentation": "Generate HMAC-MD5 of a string with a key\n- Parameters:\n- key: The secret key\n- data: The data to authenticate\n- Returns: Hexadecimal HMAC-MD5",
+            "description": "Generate HMAC-MD5 of a string with a key",
             "params": [
               {
                 "name": "key",
@@ -118,7 +125,8 @@
           {
             "name": "hmacSHA1",
             "signature": "func hmacSHA1(_ key: String, _ data: String) -> String",
-            "documentation": "Generate HMAC-SHA1 of a string with a key\n- Parameters:\n- key: The secret key\n- data: The data to authenticate\n- Returns: Hexadecimal HMAC-SHA1",
+            "rawDocumentation": "Generate HMAC-SHA1 of a string with a key\n- Parameters:\n- key: The secret key\n- data: The data to authenticate\n- Returns: Hexadecimal HMAC-SHA1",
+            "description": "Generate HMAC-SHA1 of a string with a key",
             "params": [
               {
                 "name": "key",
@@ -137,7 +145,8 @@
           {
             "name": "hmacSHA256",
             "signature": "func hmacSHA256(_ key: String, _ data: String) -> String",
-            "documentation": "Generate HMAC-SHA256 of a string with a key\n- Parameters:\n- key: The secret key\n- data: The data to authenticate\n- Returns: Hexadecimal HMAC-SHA256",
+            "rawDocumentation": "Generate HMAC-SHA256 of a string with a key\n- Parameters:\n- key: The secret key\n- data: The data to authenticate\n- Returns: Hexadecimal HMAC-SHA256",
+            "description": "Generate HMAC-SHA256 of a string with a key",
             "params": [
               {
                 "name": "key",
@@ -156,7 +165,8 @@
           {
             "name": "hmacSHA512",
             "signature": "func hmacSHA512(_ key: String, _ data: String) -> String",
-            "documentation": "Generate HMAC-SHA512 of a string with a key\n- Parameters:\n- key: The secret key\n- data: The data to authenticate\n- Returns: Hexadecimal HMAC-SHA512",
+            "rawDocumentation": "Generate HMAC-SHA512 of a string with a key\n- Parameters:\n- key: The secret key\n- data: The data to authenticate\n- Returns: Hexadecimal HMAC-SHA512",
+            "description": "Generate HMAC-SHA512 of a string with a key",
             "params": [
               {
                 "name": "key",

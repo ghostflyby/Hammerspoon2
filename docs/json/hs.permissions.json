@@ -9,7 +9,8 @@
           {
             "name": "checkAccessibility",
             "signature": "func checkAccessibility() -> Bool",
-            "documentation": "Check if the app has Accessibility permission\n- Returns: true if permission is granted, false otherwise",
+            "rawDocumentation": "Check if the app has Accessibility permission\n- Returns: true if permission is granted, false otherwise",
+            "description": "Check if the app has Accessibility permission",
             "params": [],
             "returns": {
               "type": "Bool",
@@ -19,14 +20,16 @@
           {
             "name": "requestAccessibility",
             "signature": "func requestAccessibility()",
-            "documentation": "Request Accessibility permission (shows system dialog if not granted)",
+            "rawDocumentation": "Request Accessibility permission (shows system dialog if not granted)",
+            "description": "Request Accessibility permission (shows system dialog if not granted)",
             "params": [],
             "returns": null
           },
           {
             "name": "checkScreenRecording",
             "signature": "func checkScreenRecording() -> Bool",
-            "documentation": "Check if the app has Screen Recording permission\n- Returns: true if permission is granted, false otherwise",
+            "rawDocumentation": "Check if the app has Screen Recording permission\n- Returns: true if permission is granted, false otherwise",
+            "description": "Check if the app has Screen Recording permission",
             "params": [],
             "returns": {
               "type": "Bool",
@@ -36,14 +39,16 @@
           {
             "name": "requestScreenRecording",
             "signature": "func requestScreenRecording()",
-            "documentation": "Request Screen Recording permission\n- Note: This will trigger a screen capture which prompts the system dialog",
+            "rawDocumentation": "Request Screen Recording permission\n- Note: This will trigger a screen capture which prompts the system dialog",
+            "description": "Request Screen Recording permission",
             "params": [],
             "returns": null
           },
           {
             "name": "checkCamera",
             "signature": "func checkCamera() -> Bool",
-            "documentation": "Check if the app has Camera permission\n- Returns: true if permission is granted, false otherwise",
+            "rawDocumentation": "Check if the app has Camera permission\n- Returns: true if permission is granted, false otherwise",
+            "description": "Check if the app has Camera permission",
             "params": [],
             "returns": {
               "type": "Bool",
@@ -53,7 +58,8 @@
           {
             "name": "requestCamera",
             "signature": "func requestCamera(_ callback: JSValue?)",
-            "documentation": "Request Camera permission (shows system dialog if not granted)\n- Parameter callback: Optional callback that receives true if granted, false if denied",
+            "rawDocumentation": "Request Camera permission (shows system dialog if not granted)\n- Parameter callback: Optional callback that receives true if granted, false if denied",
+            "description": "Request Camera permission (shows system dialog if not granted)",
             "params": [
               {
                 "name": "callback",
@@ -65,7 +71,8 @@
           {
             "name": "checkMicrophone",
             "signature": "func checkMicrophone() -> Bool",
-            "documentation": "Check if the app has Microphone permission\n- Returns: true if permission is granted, false otherwise",
+            "rawDocumentation": "Check if the app has Microphone permission\n- Returns: true if permission is granted, false otherwise",
+            "description": "Check if the app has Microphone permission",
             "params": [],
             "returns": {
               "type": "Bool",
@@ -75,7 +82,8 @@
           {
             "name": "requestMicrophone",
             "signature": "func requestMicrophone(_ callback: JSValue?)",
-            "documentation": "Request Microphone permission (shows system dialog if not granted)\n- Parameter callback: Optional callback that receives true if granted, false if denied",
+            "rawDocumentation": "Request Microphone permission (shows system dialog if not granted)\n- Parameter callback: Optional callback that receives true if granted, false if denied",
+            "description": "Request Microphone permission (shows system dialog if not granted)",
             "params": [
               {
                 "name": "callback",

@@ -9,7 +9,8 @@
           {
             "name": "focusedWindow",
             "signature": "func focusedWindow() -> HSWindow?",
-            "documentation": "Get the currently focused window\n- Returns: The focused window, or nil if none",
+            "rawDocumentation": "Get the currently focused window\n- Returns: The focused window, or nil if none",
+            "description": "Get the currently focused window",
             "params": [],
             "returns": {
               "type": "HSWindow?",
@@ -19,7 +20,8 @@
           {
             "name": "allWindows",
             "signature": "func allWindows() -> [HSWindow]",
-            "documentation": "Get all windows from all applications\n- Returns: An array of all windows",
+            "rawDocumentation": "Get all windows from all applications\n- Returns: An array of all windows",
+            "description": "Get all windows from all applications",
             "params": [],
             "returns": {
               "type": "[HSWindow]",
@@ -29,7 +31,8 @@
           {
             "name": "visibleWindows",
             "signature": "func visibleWindows() -> [HSWindow]",
-            "documentation": "Get all visible (not minimized) windows\n- Returns: An array of visible windows",
+            "rawDocumentation": "Get all visible (not minimized) windows\n- Returns: An array of visible windows",
+            "description": "Get all visible (not minimized) windows",
             "params": [],
             "returns": {
               "type": "[HSWindow]",
@@ -39,7 +42,8 @@
           {
             "name": "windowsForApp",
             "signature": "func windowsForApp(_ app: HSApplication) -> [HSWindow]",
-            "documentation": "Get windows for a specific application\n- Parameter app: An HSApplication object\n- Returns: An array of windows for that application",
+            "rawDocumentation": "Get windows for a specific application\n- Parameter app: An HSApplication object\n- Returns: An array of windows for that application",
+            "description": "Get windows for a specific application",
             "params": [
               {
                 "name": "app",
@@ -54,7 +58,8 @@
           {
             "name": "windowsOnScreen",
             "signature": "func windowsOnScreen(_ screenIndex: Int) -> [HSWindow]",
-            "documentation": "Get all windows on a specific screen\n- Parameter screenIndex: The screen index (0 for main screen)\n- Returns: An array of windows on that screen",
+            "rawDocumentation": "Get all windows on a specific screen\n- Parameter screenIndex: The screen index (0 for main screen)\n- Returns: An array of windows on that screen",
+            "description": "Get all windows on a specific screen",
             "params": [
               {
                 "name": "screenIndex",
@@ -69,7 +74,8 @@
           {
             "name": "windowAtPoint",
             "signature": "func windowAtPoint(_ point: HSPoint) -> HSWindow?",
-            "documentation": "Get the window at a specific screen position\n- Parameters:\n- point: An HSPoint containing the coordinates\n- Returns: The topmost window at that position, or nil if none",
+            "rawDocumentation": "Get the window at a specific screen position\n- Parameters:\n- point: An HSPoint containing the coordinates\n- Returns: The topmost window at that position, or nil if none",
+            "description": "Get the window at a specific screen position",
             "params": [
               {
                 "name": "point",
@@ -84,7 +90,8 @@
           {
             "name": "orderedWindows",
             "signature": "func orderedWindows() -> [HSWindow]",
-            "documentation": "Get ordered windows (front to back)\n- Returns: An array of windows in z-order",
+            "rawDocumentation": "Get ordered windows (front to back)\n- Returns: An array of windows in z-order",
+            "description": "Get ordered windows (front to back)",
             "params": [],
             "returns": {
               "type": "[HSWindow]",
@@ -102,7 +109,8 @@
           {
             "name": "focus",
             "signature": "func focus() -> Bool",
-            "documentation": "Focus this window\n- Returns: true if successful",
+            "rawDocumentation": "Focus this window\n- Returns: true if successful",
+            "description": "Focus this window",
             "params": [],
             "returns": {
               "type": "Bool",
@@ -112,7 +120,8 @@
           {
             "name": "minimize",
             "signature": "func minimize() -> Bool",
-            "documentation": "Minimize this window\n- Returns: true if successful",
+            "rawDocumentation": "Minimize this window\n- Returns: true if successful",
+            "description": "Minimize this window",
             "params": [],
             "returns": {
               "type": "Bool",
@@ -122,7 +131,8 @@
           {
             "name": "unminimize",
             "signature": "func unminimize() -> Bool",
-            "documentation": "Unminimize this window\n- Returns: true if successful",
+            "rawDocumentation": "Unminimize this window\n- Returns: true if successful",
+            "description": "Unminimize this window",
             "params": [],
             "returns": {
               "type": "Bool",
@@ -132,7 +142,8 @@
           {
             "name": "raise",
             "signature": "func raise() -> Bool",
-            "documentation": "Raise this window to the front\n- Returns: true if successful",
+            "rawDocumentation": "Raise this window to the front\n- Returns: true if successful",
+            "description": "Raise this window to the front",
             "params": [],
             "returns": {
               "type": "Bool",
@@ -142,7 +153,8 @@
           {
             "name": "toggleFullscreen",
             "signature": "func toggleFullscreen() -> Bool",
-            "documentation": "Toggle fullscreen mode\n- Returns: true if successful",
+            "rawDocumentation": "Toggle fullscreen mode\n- Returns: true if successful",
+            "description": "Toggle fullscreen mode",
             "params": [],
             "returns": {
               "type": "Bool",
@@ -152,7 +164,8 @@
           {
             "name": "close",
             "signature": "func close() -> Bool",
-            "documentation": "Close this window\n- Returns: true if successful",
+            "rawDocumentation": "Close this window\n- Returns: true if successful",
+            "description": "Close this window",
             "params": [],
             "returns": {
               "type": "Bool",
@@ -162,14 +175,16 @@
           {
             "name": "centerOnScreen",
             "signature": "func centerOnScreen()",
-            "documentation": "Center the window on the screen\n- Returns: true if successful",
+            "rawDocumentation": "Center the window on the screen\n- Returns: true if successful",
+            "description": "Center the window on the screen",
             "params": [],
             "returns": null
           },
           {
             "name": "axElement",
             "signature": "func axElement() -> HSAXElement",
-            "documentation": "Get the underlying AXElement\n- Returns: The accessibility element for this window",
+            "rawDocumentation": "Get the underlying AXElement\n- Returns: The accessibility element for this window",
+            "description": "Get the underlying AXElement",
             "params": [],
             "returns": {
               "type": "HSAXElement",
@@ -181,57 +196,68 @@
           {
             "name": "title",
             "signature": "var title: String? { get }",
-            "documentation": "The window's title"
+            "rawDocumentation": "The window's title",
+            "description": "The window's title"
           },
           {
             "name": "application",
             "signature": "var application: HSApplication? { get }",
-            "documentation": "The application that owns this window"
+            "rawDocumentation": "The application that owns this window",
+            "description": "The application that owns this window"
           },
           {
             "name": "pid",
             "signature": "var pid: Int { get }",
-            "documentation": "The process ID of the application that owns this window"
+            "rawDocumentation": "The process ID of the application that owns this window",
+            "description": "The process ID of the application that owns this window"
           },
           {
             "name": "isMinimized",
             "signature": "var isMinimized: Bool { get set }",
-            "documentation": "Whether the window is minimized"
+            "rawDocumentation": "Whether the window is minimized",
+            "description": "Whether the window is minimized"
           },
           {
             "name": "isVisible",
             "signature": "var isVisible: Bool { get }",
-            "documentation": "Whether the window is visible (not minimized or hidden)"
+            "rawDocumentation": "Whether the window is visible (not minimized or hidden)",
+            "description": "Whether the window is visible (not minimized or hidden)"
           },
           {
             "name": "isFocused",
             "signature": "var isFocused: Bool { get }",
-            "documentation": "Whether the window is focused"
+            "rawDocumentation": "Whether the window is focused",
+            "description": "Whether the window is focused"
           },
           {
             "name": "isFullscreen",
             "signature": "var isFullscreen: Bool { get set }",
-            "documentation": "Whether the window is fullscreen"
+            "rawDocumentation": "Whether the window is fullscreen",
+            "description": "Whether the window is fullscreen"
           },
           {
             "name": "isStandard",
             "signature": "var isStandard: Bool { get }",
-            "documentation": "Whether the window is standard (has a titlebar)"
+            "rawDocumentation": "Whether the window is standard (has a titlebar)",
+            "description": "Whether the window is standard (has a titlebar)"
           },
           {
             "name": "position",
             "signature": "var position: HSPoint? { get set }",
-            "documentation": "The window's position on screen {x: Int, y: Int}"
+            "rawDocumentation": "The window's position on screen {x: Int, y: Int}",
+            "description": "The window's position on screen {x: Int, y: Int}"
           },
           {
             "name": "size",
             "signature": "var size: HSSize? { get set }",
-            "documentation": "The window's size {w: Int, h: Int}"
+            "rawDocumentation": "The window's size {w: Int, h: Int}",
+            "description": "The window's size {w: Int, h: Int}"
           },
           {
             "name": "frame",
             "signature": "var frame: HSRect? { get set }",
-            "documentation": "The window's frame {x: Int, y: Int, w: Int, h: Int}"
+            "rawDocumentation": "The window's frame {x: Int, y: Int, w: Int, h: Int}",
+            "description": "The window's frame {x: Int, y: Int, w: Int, h: Int}"
           }
         ],
         "category": "object"

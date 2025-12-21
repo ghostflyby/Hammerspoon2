@@ -187,10 +187,12 @@ function parseSwiftFile(filePath) {
                         }
                     }
                     
+                    const rawDoc = currentDoc.join('\n');
                     protocol.methods.push({
                         name: methodName,
                         signature: fullSignature,
-                        documentation: currentDoc.join('\n'),
+                        rawDocumentation: rawDoc,
+                        description: formatDocCToJSDoc(rawDoc),
                         params: extractParams(fullSignature),
                         returns: extractReturns(fullSignature, currentDoc)
                     });
@@ -200,10 +202,12 @@ function parseSwiftFile(filePath) {
                 } else if (methodMatch[2]) {
                     // It's a property
                     const propName = methodMatch[2];
+                    const rawDoc = currentDoc.join('\n');
                     protocol.properties.push({
                         name: propName,
                         signature: line.replace(/@objc\s*/, ''),
-                        documentation: currentDoc.join('\n')
+                        rawDocumentation: rawDoc,
+                        description: formatDocCToJSDoc(rawDoc)
                     });
                 }
                 currentDoc = [];
@@ -585,11 +589,10 @@ function generateCombinedJSDoc(moduleData) {
 
             // Add property definitions
             for (const prop of protocol.properties) {
-                const cleanDoc = formatDocCToJSDoc(prop.documentation);
                 const propType = swiftTypeToJSDoc(extractPropertyType(prop.signature));
                 output += ` * @property {${propType}} ${prop.name}`;
-                if (cleanDoc) {
-                    output += ` - ${cleanDoc}`;
+                if (prop.description) {
+                    output += ` - ${prop.description}`;
                 }
                 output += `\n`;
             }
@@ -602,12 +605,11 @@ function generateCombinedJSDoc(moduleData) {
     for (const protocol of moduleData.swift.protocols) {
         // Add methods (including those from typedef protocols)
         for (const method of protocol.methods) {
-            const cleanDoc = formatDocCToJSDoc(method.documentation);
             const escapedName = escapeFunctionName(method.name);
 
             output += `/**\n`;
-            if (cleanDoc) {
-                output += ` * ${cleanDoc}\n`;
+            if (method.description) {
+                output += ` * ${method.description}\n`;
                 output += ` *\n`;
             }
             for (const param of method.params) {
@@ -624,11 +626,9 @@ function generateCombinedJSDoc(moduleData) {
         // Add properties (but skip properties from typedef protocols since they're in the @typedef)
         if (protocol.type !== 'typedef') {
             for (const prop of protocol.properties) {
-                const cleanDoc = formatDocCToJSDoc(prop.documentation);
-
                 output += `/**\n`;
-                if (cleanDoc) {
-                    output += ` * ${cleanDoc}\n`;
+                if (prop.description) {
+                    output += ` * ${prop.description}\n`;
                 }
                 output += ` * @type {*}\n`;
                 output += ` */\n`;
@@ -687,12 +687,11 @@ function generateTypesJSDoc(typesData) {
 
             // Add static methods
             for (const method of protocol.methods) {
-                const cleanDoc = formatDocCToJSDoc(method.documentation);
                 const escapedName = escapeFunctionName(method.name);
 
                 output += `/**\n`;
-                if (cleanDoc) {
-                    output += ` * ${cleanDoc}\n`;
+                if (method.description) {
+                    output += ` * ${method.description}\n`;
                     output += ` *\n`;
                 }
                 for (const param of method.params) {
@@ -711,11 +710,10 @@ function generateTypesJSDoc(typesData) {
                 output += `/**\n`;
                 output += ` * @typedef {Object} ${typeName}Instance\n`;
                 for (const prop of protocol.properties) {
-                    const cleanDoc = formatDocCToJSDoc(prop.documentation);
                     const propType = swiftTypeToJSDoc(extractPropertyType(prop.signature));
                     output += ` * @property {${propType}} ${prop.name}`;
-                    if (cleanDoc) {
-                        output += ` - ${cleanDoc}`;
+                    if (prop.description) {
+                        output += ` - ${prop.description}`;
                     }
                     output += `\n`;
                 }
@@ -728,11 +726,10 @@ function generateTypesJSDoc(typesData) {
 
             // Add properties to the class documentation
             for (const prop of protocol.properties) {
-                const cleanDoc = formatDocCToJSDoc(prop.documentation);
                 const propType = swiftTypeToJSDoc(extractPropertyType(prop.signature));
                 output += ` * @property {${propType}} ${prop.name}`;
-                if (cleanDoc) {
-                    output += ` - ${cleanDoc}`;
+                if (prop.description) {
+                    output += ` - ${prop.description}`;
                 }
                 output += `\n`;
             }
@@ -743,9 +740,8 @@ function generateTypesJSDoc(typesData) {
             const initMethod = protocol.methods.find(m => m.name === 'init');
             if (initMethod) {
                 output += `    /**\n`;
-                const cleanDoc = formatDocCToJSDoc(initMethod.documentation);
-                if (cleanDoc) {
-                    output += `     * ${cleanDoc}\n`;
+                if (initMethod.description) {
+                    output += `     * ${initMethod.description}\n`;
                     output += `     *\n`;
                 }
                 for (const param of initMethod.params) {
@@ -759,12 +755,11 @@ function generateTypesJSDoc(typesData) {
             for (const method of protocol.methods) {
                 if (method.name === 'init') continue; // Skip init, already handled as constructor
 
-                const cleanDoc = formatDocCToJSDoc(method.documentation);
                 const escapedName = escapeFunctionName(method.name);
 
                 output += `    /**\n`;
-                if (cleanDoc) {
-                    output += `     * ${cleanDoc}\n`;
+                if (method.description) {
+                    output += `     * ${method.description}\n`;
                     output += `     *\n`;
                 }
                 for (const param of method.params) {

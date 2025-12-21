@@ -9,7 +9,8 @@
           {
             "name": "new",
             "signature": "func new(_ interval: TimeInterval, _ callback: JSValue, _ continueOnError: Bool) -> HSTimerObject",
-            "documentation": "Create a new timer\n- Parameters:\n- interval: The interval in seconds at which the timer should fire\n- callback: A JavaScript function to call when the timer fires\n- continueOnError: If true, the timer will continue running even if the callback throws an error\n- Returns: A timer object. Call start() to begin the timer.",
+            "rawDocumentation": "Create a new timer\n- Parameters:\n- interval: The interval in seconds at which the timer should fire\n- callback: A JavaScript function to call when the timer fires\n- continueOnError: If true, the timer will continue running even if the callback throws an error\n- Returns: A timer object. Call start() to begin the timer.",
+            "description": "Create a new timer",
             "params": [
               {
                 "name": "interval",
@@ -32,7 +33,8 @@
           {
             "name": "doAfter",
             "signature": "func doAfter(_ seconds: TimeInterval, _ callback: JSValue) -> HSTimerObject",
-            "documentation": "Create and start a one-shot timer\n- Parameters:\n- seconds: Number of seconds to wait before firing\n- callback: A JavaScript function to call when the timer fires\n- Returns: A timer object (already started)",
+            "rawDocumentation": "Create and start a one-shot timer\n- Parameters:\n- seconds: Number of seconds to wait before firing\n- callback: A JavaScript function to call when the timer fires\n- Returns: A timer object (already started)",
+            "description": "Create and start a one-shot timer",
             "params": [
               {
                 "name": "seconds",
@@ -51,7 +53,8 @@
           {
             "name": "doEvery",
             "signature": "func doEvery(_ interval: TimeInterval, _ callback: JSValue) -> HSTimerObject",
-            "documentation": "Create and start a repeating timer\n- Parameters:\n- interval: The interval in seconds at which the timer should fire\n- callback: A JavaScript function to call when the timer fires\n- Returns: A timer object (already started)",
+            "rawDocumentation": "Create and start a repeating timer\n- Parameters:\n- interval: The interval in seconds at which the timer should fire\n- callback: A JavaScript function to call when the timer fires\n- Returns: A timer object (already started)",
+            "description": "Create and start a repeating timer",
             "params": [
               {
                 "name": "interval",
@@ -70,7 +73,8 @@
           {
             "name": "doAt",
             "signature": "func doAt(_ time: TimeInterval, _ repeatInterval: TimeInterval, _ callback: JSValue, _ continueOnError: Bool) -> HSTimerObject",
-            "documentation": "Create and start a timer that fires at a specific time\n- Parameters:\n- time: Seconds since midnight (local time) when the timer should first fire\n- repeatInterval: If provided, the timer will repeat at this interval. Pass 0 for one-shot.\n- callback: A JavaScript function to call when the timer fires\n- continueOnError: If true, the timer will continue running even if the callback throws an error\n- Returns: A timer object (already started)",
+            "rawDocumentation": "Create and start a timer that fires at a specific time\n- Parameters:\n- time: Seconds since midnight (local time) when the timer should first fire\n- repeatInterval: If provided, the timer will repeat at this interval. Pass 0 for one-shot.\n- callback: A JavaScript function to call when the timer fires\n- continueOnError: If true, the timer will continue running even if the callback throws an error\n- Returns: A timer object (already started)",
+            "description": "Create and start a timer that fires at a specific time",
             "params": [
               {
                 "name": "time",
@@ -97,7 +101,8 @@
           {
             "name": "usleep",
             "signature": "func usleep(_ microseconds: UInt32)",
-            "documentation": "Block execution for a specified number of microseconds (strongly discouraged)\n- Parameter microseconds: Number of microseconds to sleep\n- Note: This blocks the entire application and should be avoided. Use timers instead.",
+            "rawDocumentation": "Block execution for a specified number of microseconds (strongly discouraged)\n- Parameter microseconds: Number of microseconds to sleep\n- Note: This blocks the entire application and should be avoided. Use timers instead.",
+            "description": "Block execution for a specified number of microseconds (strongly discouraged)",
             "params": [
               {
                 "name": "microseconds",
@@ -109,7 +114,8 @@
           {
             "name": "secondsSinceEpoch",
             "signature": "func secondsSinceEpoch() -> TimeInterval",
-            "documentation": "Get the current time as seconds since the UNIX epoch with sub-second precision\n- Returns: Fractional seconds since midnight, January 1, 1970 UTC",
+            "rawDocumentation": "Get the current time as seconds since the UNIX epoch with sub-second precision\n- Returns: Fractional seconds since midnight, January 1, 1970 UTC",
+            "description": "Get the current time as seconds since the UNIX epoch with sub-second precision",
             "params": [],
             "returns": {
               "type": "TimeInterval",
@@ -119,7 +125,8 @@
           {
             "name": "absoluteTime",
             "signature": "func absoluteTime() -> UInt64",
-            "documentation": "Get the number of nanoseconds since the system was booted (excluding sleep time)\n- Returns: Nanoseconds since boot",
+            "rawDocumentation": "Get the number of nanoseconds since the system was booted (excluding sleep time)\n- Returns: Nanoseconds since boot",
+            "description": "Get the number of nanoseconds since the system was booted (excluding sleep time)",
             "params": [],
             "returns": {
               "type": "UInt64",
@@ -129,7 +136,8 @@
           {
             "name": "localTime",
             "signature": "func localTime() -> TimeInterval",
-            "documentation": "Get the number of seconds since local midnight\n- Returns: Seconds since midnight in the local timezone",
+            "rawDocumentation": "Get the number of seconds since local midnight\n- Returns: Seconds since midnight in the local timezone",
+            "description": "Get the number of seconds since local midnight",
             "params": [],
             "returns": {
               "type": "TimeInterval",
@@ -147,28 +155,32 @@
           {
             "name": "start",
             "signature": "func start()",
-            "documentation": "Start the timer",
+            "rawDocumentation": "Start the timer",
+            "description": "Start the timer",
             "params": [],
             "returns": null
           },
           {
             "name": "stop",
             "signature": "func stop()",
-            "documentation": "Stop the timer",
+            "rawDocumentation": "Stop the timer",
+            "description": "Stop the timer",
             "params": [],
             "returns": null
           },
           {
             "name": "fire",
             "signature": "func fire()",
-            "documentation": "Immediately fire the timer's callback",
+            "rawDocumentation": "Immediately fire the timer's callback",
+            "description": "Immediately fire the timer's callback",
             "params": [],
             "returns": null
           },
           {
             "name": "running",
             "signature": "func running() -> Bool",
-            "documentation": "Check if the timer is currently running\n- Returns: true if the timer is running, false otherwise",
+            "rawDocumentation": "Check if the timer is currently running\n- Returns: true if the timer is running, false otherwise",
+            "description": "Check if the timer is currently running",
             "params": [],
             "returns": {
               "type": "Bool",
@@ -178,7 +190,8 @@
           {
             "name": "nextTrigger",
             "signature": "func nextTrigger() -> TimeInterval",
-            "documentation": "Get the number of seconds until the timer next fires\n- Returns: Seconds until next trigger, or a negative value if the timer is not running",
+            "rawDocumentation": "Get the number of seconds until the timer next fires\n- Returns: Seconds until next trigger, or a negative value if the timer is not running",
+            "description": "Get the number of seconds until the timer next fires",
             "params": [],
             "returns": {
               "type": "TimeInterval",
@@ -188,7 +201,8 @@
           {
             "name": "setNextTrigger",
             "signature": "func setNextTrigger(_ seconds: TimeInterval)",
-            "documentation": "Set when the timer should next fire\n- Parameter seconds: Number of seconds from now when the timer should fire",
+            "rawDocumentation": "Set when the timer should next fire\n- Parameter seconds: Number of seconds from now when the timer should fire",
+            "description": "Set when the timer should next fire",
             "params": [
               {
                 "name": "seconds",
@@ -202,12 +216,14 @@
           {
             "name": "interval",
             "signature": "var interval: TimeInterval { get }",
-            "documentation": "The timer's interval in seconds"
+            "rawDocumentation": "The timer's interval in seconds",
+            "description": "The timer's interval in seconds"
           },
           {
             "name": "repeats",
             "signature": "var repeats: Bool { get }",
-            "documentation": "Whether the timer repeats"
+            "rawDocumentation": "Whether the timer repeats",
+            "description": "Whether the timer repeats"
           }
         ],
         "category": "object"

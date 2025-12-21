@@ -10,47 +10,56 @@
           {
             "name": "appName",
             "signature": "var appName: String { get }",
-            "documentation": "The application's internal name (e.g., \"Hammerspoon 2\")"
+            "rawDocumentation": "The application's internal name (e.g., \"Hammerspoon 2\")",
+            "description": "The application's internal name (e.g., \"Hammerspoon 2\")"
           },
           {
             "name": "displayName",
             "signature": "var displayName: String { get }",
-            "documentation": "The application's display name shown to users"
+            "rawDocumentation": "The application's display name shown to users",
+            "description": "The application's display name shown to users"
           },
           {
             "name": "version",
             "signature": "var version: String { get }",
-            "documentation": "The application's version string (e.g., \"2.0.0\")"
+            "rawDocumentation": "The application's version string (e.g., \"2.0.0\")",
+            "description": "The application's version string (e.g., \"2.0.0\")"
           },
           {
             "name": "build",
             "signature": "var build: String { get }",
-            "documentation": "The application's build number"
+            "rawDocumentation": "The application's build number",
+            "description": "The application's build number"
           },
           {
             "name": "minimumOSVersion",
             "signature": "var minimumOSVersion: String { get }",
-            "documentation": "The minimum macOS version required to run this application"
+            "rawDocumentation": "The minimum macOS version required to run this application",
+            "description": "The minimum macOS version required to run this application"
           },
           {
             "name": "copyrightNotice",
             "signature": "var copyrightNotice: String { get }",
-            "documentation": "The copyright notice for this application"
+            "rawDocumentation": "The copyright notice for this application",
+            "description": "The copyright notice for this application"
           },
           {
             "name": "bundleIdentifier",
             "signature": "var bundleIdentifier: String { get }",
-            "documentation": "The application's bundle identifier (e.g., \"com.hammerspoon.Hammerspoon-2\")"
+            "rawDocumentation": "The application's bundle identifier (e.g., \"com.hammerspoon.Hammerspoon-2\")",
+            "description": "The application's bundle identifier (e.g., \"com.hammerspoon.Hammerspoon-2\")"
           },
           {
             "name": "bundlePath",
             "signature": "var bundlePath: String { get }",
-            "documentation": "The filesystem path to the application bundle"
+            "rawDocumentation": "The filesystem path to the application bundle",
+            "description": "The filesystem path to the application bundle"
           },
           {
             "name": "resourcePath",
             "signature": "var resourcePath: String { get }",
-            "documentation": "The filesystem path to the application's resource directory"
+            "rawDocumentation": "The filesystem path to the application's resource directory",
+            "description": "The filesystem path to the application's resource directory"
           }
         ],
         "category": "module"

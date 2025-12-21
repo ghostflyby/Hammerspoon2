@@ -9,7 +9,8 @@
           {
             "name": "children",
             "signature": "func children() -> [HSAXElement]",
-            "documentation": "The element's children",
+            "rawDocumentation": "The element's children",
+            "description": "The element's children",
             "params": [],
             "returns": {
               "type": "[HSAXElement]",
@@ -19,7 +20,8 @@
           {
             "name": "childAtIndex",
             "signature": "func childAtIndex(_ index: Int) -> HSAXElement?",
-            "documentation": "Get a specific child by index",
+            "rawDocumentation": "Get a specific child by index",
+            "description": "Get a specific child by index",
             "params": [
               {
                 "name": "index",
@@ -34,7 +36,8 @@
           {
             "name": "attributeNames",
             "signature": "func attributeNames() -> [String]",
-            "documentation": "Get all available attribute names",
+            "rawDocumentation": "Get all available attribute names",
+            "description": "Get all available attribute names",
             "params": [],
             "returns": {
               "type": "[String]",
@@ -44,7 +47,8 @@
           {
             "name": "attributeValue",
             "signature": "func attributeValue(_ attribute: String) -> Any?",
-            "documentation": "Get the value of a specific attribute",
+            "rawDocumentation": "Get the value of a specific attribute",
+            "description": "Get the value of a specific attribute",
             "params": [
               {
                 "name": "attribute",
@@ -59,7 +63,8 @@
           {
             "name": "setAttributeValue",
             "signature": "func setAttributeValue(_ attribute: String, value: Any) -> Bool",
-            "documentation": "Set the value of a specific attribute",
+            "rawDocumentation": "Set the value of a specific attribute",
+            "description": "Set the value of a specific attribute",
             "params": [
               {
                 "name": "attribute",
@@ -78,7 +83,8 @@
           {
             "name": "isAttributeSettable",
             "signature": "func isAttributeSettable(_ attribute: String) -> Bool",
-            "documentation": "Check if an attribute is settable",
+            "rawDocumentation": "Check if an attribute is settable",
+            "description": "Check if an attribute is settable",
             "params": [
               {
                 "name": "attribute",
@@ -93,7 +99,8 @@
           {
             "name": "actionNames",
             "signature": "func actionNames() -> [String]",
-            "documentation": "Get all available action names",
+            "rawDocumentation": "Get all available action names",
+            "description": "Get all available action names",
             "params": [],
             "returns": {
               "type": "[String]",
@@ -103,7 +110,8 @@
           {
             "name": "performAction",
             "signature": "func performAction(_ action: String) -> Bool",
-            "documentation": "Perform a specific action",
+            "rawDocumentation": "Perform a specific action",
+            "description": "Perform a specific action",
             "params": [
               {
                 "name": "action",
@@ -120,62 +128,74 @@
           {
             "name": "role",
             "signature": "var role: String? { get }",
-            "documentation": "The element's role (e.g., \"AXWindow\", \"AXButton\")"
+            "rawDocumentation": "The element's role (e.g., \"AXWindow\", \"AXButton\")",
+            "description": "The element's role (e.g., \"AXWindow\", \"AXButton\")"
           },
           {
             "name": "subrole",
             "signature": "var subrole: String? { get }",
-            "documentation": "The element's subrole"
+            "rawDocumentation": "The element's subrole",
+            "description": "The element's subrole"
           },
           {
             "name": "title",
             "signature": "var title: String? { get }",
-            "documentation": "The element's title"
+            "rawDocumentation": "The element's title",
+            "description": "The element's title"
           },
           {
             "name": "value",
             "signature": "var value: Any? { get }",
-            "documentation": "The element's value"
+            "rawDocumentation": "The element's value",
+            "description": "The element's value"
           },
           {
             "name": "elementDescription",
             "signature": "var elementDescription: String? { get }",
-            "documentation": "The element's description"
+            "rawDocumentation": "The element's description",
+            "description": "The element's description"
           },
           {
             "name": "isEnabled",
             "signature": "var isEnabled: Bool { get }",
-            "documentation": "Whether the element is enabled"
+            "rawDocumentation": "Whether the element is enabled",
+            "description": "Whether the element is enabled"
           },
           {
             "name": "isFocused",
             "signature": "var isFocused: Bool { get set }",
-            "documentation": "Whether the element is focused"
+            "rawDocumentation": "Whether the element is focused",
+            "description": "Whether the element is focused"
           },
           {
             "name": "position",
             "signature": "var position: HSPoint? { get set }",
-            "documentation": "The element's position on screen"
+            "rawDocumentation": "The element's position on screen",
+            "description": "The element's position on screen"
           },
           {
             "name": "size",
             "signature": "var size: HSSize? { get set }",
-            "documentation": "The element's size"
+            "rawDocumentation": "The element's size",
+            "description": "The element's size"
           },
           {
             "name": "frame",
             "signature": "var frame: HSRect? { get set }",
-            "documentation": "The element's frame (position and size combined)"
+            "rawDocumentation": "The element's frame (position and size combined)",
+            "description": "The element's frame (position and size combined)"
           },
           {
             "name": "parent",
             "signature": "var parent: HSAXElement? { get }",
-            "documentation": "The element's parent"
+            "rawDocumentation": "The element's parent",
+            "description": "The element's parent"
           },
           {
             "name": "pid",
             "signature": "var pid: Int { get }",
-            "documentation": "Get the process ID of the application that owns this element"
+            "rawDocumentation": "Get the process ID of the application that owns this element",
+            "description": "Get the process ID of the application that owns this element"
           }
         ],
         "category": "object"
@@ -187,7 +207,8 @@
           {
             "name": "systemWideElement",
             "signature": "func systemWideElement() -> HSAXElement?",
-            "documentation": "Get the system-wide accessibility element\n- Returns: The system-wide AXElement, or nil if accessibility is not available",
+            "rawDocumentation": "Get the system-wide accessibility element\n- Returns: The system-wide AXElement, or nil if accessibility is not available",
+            "description": "Get the system-wide accessibility element",
             "params": [],
             "returns": {
               "type": "HSAXElement?",
@@ -197,7 +218,8 @@
           {
             "name": "applicationElement",
             "signature": "func applicationElement(_ element: HSApplication) -> HSAXElement?",
-            "documentation": "Get the accessibility element for an application\n- Parameters:\n- element: An HSApplication object\n- Returns: The AXElement for the application, or nil if accessibility is not available",
+            "rawDocumentation": "Get the accessibility element for an application\n- Parameters:\n- element: An HSApplication object\n- Returns: The AXElement for the application, or nil if accessibility is not available",
+            "description": "Get the accessibility element for an application",
             "params": [
               {
                 "name": "element",
@@ -212,7 +234,8 @@
           {
             "name": "windowElement",
             "signature": "func windowElement(_ window: HSWindow) -> HSAXElement?",
-            "documentation": "Get the accessibility element for a window\n- Parameters:\n- window: An HSWindow  object\n- Returns: The AXElement for the window, or nil if accessibility is not available",
+            "rawDocumentation": "Get the accessibility element for a window\n- Parameters:\n- window: An HSWindow  object\n- Returns: The AXElement for the window, or nil if accessibility is not available",
+            "description": "Get the accessibility element for a window",
             "params": [
               {
                 "name": "window",
@@ -227,7 +250,8 @@
           {
             "name": "elementAtPoint",
             "signature": "func elementAtPoint(_ point: HSPoint) -> HSAXElement?",
-            "documentation": "Get the accessibility element at the specific screen position\n- Parameter point: An HSPoint object containing screen coordinates\n- Returns: The AXElement at that position, or nil if none found",
+            "rawDocumentation": "Get the accessibility element at the specific screen position\n- Parameter point: An HSPoint object containing screen coordinates\n- Returns: The AXElement at that position, or nil if none found",
+            "description": "Get the accessibility element at the specific screen position",
             "params": [
               {
                 "name": "point",
@@ -242,7 +266,8 @@
           {
             "name": "_addWatcher",
             "signature": "func _addWatcher(_ application: HSApplication, notification: String, callback: JSValue)",
-            "documentation": "",
+            "rawDocumentation": "",
+            "description": "",
             "params": [
               {
                 "name": "application",
@@ -262,7 +287,8 @@
           {
             "name": "_removeWatcher",
             "signature": "func _removeWatcher(_ application: HSApplication, notification: String)",
-            "documentation": "",
+            "rawDocumentation": "",
+            "description": "",
             "params": [
               {
                 "name": "application",
@@ -280,7 +306,8 @@
           {
             "name": "notificationTypes",
             "signature": "var notificationTypes: [String: String] { get }",
-            "documentation": "A dictionary containing all of the notification types that can be used with hs.ax.addWatcher()"
+            "rawDocumentation": "A dictionary containing all of the notification types that can be used with hs.ax.addWatcher()",
+            "description": "A dictionary containing all of the notification types that can be used with hs.ax.addWatcher()"
           }
         ],
         "category": "module"

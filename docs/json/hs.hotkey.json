@@ -9,7 +9,8 @@
           {
             "name": "bind",
             "signature": "func bind(_ mods: JSValue, _ key: String, _ callbackPressed: JSValue, _ callbackReleased: JSValue) -> HSHotkeyObject?",
-            "documentation": "Bind a hotkey\n- Parameters:\n- mods: An array of modifier key strings (e.g., [\"cmd\", \"shift\"])\n- key: The key name or character (e.g., \"a\", \"space\", \"return\")\n- callbackPressed: A JavaScript function to call when the hotkey is pressed\n- callbackReleased: A JavaScript function to call when the hotkey is released\n- Returns: A hotkey object, or nil if binding failed",
+            "rawDocumentation": "Bind a hotkey\n- Parameters:\n- mods: An array of modifier key strings (e.g., [\"cmd\", \"shift\"])\n- key: The key name or character (e.g., \"a\", \"space\", \"return\")\n- callbackPressed: A JavaScript function to call when the hotkey is pressed\n- callbackReleased: A JavaScript function to call when the hotkey is released\n- Returns: A hotkey object, or nil if binding failed",
+            "description": "Bind a hotkey",
             "params": [
               {
                 "name": "mods",
@@ -36,7 +37,8 @@
           {
             "name": "bindSpec",
             "signature": "func bindSpec(_ mods: JSValue, _ key: String, _ message: String?, _ callbackPressed: JSValue, _ callbackReleased: JSValue) -> HSHotkeyObject?",
-            "documentation": "Bind a hotkey with a message description\n- Parameters:\n- mods: An array of modifier key strings\n- key: The key name or character\n- message: A description of what this hotkey does (currently unused, for future features)\n- callbackPressed: A JavaScript function to call when the hotkey is pressed\n- callbackReleased: A JavaScript function to call when the hotkey is released\n- Returns: A hotkey object, or nil if binding failed",
+            "rawDocumentation": "Bind a hotkey with a message description\n- Parameters:\n- mods: An array of modifier key strings\n- key: The key name or character\n- message: A description of what this hotkey does (currently unused, for future features)\n- callbackPressed: A JavaScript function to call when the hotkey is pressed\n- callbackReleased: A JavaScript function to call when the hotkey is released\n- Returns: A hotkey object, or nil if binding failed",
+            "description": "Bind a hotkey with a message description",
             "params": [
               {
                 "name": "mods",
@@ -67,7 +69,8 @@
           {
             "name": "getKeyCodeMap",
             "signature": "func getKeyCodeMap() -> [String: UInt32]",
-            "documentation": "Get the system-wide mapping of key names to key codes\n- Returns: A dictionary mapping key names to numeric key codes",
+            "rawDocumentation": "Get the system-wide mapping of key names to key codes\n- Returns: A dictionary mapping key names to numeric key codes",
+            "description": "Get the system-wide mapping of key names to key codes",
             "params": [],
             "returns": {
               "type": "[String: UInt32]",
@@ -77,7 +80,8 @@
           {
             "name": "getModifierMap",
             "signature": "func getModifierMap() -> [String: UInt32]",
-            "documentation": "Get the mapping of modifier names to modifier flags\n- Returns: A dictionary mapping modifier names to their numeric values",
+            "rawDocumentation": "Get the mapping of modifier names to modifier flags\n- Returns: A dictionary mapping modifier names to their numeric values",
+            "description": "Get the mapping of modifier names to modifier flags",
             "params": [],
             "returns": {
               "type": "[String: UInt32]",
@@ -95,7 +99,8 @@
           {
             "name": "enable",
             "signature": "func enable() -> Bool",
-            "documentation": "Enable the hotkey",
+            "rawDocumentation": "Enable the hotkey",
+            "description": "Enable the hotkey",
             "params": [],
             "returns": {
               "type": "Bool",
@@ -105,14 +110,16 @@
           {
             "name": "disable",
             "signature": "func disable()",
-            "documentation": "Disable the hotkey",
+            "rawDocumentation": "Disable the hotkey",
+            "description": "Disable the hotkey",
             "params": [],
             "returns": null
           },
           {
             "name": "isEnabled",
             "signature": "func isEnabled() -> Bool",
-            "documentation": "Check if the hotkey is currently enabled",
+            "rawDocumentation": "Check if the hotkey is currently enabled",
+            "description": "Check if the hotkey is currently enabled",
             "params": [],
             "returns": {
               "type": "Bool",
@@ -122,7 +129,8 @@
           {
             "name": "delete",
             "signature": "func delete()",
-            "documentation": "Delete the hotkey (disables and clears callbacks)",
+            "rawDocumentation": "Delete the hotkey (disables and clears callbacks)",
+            "description": "Delete the hotkey (disables and clears callbacks)",
             "params": [],
             "returns": null
           }

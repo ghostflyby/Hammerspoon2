@@ -9,7 +9,8 @@
           {
             "name": "runningApplications",
             "signature": "func runningApplications() -> [HSApplication]",
-            "documentation": "Fetch all running applications\n- Returns: An array of all currently running applications",
+            "rawDocumentation": "Fetch all running applications\n- Returns: An array of all currently running applications",
+            "description": "Fetch all running applications",
             "params": [],
             "returns": {
               "type": "[HSApplication]",
@@ -19,7 +20,8 @@
           {
             "name": "matchingName",
             "signature": "func matchingName(_ name: String) -> HSApplication?",
-            "documentation": "Fetch the first running application that matches a name\n- Parameter name: The applicaiton name to search for\n- Returns: The first matching application, or nil if none matched",
+            "rawDocumentation": "Fetch the first running application that matches a name\n- Parameter name: The applicaiton name to search for\n- Returns: The first matching application, or nil if none matched",
+            "description": "Fetch the first running application that matches a name",
             "params": [
               {
                 "name": "name",
@@ -34,7 +36,8 @@
           {
             "name": "matchingBundleID",
             "signature": "func matchingBundleID(_ bundleID: String) -> HSApplication?",
-            "documentation": "Fetch the first running application that matches a Bundle ID\n- Parameter bundleID: The identifier to search for\n- Returns: The first matching application, or nil if none matched",
+            "rawDocumentation": "Fetch the first running application that matches a Bundle ID\n- Parameter bundleID: The identifier to search for\n- Returns: The first matching application, or nil if none matched",
+            "description": "Fetch the first running application that matches a Bundle ID",
             "params": [
               {
                 "name": "bundleID",
@@ -49,7 +52,8 @@
           {
             "name": "fromPID",
             "signature": "func fromPID(_ pid: Int) -> HSApplication?",
-            "documentation": "Fetch the running application that matches a POSIX PID\n- Parameter pid: The PID to search for\n- Returns: The matching application, or nil if none matched",
+            "rawDocumentation": "Fetch the running application that matches a POSIX PID\n- Parameter pid: The PID to search for\n- Returns: The matching application, or nil if none matched",
+            "description": "Fetch the running application that matches a POSIX PID",
             "params": [
               {
                 "name": "pid",
@@ -64,7 +68,8 @@
           {
             "name": "frontmost",
             "signature": "func frontmost() -> HSApplication?",
-            "documentation": "Fetch the currently focused application\n- Returns: The matching application, or nil if none matched",
+            "rawDocumentation": "Fetch the currently focused application\n- Returns: The matching application, or nil if none matched",
+            "description": "Fetch the currently focused application",
             "params": [],
             "returns": {
               "type": "HSApplication?",
@@ -74,7 +79,8 @@
           {
             "name": "menuBarOwner",
             "signature": "func menuBarOwner() -> HSApplication?",
-            "documentation": "Fetch the application which currently owns the menu bar\n- Returns: The matching application, or nil if none matched",
+            "rawDocumentation": "Fetch the application which currently owns the menu bar\n- Returns: The matching application, or nil if none matched",
+            "description": "Fetch the application which currently owns the menu bar",
             "params": [],
             "returns": {
               "type": "HSApplication?",
@@ -84,7 +90,8 @@
           {
             "name": "pathForBundleID",
             "signature": "func pathForBundleID(_ bundleID: String) -> String?",
-            "documentation": "Fetch the filesystem path for an application\n- Parameter bundleID: The application bundle identifier to search for (e.g. \"com.apple.Safari\")\n- Returns: The application's filesystem path, or nil if it was not found",
+            "rawDocumentation": "Fetch the filesystem path for an application\n- Parameter bundleID: The application bundle identifier to search for (e.g. \"com.apple.Safari\")\n- Returns: The application's filesystem path, or nil if it was not found",
+            "description": "Fetch the filesystem path for an application",
             "params": [
               {
                 "name": "bundleID",
@@ -99,7 +106,8 @@
           {
             "name": "pathsForBundleID",
             "signature": "func pathsForBundleID(_ bundleID: String) -> [String]",
-            "documentation": "Fetch filesystem paths for an application\n- Parameter bundleID: The application bundle identifier to search for (e.g. \"com.apple.Safari\")\n- Returns: An array of strings containing any filesystem paths that were found",
+            "rawDocumentation": "Fetch filesystem paths for an application\n- Parameter bundleID: The application bundle identifier to search for (e.g. \"com.apple.Safari\")\n- Returns: An array of strings containing any filesystem paths that were found",
+            "description": "Fetch filesystem paths for an application",
             "params": [
               {
                 "name": "bundleID",
@@ -114,7 +122,8 @@
           {
             "name": "infoForBundlePath",
             "signature": "func infoForBundlePath(_ bundlePath: String) -> [String: Any]?",
-            "documentation": "",
+            "rawDocumentation": "",
+            "description": "",
             "params": [
               {
                 "name": "bundlePath",
@@ -129,7 +138,8 @@
           {
             "name": "pathForFileType",
             "signature": "func pathForFileType(_ fileType: String) -> String?",
-            "documentation": "Fetch filesystem path for an application able to open a given file type\n- Parameter fileType: The file type to search for. This can be a UTType identifier, a MIME type, or a filename extension\n- Returns: The path to an application for the given filetype, or il if none were found",
+            "rawDocumentation": "Fetch filesystem path for an application able to open a given file type\n- Parameter fileType: The file type to search for. This can be a UTType identifier, a MIME type, or a filename extension\n- Returns: The path to an application for the given filetype, or il if none were found",
+            "description": "Fetch filesystem path for an application able to open a given file type",
             "params": [
               {
                 "name": "fileType",
@@ -144,7 +154,8 @@
           {
             "name": "pathsForFileType",
             "signature": "func pathsForFileType(_ fileType: String) -> [String]",
-            "documentation": "Fetch filesystem paths for applications able to open a given file type\n- Parameter fileType: The file type to search for. This can be a UTType identifier, a MIME type, or a filename extension\n- Returns: An array of strings containing the filesystem paths for any applications that were found",
+            "rawDocumentation": "Fetch filesystem paths for applications able to open a given file type\n- Parameter fileType: The file type to search for. This can be a UTType identifier, a MIME type, or a filename extension\n- Returns: An array of strings containing the filesystem paths for any applications that were found",
+            "description": "Fetch filesystem paths for applications able to open a given file type",
             "params": [
               {
                 "name": "fileType",
@@ -159,7 +170,8 @@
           {
             "name": "launchOrFocus",
             "signature": "func launchOrFocus(_ bundleID: String)",
-            "documentation": "Launch an application, or give it focus if it's already running\n- Parameter bundleID: A bundle identifier for the app to launch/focus (e.g. \"com.apple.Safari\")",
+            "rawDocumentation": "Launch an application, or give it focus if it's already running\n- Parameter bundleID: A bundle identifier for the app to launch/focus (e.g. \"com.apple.Safari\")",
+            "description": "Launch an application, or give it focus if it's already running",
             "params": [
               {
                 "name": "bundleID",
@@ -171,7 +183,8 @@
           {
             "name": "_addWatcher",
             "signature": "func _addWatcher(eventName: String, callback: JSValue)",
-            "documentation": "",
+            "rawDocumentation": "",
+            "description": "",
             "params": [
               {
                 "name": "eventName",
@@ -187,7 +200,8 @@
           {
             "name": "_removeWatcher",
             "signature": "func _removeWatcher(eventName: String)",
-            "documentation": "",
+            "rawDocumentation": "",
+            "description": "",
             "params": [
               {
                 "name": "eventName",
@@ -207,7 +221,8 @@
           {
             "name": "kill",
             "signature": "func kill() -> Bool",
-            "documentation": "Terminate the application",
+            "rawDocumentation": "Terminate the application",
+            "description": "Terminate the application",
             "params": [],
             "returns": {
               "type": "Bool",
@@ -217,7 +232,8 @@
           {
             "name": "kill9",
             "signature": "func kill9() -> Bool",
-            "documentation": "Force-terminate the application",
+            "rawDocumentation": "Force-terminate the application",
+            "description": "Force-terminate the application",
             "params": [],
             "returns": {
               "type": "Bool",
@@ -227,7 +243,8 @@
           {
             "name": "axElement",
             "signature": "func axElement() -> HSAXElement?",
-            "documentation": "The application's HSAXElement object, for use with the hs.ax APIs",
+            "rawDocumentation": "The application's HSAXElement object, for use with the hs.ax APIs",
+            "description": "The application's HSAXElement object, for use with the hs.ax APIs",
             "params": [],
             "returns": {
               "type": "HSAXElement?",
@@ -239,52 +256,62 @@
           {
             "name": "pid",
             "signature": "var pid: Int { get }",
-            "documentation": "POSIX Process Identifier"
+            "rawDocumentation": "POSIX Process Identifier",
+            "description": "POSIX Process Identifier"
           },
           {
             "name": "bundleID",
             "signature": "var bundleID: String? { get }",
-            "documentation": "Bundle Identifier (e.g. com.apple.Safari)"
+            "rawDocumentation": "Bundle Identifier (e.g. com.apple.Safari)",
+            "description": "Bundle Identifier (e.g. com.apple.Safari)"
           },
           {
             "name": "title",
             "signature": "var title: String? { get }",
-            "documentation": "The application's title"
+            "rawDocumentation": "The application's title",
+            "description": "The application's title"
           },
           {
             "name": "bundlePath",
             "signature": "var bundlePath: String? { get }",
-            "documentation": "Location of the application on disk"
+            "rawDocumentation": "Location of the application on disk",
+            "description": "Location of the application on disk"
           },
           {
             "name": "isHidden",
             "signature": "var isHidden: Bool { get set }",
-            "documentation": "Is the application hidden"
+            "rawDocumentation": "Is the application hidden",
+            "description": "Is the application hidden"
           },
           {
             "name": "isActive",
             "signature": "var isActive: Bool { get }",
-            "documentation": "Is the application focused"
+            "rawDocumentation": "Is the application focused",
+            "description": "Is the application focused"
           },
           {
             "name": "mainWindow",
             "signature": "var mainWindow: HSWindow? { get }",
-            "documentation": "The main window of this application, or nil if there is no main window"
+            "rawDocumentation": "The main window of this application, or nil if there is no main window",
+            "description": "The main window of this application, or nil if there is no main window"
           },
           {
             "name": "focusedWindow",
             "signature": "var focusedWindow: HSWindow? { get }",
-            "documentation": "The focused window of this application, or nil if there is no focused window"
+            "rawDocumentation": "The focused window of this application, or nil if there is no focused window",
+            "description": "The focused window of this application, or nil if there is no focused window"
           },
           {
             "name": "allWindows",
             "signature": "var allWindows: [HSWindow] { get }",
-            "documentation": "All windows of this application"
+            "rawDocumentation": "All windows of this application",
+            "description": "All windows of this application"
           },
           {
             "name": "visibleWindows",
             "signature": "var visibleWindows: [HSWindow] { get }",
-            "documentation": "All visible (ie non-hidden) windows of this application"
+            "rawDocumentation": "All visible (ie non-hidden) windows of this application",
+            "description": "All visible (ie non-hidden) windows of this application"
           }
         ],
         "category": "object"
