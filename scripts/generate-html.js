@@ -35,7 +35,7 @@ function htmlTemplate(title, content, currentPage = '') {
 <body>
     <nav class="sidebar">
         <div class="sidebar-header">
-            <h1>Hammerspoon 2</h1>
+            <h1><a href="index.html">Hammerspoon 2</a></h1>
             <p class="version">API Documentation</p>
         </div>
 
