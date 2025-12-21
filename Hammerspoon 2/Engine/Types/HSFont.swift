@@ -10,7 +10,7 @@ import JavaScriptCore
 import SwiftUI
 
 /// A font object
-@objc protocol HSFontJAPI: HSTypeAPI, JSExport {
+@objc protocol HSFontAPI: HSTypeAPI, JSExport {
     // Text style static factory methods
     /// Body text style
     /// - Returns: An HSFont object
@@ -37,7 +37,7 @@ import SwiftUI
     static func custom(_ name: String, size: Double) -> HSFont
 }
 
-@objc class HSFont: NSObject, HSFontJAPI {
+@objc class HSFont: NSObject, HSFontAPI {
     @objc var typeName = "HSFont"
     var font: Font
 
