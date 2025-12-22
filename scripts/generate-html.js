@@ -25,11 +25,40 @@ if (!fs.existsSync(OUTPUT_DIR)) {
 let htmlTemplate = '';
 let cssTemplate = '';
 let scriptTemplate = '';
+let moduleContentTemplate = '';
+let typeContentTemplate = '';
+let indexContentTemplate = '';
+let methodTemplate = '';
+let propertyTemplate = '';
+let parameterTemplate = '';
+let typeLinkTemplate = '';
+let moduleCardTemplate = '';
+let typeCardTemplate = '';
 
 function loadTemplates() {
     htmlTemplate = fs.readFileSync(path.join(TEMPLATES_DIR, 'page.html'), 'utf8');
     cssTemplate = fs.readFileSync(path.join(TEMPLATES_DIR, 'styles.css'), 'utf8');
     scriptTemplate = fs.readFileSync(path.join(TEMPLATES_DIR, 'script.js'), 'utf8');
+    moduleContentTemplate = fs.readFileSync(path.join(TEMPLATES_DIR, 'module-content.html'), 'utf8');
+    typeContentTemplate = fs.readFileSync(path.join(TEMPLATES_DIR, 'type-content.html'), 'utf8');
+    indexContentTemplate = fs.readFileSync(path.join(TEMPLATES_DIR, 'index-content.html'), 'utf8');
+    methodTemplate = fs.readFileSync(path.join(TEMPLATES_DIR, 'method.html'), 'utf8');
+    propertyTemplate = fs.readFileSync(path.join(TEMPLATES_DIR, 'property.html'), 'utf8');
+    parameterTemplate = fs.readFileSync(path.join(TEMPLATES_DIR, 'parameter.html'), 'utf8');
+    typeLinkTemplate = fs.readFileSync(path.join(TEMPLATES_DIR, 'type-link.html'), 'utf8');
+    moduleCardTemplate = fs.readFileSync(path.join(TEMPLATES_DIR, 'module-card.html'), 'utf8');
+    typeCardTemplate = fs.readFileSync(path.join(TEMPLATES_DIR, 'type-card.html'), 'utf8');
+}
+
+/**
+ * Simple template replacement helper
+ */
+function fillTemplate(template, replacements) {
+    let result = template;
+    for (const [key, value] of Object.entries(replacements)) {
+        result = result.replace(new RegExp(`{{${key}}}`, 'g'), value);
+    }
+    return result;
 }
 
 /**
@@ -75,6 +104,81 @@ function validateType(protocol, typeName) {
     if (!protocol.description || protocol.description.trim() === '') {
         throw new Error(`Missing description for type ${typeName}`);
     }
+}
+
+/**
+ * Generate HTML for a single parameter
+ */
+function generateParameter(param) {
+    return fillTemplate(parameterTemplate, {
+        PARAM_NAME: param.name,
+        PARAM_TYPE: formatType(param.type),
+        PARAM_DESCRIPTION: param.description
+    });
+}
+
+/**
+ * Generate HTML for parameters section
+ */
+function generateParameters(params) {
+    if (params.length === 0) {
+        return '<p>None</p>';
+    }
+    return '<ul class="params">\n' + params.map(generateParameter).join('\n') + '\n</ul>';
+}
+
+/**
+ * Generate HTML for returns section
+ */
+function generateReturns(returns) {
+    if (!returns) {
+        return '<p>Nothing</p>';
+    }
+    return `<p><span class="type">${formatType(returns.type)}</span> - ${returns.description}</p>`;
+}
+
+/**
+ * Generate HTML for a single method
+ */
+function generateMethod(method, context, isStatic = false) {
+    const params = method.params || [];
+    const paramStr = params.map(p => p.name).join(', ');
+    const methodName = method.name === 'init' ? 'constructor' : method.name;
+
+    const staticBadge = isStatic ? '<span class="static-badge">static</span> ' : '';
+    const prefix = isStatic ? `${context}.` : '';
+
+    return fillTemplate(methodTemplate, {
+        METHOD_ID: methodName,
+        STATIC_BADGE: staticBadge,
+        METHOD_SIGNATURE: `${prefix}${methodName}(${paramStr})`,
+        METHOD_RAWSIGNATURE: method.signature,
+        DESCRIPTION: method.description,
+        PARAMETERS: generateParameters(params),
+        RETURNS: generateReturns(method.returns)
+    });
+}
+
+/**
+ * Generate HTML for a single property
+ */
+function generateProperty(prop, propType) {
+    return fillTemplate(propertyTemplate, {
+        PROPERTY_ID: prop.name,
+        PROPERTY_NAME: prop.name,
+        PROPERTY_TYPE: formatType(propType),
+        DESCRIPTION: prop.description
+    });
+}
+
+/**
+ * Generate HTML for a type link
+ */
+function generateTypeLink(typeName) {
+    return fillTemplate(typeLinkTemplate, {
+        TYPE_URL: `${typeName}.html`,
+        TYPE_NAME: typeName
+    });
 }
 
 /**
@@ -145,104 +249,36 @@ function generateModulePage(moduleData) {
         }
     }
 
-    let content = `
-        <div class="page-header">
-            <h1>${moduleName}</h1>
-            <p class="module-type">Module</p>
-        </div>
-
-        <div class="section">`;
-
-    // Always show type definitions section
-    content += `
-            <h2>Types</h2>`;
-
+    // Generate types content
+    let typesContent;
     if (typeDefinitions.length > 0) {
-        content += `
-            <p>This module provides the following types:</p>
-            <ul class="type-list">`;
-
-        for (const typeDef of typeDefinitions) {
-            const typeName = typeDef.name.replace(/API$/, '');
-            content += `
-                <li>
-                    <a href="${typeName}.html" class="type-link">${typeName}</a>
-                </li>`;
-        }
-
-        content += `
-            </ul>`;
+        const typeLinks = typeDefinitions.map(td => {
+            const typeName = td.name.replace(/API$/, '');
+            return generateTypeLink(typeName);
+        }).join('\n');
+        typesContent = `<p>This module provides the following types:</p>\n<ul class="type-list">\n${typeLinks}\n</ul>`;
     } else {
-        content += `
-            <p>This module does not provide any types.</p>`;
+        typesContent = '<p>This module does not provide any types.</p>';
     }
 
-    // Always show module methods section
-    content += `
-            <h2>Methods</h2>`;
-
+    // Generate methods content
+    let methodsContent;
     if (moduleMethods.length > 0) {
-        for (const method of moduleMethods) {
+        methodsContent = moduleMethods.map(method => {
             // Validate method has required documentation
             validateMethod(method, moduleName);
-
-            const params = method.params || [];
-            const paramStr = params.map(p => p.name).join(', ');
-
-            content += `
-            <div class="method" id="${method.name}">
-                <h3>${moduleName}.${method.name}(${paramStr})</h3>
-                <p class="description">${method.description}</p>`;
-
-            // Always show parameters section
-            content += `
-                <h4>Parameters</h4>`;
-
-            if (params.length > 0) {
-                content += `
-                <ul class="params">`;
-
-                for (const param of params) {
-                    content += `
-                    <li>
-                        <code>${param.name}</code>
-                        <span class="type">${formatType(param.type)}</span>
-                        <p class="param-desc">${param.description}</p>
-                    </li>`;
-                }
-
-                content += `
-                </ul>`;
-            } else {
-                content += `
-                <p>None</p>`;
-            }
-
-            // Always show returns section
-            content += `
-                <h4>Returns</h4>`;
-
-            if (method.returns) {
-                content += `
-                <p>
-                    <span class="type">${formatType(method.returns.type)}</span>
-                     - ${method.returns.description}
-                </p>`;
-            } else {
-                content += `
-                <p>Nothing</p>`;
-            }
-
-            content += `
-            </div>`;
-        }
+            return generateMethod(method, moduleName, false);
+        }).join('\n');
     } else {
-        content += `
-            <p>This module has no methods.</p>`;
+        methodsContent = '<p>This module has no methods.</p>';
     }
 
-    content += `
-        </div>`;
+    // Fill in the module content template
+    const content = fillTemplate(moduleContentTemplate, {
+        MODULE_NAME: moduleName,
+        TYPES_CONTENT: typesContent,
+        METHODS_CONTENT: methodsContent
+    });
 
     const html = generatePage(moduleName, content, moduleName);
     const outputPath = path.join(OUTPUT_DIR, `${moduleName}.html`);
@@ -257,28 +293,11 @@ function generateTypePage(typeName, protocol, isGlobal = false) {
     // Validate type has required documentation
     validateType(protocol, typeName);
 
-    let content = `
-        <div class="page-header">
-            <h1>${typeName}</h1>
-            <p class="module-type">Type</p>
-        </div>`;
-
-    // Always show type description
-    content += `
-        <div class="section">
-            <p class="type-description">${protocol.description}</p>
-        </div>`;
-
-    content += `
-        <div class="section">`;
-
-    // Always show properties section
-    content += `
-            <h2>Properties</h2>`;
-
+    // Generate properties content
     const properties = protocol.properties || [];
+    let propertiesContent;
     if (properties.length > 0) {
-        for (const prop of properties) {
+        propertiesContent = properties.map(prop => {
             // Validate property has required documentation
             validateProperty(prop, typeName);
 
@@ -286,93 +305,38 @@ function generateTypePage(typeName, protocol, isGlobal = false) {
             const typeMatch = prop.signature.match(/var\s+\w+\s*:\s*([^{]+)/);
             const propType = typeMatch ? typeMatch[1].trim() : 'any';
 
-            content += `
-            <div class="property" id="${prop.name}">
-                <h3>${prop.name}</h3>
-                <p class="type">${formatType(propType)}</p>
-                <p class="description">${prop.description}</p>
-            </div>`;
-        }
+            return generateProperty(prop, propType);
+        }).join('\n');
     } else {
-        content += `
-            <p>This type has no properties.</p>`;
+        propertiesContent = '<p>This type has no properties.</p>';
     }
 
-    // Always show methods section
-    content += `
-            <h2>Methods</h2>`;
-
+    // Generate methods content
     const methods = protocol.methods || [];
     const filteredMethods = methods.filter(m => m.name !== 'init' || isGlobal);
+    let methodsContent;
 
     if (filteredMethods.length > 0) {
-        for (const method of filteredMethods) {
+        methodsContent = filteredMethods.map(method => {
             // Validate method has required documentation
             validateMethod(method, typeName);
 
-            const params = method.params || [];
-            const paramStr = params.map(p => p.name).join(', ');
-            const methodName = method.name === 'init' ? 'constructor' : method.name;
             // Check if it's a static method by looking at the signature
             const isStatic = method.signature && method.signature.includes('static func');
 
-            content += `
-            <div class="method" id="${methodName}">
-                <h3>
-                    ${isStatic ? `<span class="static-badge">static</span> ` : ''}
-                    ${isStatic ? `${typeName}.` : ''}${methodName}(${paramStr})
-                </h3>
-                <p class="description">${method.description}</p>`;
-
-            // Always show parameters section
-            content += `
-                <h4>Parameters</h4>`;
-
-            if (params.length > 0) {
-                content += `
-                <ul class="params">`;
-
-                for (const param of params) {
-                    content += `
-                    <li>
-                        <code>${param.name}</code>
-                        <span class="type">${formatType(param.type)}</span>
-                        <p class="param-desc">${param.description}</p>
-                    </li>`;
-                }
-
-                content += `
-                </ul>`;
-            } else {
-                content += `
-                <p>None</p>`;
-            }
-
-            // Always show returns section
-            content += `
-                <h4>Returns</h4>`;
-
-            if (method.returns) {
-                content += `
-                <p>
-                    <span class="type">${formatType(method.returns.type)}</span>
-                     - ${method.returns.description}
-                </p>`;
-            } else {
-                content += `
-                <p>Nothing</p>`;
-            }
-
-            content += `
-            </div>`;
-        }
+            return generateMethod(method, typeName, isStatic);
+        }).join('\n');
     } else {
-        content += `
-            <p>This type has no methods.</p>`;
+        methodsContent = '<p>This type has no methods.</p>';
     }
 
-    content += `
-        </div>`;
+    // Fill in the type content template
+    const content = fillTemplate(typeContentTemplate, {
+        TYPE_NAME: typeName,
+        TYPE_DESCRIPTION: protocol.description,
+        PROPERTIES_CONTENT: propertiesContent,
+        METHODS_CONTENT: methodsContent
+    });
 
     const html = generatePage(typeName, content, typeName);
     const outputPath = path.join(OUTPUT_DIR, `${typeName}.html`);
@@ -384,37 +348,28 @@ function generateTypePage(typeName, protocol, isGlobal = false) {
  * Generate index page
  */
 function generateIndexPage(modules, types) {
-    const content = `
-        <div class="page-header">
-            <h1>Hammerspoon 2 API Documentation</h1>
-            <p>Welcome to the Hammerspoon 2 API documentation</p>
-        </div>
+    // Generate module cards
+    const modulesGrid = modules.map(m => {
+        return fillTemplate(moduleCardTemplate, {
+            MODULE_URL: `${m.name}.html`,
+            MODULE_NAME: m.name,
+            MODULE_INFO: `${m.swiftProtocols} protocols, ${m.javascriptFunctions} functions`
+        });
+    }).join('\n');
 
-        <div class="section">
-            <h2>Modules</h2>
-            <p>Modules are the main entry points for Hammerspoon functionality.</p>
-            <div class="grid">
-                ${modules.map(m => `
-                <a href="${m.name}.html" class="card">
-                    <h3>${m.name}</h3>
-                    <p>${m.swiftProtocols} protocols, ${m.javascriptFunctions} functions</p>
-                </a>
-                `).join('')}
-            </div>
-        </div>
+    // Generate type cards
+    const typesGrid = types.map(t => {
+        return fillTemplate(typeCardTemplate, {
+            TYPE_URL: `${t}.html`,
+            TYPE_NAME: t
+        });
+    }).join('\n');
 
-        <div class="section">
-            <h2>Types</h2>
-            <p>Types represent objects that can be created and manipulated in Hammerspoon.</p>
-            <div class="grid">
-                ${types.map(t => `
-                <a href="${t}.html" class="card">
-                    <h3>${t}</h3>
-                </a>
-                `).join('')}
-            </div>
-        </div>
-    `;
+    // Fill in the index content template
+    const content = fillTemplate(indexContentTemplate, {
+        MODULES_GRID: modulesGrid,
+        TYPES_GRID: typesGrid
+    });
 
     const html = generatePage('Home', content, 'index');
     const outputPath = path.join(OUTPUT_DIR, 'index.html');
