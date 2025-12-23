@@ -11,11 +11,25 @@
 const fs = require('fs');
 const path = require('path');
 const nunjucks = require('nunjucks');
+const { marked } = require('marked');
+const hljs = require('highlight.js');
 
 const JSON_DIR = path.join(__dirname, '..', 'docs', 'json');
 const OUTPUT_DIR = path.join(__dirname, '..', 'docs', 'html');
 const COMBINED_DIR = path.join(JSON_DIR, 'combined');
 const TEMPLATES_DIR = path.join(__dirname, 'templates');
+
+// Configure marked with highlight.js
+marked.setOptions({
+    highlight: function(code, lang) {
+        if (lang && hljs.getLanguage(lang)) {
+            try {
+                return hljs.highlight(code, { language: lang }).value;
+            } catch (err) {}
+        }
+        return code;
+    }
+});
 
 // Ensure output directory exists
 if (!fs.existsSync(OUTPUT_DIR)) {
@@ -42,6 +56,11 @@ env.addFilter('extractPropertyType', function(signature) {
 env.addFilter('filterInitMethods', function(methods, isGlobal) {
     if (!methods) return [];
     return methods.filter(m => m.name !== 'init' || isGlobal);
+});
+
+env.addFilter('markdown', function(text) {
+    if (!text) return '';
+    return marked(text);
 });
 
 // Load static asset templates (CSS and JS are not Nunjucks templates)

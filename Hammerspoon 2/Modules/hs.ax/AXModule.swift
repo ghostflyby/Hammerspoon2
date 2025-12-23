@@ -12,7 +12,28 @@ import AXSwift
 
 // MARK: - Declare our JavaScript API
 
-/// Module for interacting with the macOS Accessibility API
+/// # Accessibility API Module
+///
+/// This module provides access to macOS's powerful **Accessibility API**, allowing you to:
+/// - Inspect UI elements in any application
+/// - Monitor window and element changes
+/// - Programmatically interact with UI elements
+///
+/// ## Basic Usage
+///
+/// ```js
+/// // Get the focused UI element
+/// const element = hs.ax.focusedElement();
+/// console.log(element.role, element.title);
+///
+/// // Watch for window creation events
+/// const app = hs.application.frontmost();
+/// hs.ax.addWatcher(app, "AXWindowCreated", (notification, element) => {
+///     console.log("New window:", element.title);
+/// });
+/// ```
+///
+/// **Note:** Requires accessibility permissions in System Preferences.
 @objc protocol HSAXModuleAPI: JSExport {
     /// Get the system-wide accessibility element
     /// - Returns: The system-wide AXElement, or nil if accessibility is not available

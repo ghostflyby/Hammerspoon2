@@ -24,4 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check for saved theme preference or default to dark
     const theme = localStorage.getItem('theme') || 'dark';
     document.body.setAttribute('data-theme', theme);
+
+    // Initialize syntax highlighting for code blocks
+    // This will highlight any <code> blocks with language- classes
+    if (typeof hljs !== 'undefined') {
+        hljs.highlightAll();
+    }
 });
