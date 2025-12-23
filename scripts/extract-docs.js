@@ -1111,6 +1111,16 @@ function main() {
     fs.writeFileSync(indexPath, JSON.stringify(indexData, null, 2));
     console.log(`\n✓ Saved module index: ${indexPath}`);
 
+    // Save combined api.json file with all modules and types
+    const apiJsonPath = path.join(__dirname, '..', 'docs', 'api.json');
+    const apiJsonData = {
+        modules: allModules,
+        types: typesData ? (typesData.types || []) : [],
+        generatedAt: new Date().toISOString()
+    };
+    fs.writeFileSync(apiJsonPath, JSON.stringify(apiJsonData, null, 2));
+    console.log(`✓ Saved unified API JSON: ${apiJsonPath}`);
+
     console.log(`\n✅ Documentation extraction complete!`);
     console.log(`   - Processed ${allModules.length} modules`);
     if (typesData) {
@@ -1118,6 +1128,7 @@ function main() {
     }
     console.log(`   - JSON files: docs/json/`);
     console.log(`   - Combined JSDoc: docs/json/combined/`);
+    console.log(`   - Unified API JSON: docs/api.json`);
 }
 
 main();
