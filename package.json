@@ -5,11 +5,12 @@
   "private": true,
   "scripts": {
     "docs:extract": "node scripts/extract-docs.js",
-    "docs:generate": "npm run docs:extract && npm run docs:html",
+    "docs:generate": "npm run docs:extract && npm run docs:html && npm run docs:typescript",
     "docs:html": "node scripts/generate-html.js",
+    "docs:typescript": "node scripts/generate-typescript.js",
     "docs:coverage": "node scripts/docs-coverage.js",
     "docs:test": "bash scripts/test-docs.sh",
-    "docs:clean": "rm -rf docs/json docs/html"
+    "docs:clean": "rm -rf docs/json docs/html docs/api.json docs/hammerspoon.d.ts"
   },
   "keywords": [
     "hammerspoon",

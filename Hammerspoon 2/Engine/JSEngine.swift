@@ -37,15 +37,16 @@ class JSEngine {
         }
 
         context = JSContext(virtualMachine: vm)
-        guard context != nil else {
+        guard let context else {
             throw HammerspoonError(.vmCreation, msg: "Unknown error (context)")
         }
 
         id = UUID()
-        context?.name = "Hammerspoon \(id)"
+        context.name = "Hammerspoon \(id)"
 
-        context?.injectTypeBridges()
-        context?.injectLogging()
+        context.injectTypeBridges()
+//        context.injectLogging()
+        self["console"] = ConsoleModule()
         injectEngineJS()
 
         self["hs"] = ModuleRoot()

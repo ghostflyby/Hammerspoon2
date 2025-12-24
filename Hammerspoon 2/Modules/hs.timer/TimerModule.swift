@@ -18,7 +18,7 @@ import JavaScriptCore
     ///   - callback: A JavaScript function to call when the timer fires
     ///   - continueOnError: If true, the timer will continue running even if the callback throws an error
     /// - Returns: A timer object. Call start() to begin the timer.
-    @objc func new(_ interval: TimeInterval, _ callback: JSValue, _ continueOnError: Bool) -> HSTimer
+    @objc func create(_ interval: TimeInterval, _ callback: JSValue, _ continueOnError: Bool) -> HSTimer
 
     /// Create and start a one-shot timer
     /// - Parameters:
@@ -81,7 +81,7 @@ import JavaScriptCore
 
     // MARK: - Timer constructors
 
-    @objc func new(_ interval: TimeInterval, _ callback: JSValue, _ continueOnError: Bool = false) -> HSTimer {
+    @objc func create(_ interval: TimeInterval, _ callback: JSValue, _ continueOnError: Bool = false) -> HSTimer {
         return HSTimer(interval: interval, repeats: true, callback: callback, continueOnError: continueOnError)
     }
 

@@ -43,6 +43,15 @@ jobs:
       - name: Generate HTML documentation
         run: node scripts/generate-html.js
 
+      - name: Generate TypeScript definitions
+        run: node scripts/generate-typescript.js
+
+      - name: Copy TypeScript files to HTML output
+        run: |
+          cp docs/hammerspoon.d.ts docs/html/
+          cp docs/tsconfig.example.json docs/html/
+          cp docs/TYPESCRIPT.md docs/html/
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

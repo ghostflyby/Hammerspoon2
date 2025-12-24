@@ -5,6 +5,8 @@
 //  Created by Chris Jones on 06/11/2025.
 //
 
+// TODO: Rename this to hs.log and have the UI talk about it as a Log Window. "Console" is more confusing than ever, given JavaScript.
+
 import Foundation
 import JavaScriptCore
 import AppKit

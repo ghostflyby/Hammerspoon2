@@ -1006,8 +1006,8 @@
           "params": [],
           "returns": null,
           "source": "swift",
-          "filePath": "Hammerspoon 2/Modules/hs.console/ConsoleModule.swift",
-          "lineNumber": 17
+          "filePath": "Hammerspoon 2/Modules/hs.console/HSConsoleModule.swift",
+          "lineNumber": 19
         },
         {
           "name": "close",
@@ -1017,8 +1017,8 @@
           "params": [],
           "returns": null,
           "source": "swift",
-          "filePath": "Hammerspoon 2/Modules/hs.console/ConsoleModule.swift",
-          "lineNumber": 20
+          "filePath": "Hammerspoon 2/Modules/hs.console/HSConsoleModule.swift",
+          "lineNumber": 22
         },
         {
           "name": "clear",
@@ -1028,8 +1028,8 @@
           "params": [],
           "returns": null,
           "source": "swift",
-          "filePath": "Hammerspoon 2/Modules/hs.console/ConsoleModule.swift",
-          "lineNumber": 23
+          "filePath": "Hammerspoon 2/Modules/hs.console/HSConsoleModule.swift",
+          "lineNumber": 25
         },
         {
           "name": "print",
@@ -1045,8 +1045,8 @@
           ],
           "returns": null,
           "source": "swift",
-          "filePath": "Hammerspoon 2/Modules/hs.console/ConsoleModule.swift",
-          "lineNumber": 27
+          "filePath": "Hammerspoon 2/Modules/hs.console/HSConsoleModule.swift",
+          "lineNumber": 29
         },
         {
           "name": "debug",
@@ -1062,8 +1062,8 @@
           ],
           "returns": null,
           "source": "swift",
-          "filePath": "Hammerspoon 2/Modules/hs.console/ConsoleModule.swift",
-          "lineNumber": 31
+          "filePath": "Hammerspoon 2/Modules/hs.console/HSConsoleModule.swift",
+          "lineNumber": 33
         },
         {
           "name": "info",
@@ -1079,8 +1079,8 @@
           ],
           "returns": null,
           "source": "swift",
-          "filePath": "Hammerspoon 2/Modules/hs.console/ConsoleModule.swift",
-          "lineNumber": 35
+          "filePath": "Hammerspoon 2/Modules/hs.console/HSConsoleModule.swift",
+          "lineNumber": 37
         },
         {
           "name": "warning",
@@ -1096,8 +1096,8 @@
           ],
           "returns": null,
           "source": "swift",
-          "filePath": "Hammerspoon 2/Modules/hs.console/ConsoleModule.swift",
-          "lineNumber": 39
+          "filePath": "Hammerspoon 2/Modules/hs.console/HSConsoleModule.swift",
+          "lineNumber": 41
         },
         {
           "name": "error",
@@ -1113,8 +1113,8 @@
           ],
           "returns": null,
           "source": "swift",
-          "filePath": "Hammerspoon 2/Modules/hs.console/ConsoleModule.swift",
-          "lineNumber": 43
+          "filePath": "Hammerspoon 2/Modules/hs.console/HSConsoleModule.swift",
+          "lineNumber": 45
         }
       ],
       "types": [],
@@ -1644,8 +1644,8 @@
       "name": "hs.timer",
       "methods": [
         {
-          "name": "new",
-          "signature": "func new(_ interval: TimeInterval, _ callback: JSValue, _ continueOnError: Bool) -> HSTimer",
+          "name": "create",
+          "signature": "func create(_ interval: TimeInterval, _ callback: JSValue, _ continueOnError: Bool) -> HSTimer",
           "rawDocumentation": "Create a new timer\n- Parameters:\n- interval: The interval in seconds at which the timer should fire\n- callback: A JavaScript function to call when the timer fires\n- continueOnError: If true, the timer will continue running even if the callback throws an error\n- Returns: A timer object. Call start() to begin the timer.",
           "description": "Create a new timer",
           "params": [
@@ -3023,5 +3023,5 @@
       "category": "type"
     }
   ],
-  "generatedAt": "2025-12-23T19:57:22.417Z"
+  "generatedAt": "2025-12-24T21:07:08.211Z"
 }
