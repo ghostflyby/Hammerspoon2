@@ -111,6 +111,19 @@ function generateModuleDefinitions(moduleData) {
         output += `    function ${method.name}(${params}): ${returnType};\n\n`;
     }
 
+    // Module properties
+    for (const prop of moduleData.properties || []) {
+        output += `    /**\n`;
+        if (prop.description) {
+            output += `     * ${escapeDocComment(prop.description)}\n`;
+        }
+        output += `     */\n`;
+
+        const propType = swiftTypeToTS(extractPropertyType(prop.signature));
+        // Properties are const in TypeScript (readonly)
+        output += `    const ${prop.name}: ${propType};\n\n`;
+    }
+
     output += `}\n\n`;
 
     // Type definitions for this module

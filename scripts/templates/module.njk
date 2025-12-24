@@ -27,6 +27,26 @@
         <p>This module does not provide any types.</p>
     {% endif %}
 
+    <h2>Properties</h2>
+    {% if module.properties and module.properties.length > 0 %}
+        {% for prop in module.properties %}
+        <div class="property" id="{{ prop.name }}">
+            <h3>{{ module.name }}.{{ prop.name }}</h3>
+            <p class="type">{{ prop.signature | extractPropertyType | formatType }}</p>
+            <p class="description">{{ prop.description }}</p>
+            {% if prop | githubSourceUrl %}
+            <p class="source-link">
+                <a href="{{ prop | githubSourceUrl }}" target="_blank" rel="noopener noreferrer">
+                    View source on GitHub
+                </a>
+            </p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>This module has no properties.</p>
+    {% endif %}
+
     <h2>Methods</h2>
     {% if methods.length > 0 %}
         {% for method in methods %}

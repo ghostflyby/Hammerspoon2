@@ -89,6 +89,7 @@
           "lineNumber": 31
         }
       ],
+      "properties": [],
       "types": [],
       "description": "These functions are provided to maintain convenience with the console.log() function present in many JavaScript instances.",
       "rawDocumentation": "These functions are provided to maintain convenience with the console.log() function present in many JavaScript instances."
@@ -131,6 +132,7 @@
           "lineNumber": 23
         }
       ],
+      "properties": [],
       "types": [
         {
           "name": "HSAlertAPI",
@@ -202,6 +204,89 @@
     {
       "name": "hs.appinfo",
       "methods": [],
+      "properties": [
+        {
+          "name": "appName",
+          "signature": "var appName: String { get }",
+          "rawDocumentation": "The application's internal name (e.g., \"Hammerspoon 2\")",
+          "description": "The application's internal name (e.g., \"Hammerspoon 2\")",
+          "source": "swift",
+          "filePath": "Hammerspoon 2/Modules/hs.appinfo/AppInfoModule.swift",
+          "lineNumber": 16
+        },
+        {
+          "name": "displayName",
+          "signature": "var displayName: String { get }",
+          "rawDocumentation": "The application's display name shown to users",
+          "description": "The application's display name shown to users",
+          "source": "swift",
+          "filePath": "Hammerspoon 2/Modules/hs.appinfo/AppInfoModule.swift",
+          "lineNumber": 19
+        },
+        {
+          "name": "version",
+          "signature": "var version: String { get }",
+          "rawDocumentation": "The application's version string (e.g., \"2.0.0\")",
+          "description": "The application's version string (e.g., \"2.0.0\")",
+          "source": "swift",
+          "filePath": "Hammerspoon 2/Modules/hs.appinfo/AppInfoModule.swift",
+          "lineNumber": 22
+        },
+        {
+          "name": "build",
+          "signature": "var build: String { get }",
+          "rawDocumentation": "The application's build number",
+          "description": "The application's build number",
+          "source": "swift",
+          "filePath": "Hammerspoon 2/Modules/hs.appinfo/AppInfoModule.swift",
+          "lineNumber": 25
+        },
+        {
+          "name": "minimumOSVersion",
+          "signature": "var minimumOSVersion: String { get }",
+          "rawDocumentation": "The minimum macOS version required to run this application",
+          "description": "The minimum macOS version required to run this application",
+          "source": "swift",
+          "filePath": "Hammerspoon 2/Modules/hs.appinfo/AppInfoModule.swift",
+          "lineNumber": 28
+        },
+        {
+          "name": "copyrightNotice",
+          "signature": "var copyrightNotice: String { get }",
+          "rawDocumentation": "The copyright notice for this application",
+          "description": "The copyright notice for this application",
+          "source": "swift",
+          "filePath": "Hammerspoon 2/Modules/hs.appinfo/AppInfoModule.swift",
+          "lineNumber": 31
+        },
+        {
+          "name": "bundleIdentifier",
+          "signature": "var bundleIdentifier: String { get }",
+          "rawDocumentation": "The application's bundle identifier (e.g., \"com.hammerspoon.Hammerspoon-2\")",
+          "description": "The application's bundle identifier (e.g., \"com.hammerspoon.Hammerspoon-2\")",
+          "source": "swift",
+          "filePath": "Hammerspoon 2/Modules/hs.appinfo/AppInfoModule.swift",
+          "lineNumber": 34
+        },
+        {
+          "name": "bundlePath",
+          "signature": "var bundlePath: String { get }",
+          "rawDocumentation": "The filesystem path to the application bundle",
+          "description": "The filesystem path to the application bundle",
+          "source": "swift",
+          "filePath": "Hammerspoon 2/Modules/hs.appinfo/AppInfoModule.swift",
+          "lineNumber": 37
+        },
+        {
+          "name": "resourcePath",
+          "signature": "var resourcePath: String { get }",
+          "rawDocumentation": "The filesystem path to the application's resource directory",
+          "description": "The filesystem path to the application's resource directory",
+          "source": "swift",
+          "filePath": "Hammerspoon 2/Modules/hs.appinfo/AppInfoModule.swift",
+          "lineNumber": 40
+        }
+      ],
       "types": [],
       "description": "Module for accessing information about the Hammerspoon application itself",
       "rawDocumentation": "Module for accessing information about the Hammerspoon application itself"
@@ -453,6 +538,7 @@
           "type": "function"
         }
       ],
+      "properties": [],
       "types": [
         {
           "name": "HSApplicationAPI",
@@ -816,6 +902,17 @@
           "filePath": "Hammerspoon 2/Modules/hs.ax/hs.ax.js",
           "lineNumber": 204,
           "type": "function"
+        }
+      ],
+      "properties": [
+        {
+          "name": "notificationTypes",
+          "signature": "var notificationTypes: [String: String] { get }",
+          "rawDocumentation": "A dictionary containing all of the notification types that can be used with hs.ax.addWatcher()",
+          "description": "A dictionary containing all of the notification types that can be used with hs.ax.addWatcher()",
+          "source": "swift",
+          "filePath": "Hammerspoon 2/Modules/hs.ax/AXModule.swift",
+          "lineNumber": 60
         }
       ],
       "types": [
@@ -1210,6 +1307,7 @@
           "lineNumber": 45
         }
       ],
+      "properties": [],
       "types": [],
       "description": "Module for controlling the Hammerspoon console",
       "rawDocumentation": "Module for controlling the Hammerspoon console"
@@ -1438,6 +1536,7 @@
           "lineNumber": 75
         }
       ],
+      "properties": [],
       "types": [],
       "description": "Module for hashing and encoding operations",
       "rawDocumentation": "Module for hashing and encoding operations"
@@ -1549,6 +1648,7 @@
           "lineNumber": 42
         }
       ],
+      "properties": [],
       "types": [
         {
           "name": "HSHotkeyAPI",
@@ -1729,6 +1829,7 @@
           "lineNumber": 47
         }
       ],
+      "properties": [],
       "types": [],
       "description": "Module for checking and requesting system permissions",
       "rawDocumentation": "Module for checking and requesting system permissions"
@@ -2121,6 +2222,7 @@
           "type": "function"
         }
       ],
+      "properties": [],
       "types": [
         {
           "name": "HSTimerAPI",
@@ -2457,6 +2559,7 @@
           "type": "function"
         }
       ],
+      "properties": [],
       "types": [
         {
           "name": "HSWindowAPI",
@@ -3116,5 +3219,5 @@
       "category": "type"
     }
   ],
-  "generatedAt": "2025-12-24T21:38:34.474Z"
+  "generatedAt": "2025-12-24T21:45:48.517Z"
 }

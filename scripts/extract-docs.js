@@ -732,8 +732,9 @@ function processModule(moduleName, modulePath) {
 
     const moduleData = {
         name: moduleName,
-        methods: [],  // All module-level methods (Swift + JS)
-        types: []     // Type definitions (protocols with type: 'typedef')
+        methods: [],     // All module-level methods (Swift + JS)
+        properties: [],  // All module-level properties (Swift)
+        types: []        // Type definitions (protocols with type: 'typedef')
     };
 
     // Find all Swift and JavaScript files in the module directory
@@ -760,9 +761,12 @@ function processModule(moduleName, modulePath) {
                     // Type definitions go into types array
                     moduleData.types.push(protocol);
                 } else {
-                    // Regular protocols - extract their methods
+                    // Regular protocols - extract their methods and properties
                     if (protocol.methods) {
                         moduleData.methods.push(...protocol.methods);
+                    }
+                    if (protocol.properties) {
+                        moduleData.properties.push(...protocol.properties);
                     }
                 }
             }
@@ -915,6 +919,18 @@ function generateCombinedJSDoc(moduleData) {
         // For methods from this module, use module.name prefix
         const functionName = method.name.includes('.') ? method.name : `${moduleData.name}.${escapedName}`;
         output += `${functionName} = function(${(method.params || []).map(p => p.name).join(', ')}) {};\n\n`;
+    }
+
+    // Add module properties
+    for (const prop of moduleData.properties || []) {
+        output += `/**\n`;
+        if (prop.description) {
+            output += ` * ${prop.description}\n`;
+        }
+        const propType = swiftTypeToJSDoc(extractPropertyType(prop.signature));
+        output += ` * @type {${propType}}\n`;
+        output += ` */\n`;
+        output += `${moduleData.name}.${prop.name};\n\n`;
     }
 
     return output;

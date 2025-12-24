@@ -286,6 +286,51 @@ declare class HSAlert {
  * Module for accessing information about the Hammerspoon application itself
  */
 declare namespace hs.appinfo {
+    /**
+     * The application's internal name (e.g., "Hammerspoon 2")
+     */
+    const appName: string;
+
+    /**
+     * The application's display name shown to users
+     */
+    const displayName: string;
+
+    /**
+     * The application's version string (e.g., "2.0.0")
+     */
+    const version: string;
+
+    /**
+     * The application's build number
+     */
+    const build: string;
+
+    /**
+     * The minimum macOS version required to run this application
+     */
+    const minimumOSVersion: string;
+
+    /**
+     * The copyright notice for this application
+     */
+    const copyrightNotice: string;
+
+    /**
+     * The application's bundle identifier (e.g., "com.hammerspoon.Hammerspoon-2")
+     */
+    const bundleIdentifier: string;
+
+    /**
+     * The filesystem path to the application bundle
+     */
+    const bundlePath: string;
+
+    /**
+     * The filesystem path to the application's resource directory
+     */
+    const resourcePath: string;
+
 }
 
 /**
@@ -530,6 +575,11 @@ declare namespace hs.ax {
      * @param depth This parameter should not be supplied
      */
     function printHierarchy(element: any, depth: any): void;
+
+    /**
+     * A dictionary containing all of the notification types that can be used with hs.ax.addWatcher()
+     */
+    const notificationTypes: Record<string, string>;
 
 }
 
