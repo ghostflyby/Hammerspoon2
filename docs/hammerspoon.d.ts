@@ -197,6 +197,42 @@ declare class HSSize {
 // ========================================
 
 /**
+ * These functions are provided to maintain convenience with the console.log() function present in many JavaScript instances.
+ */
+declare namespace console {
+    /**
+     * Log a message to the Hammerspoon Log Window
+     * @param message A message to log
+     */
+    function log(message: string): void;
+
+    /**
+     * Log an error to the Hammerspoon Log Window
+     * @param message An error message
+     */
+    function error(message: string): void;
+
+    /**
+     * Log a warning to the Hammerspoon Log WIndow
+     * @param message A warning message
+     */
+    function warn(message: string): void;
+
+    /**
+     * Log an informational message to the Hammerspoon Log Window
+     * @param message An informational message
+     */
+    function info(message: string): void;
+
+    /**
+     * Log a debug message to the Hammerspoon Log Window
+     * @param message A debug message
+     */
+    function debug(message: string): void;
+
+}
+
+/**
  * Module for accessing information about the Hammerspoon application itself
  */
 declare namespace hs.alert {

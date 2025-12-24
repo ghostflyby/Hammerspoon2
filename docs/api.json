@@ -1,6 +1,99 @@
 {
   "modules": [
     {
+      "name": "console",
+      "methods": [
+        {
+          "name": "log",
+          "signature": "func log(_ message: String)",
+          "rawDocumentation": "Log a message to the Hammerspoon Log Window\n- Parameter message: A message to log",
+          "description": "Log a message to the Hammerspoon Log Window",
+          "params": [
+            {
+              "name": "message",
+              "type": "String",
+              "description": "A message to log"
+            }
+          ],
+          "returns": null,
+          "source": "swift",
+          "filePath": "Hammerspoon 2/Modules/console/ConsoleModule.swift",
+          "lineNumber": 15
+        },
+        {
+          "name": "error",
+          "signature": "func error(_ message: String)",
+          "rawDocumentation": "Log an error to the Hammerspoon Log Window\n- Parameter message: An error message",
+          "description": "Log an error to the Hammerspoon Log Window",
+          "params": [
+            {
+              "name": "message",
+              "type": "String",
+              "description": "An error message"
+            }
+          ],
+          "returns": null,
+          "source": "swift",
+          "filePath": "Hammerspoon 2/Modules/console/ConsoleModule.swift",
+          "lineNumber": 19
+        },
+        {
+          "name": "warn",
+          "signature": "func warn(_ message: String)",
+          "rawDocumentation": "Log a warning to the Hammerspoon Log WIndow\n- Parameter message: A warning message",
+          "description": "Log a warning to the Hammerspoon Log WIndow",
+          "params": [
+            {
+              "name": "message",
+              "type": "String",
+              "description": "A warning message"
+            }
+          ],
+          "returns": null,
+          "source": "swift",
+          "filePath": "Hammerspoon 2/Modules/console/ConsoleModule.swift",
+          "lineNumber": 23
+        },
+        {
+          "name": "info",
+          "signature": "func info(_ message: String)",
+          "rawDocumentation": "Log an informational message to the Hammerspoon Log Window\n- Parameter message: An informational message",
+          "description": "Log an informational message to the Hammerspoon Log Window",
+          "params": [
+            {
+              "name": "message",
+              "type": "String",
+              "description": "An informational message"
+            }
+          ],
+          "returns": null,
+          "source": "swift",
+          "filePath": "Hammerspoon 2/Modules/console/ConsoleModule.swift",
+          "lineNumber": 27
+        },
+        {
+          "name": "debug",
+          "signature": "func debug(_ message: String)",
+          "rawDocumentation": "Log a debug message to the Hammerspoon Log Window\n- Parameter message: A debug message",
+          "description": "Log a debug message to the Hammerspoon Log Window",
+          "params": [
+            {
+              "name": "message",
+              "type": "String",
+              "description": "A debug message"
+            }
+          ],
+          "returns": null,
+          "source": "swift",
+          "filePath": "Hammerspoon 2/Modules/console/ConsoleModule.swift",
+          "lineNumber": 31
+        }
+      ],
+      "types": [],
+      "description": "These functions are provided to maintain convenience with the console.log() function present in many JavaScript instances.",
+      "rawDocumentation": "These functions are provided to maintain convenience with the console.log() function present in many JavaScript instances."
+    },
+    {
       "name": "hs.alert",
       "methods": [
         {
@@ -3023,5 +3116,5 @@
       "category": "type"
     }
   ],
-  "generatedAt": "2025-12-24T21:07:08.211Z"
+  "generatedAt": "2025-12-24T21:38:34.474Z"
 }

@@ -1049,7 +1049,6 @@ function main() {
 
     // Find all module directories
     const moduleDirs = fs.readdirSync(MODULES_DIR)
-        .filter(name => name.startsWith('hs.'))
         .filter(name => fs.statSync(path.join(MODULES_DIR, name)).isDirectory());
 
     const allModules = [];
