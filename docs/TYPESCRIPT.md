@@ -94,7 +94,7 @@ In your main `init.js`, load the compiled JavaScript:
 
 ```javascript
 // Load the TypeScript-compiled config
-require("compiled/config");
+require("compiled/config.js");
 ```
 
 ## Development Workflow

@@ -28,6 +28,32 @@ class JSEngine {
         }
     }
 
+    private func injectRequire() {
+        guard let context else {
+            AKError("require(): Cannot set require() before context is available. This is a bug.")
+            return
+        }
+
+        let require: @convention(block) (String) -> (JSValue?) = { path in
+            let expandedPath = NSString(string: path).expandingTildeInPath
+
+            // Return void or throw an error here.
+            guard FileManager.default.fileExists(atPath: expandedPath) else {
+                AKError("require(): \(expandedPath) could not be found. Current working directory is \(FileManager.default.currentDirectoryPath)")
+                return nil
+            }
+
+            guard let fileContent = try? String(contentsOfFile: expandedPath, encoding: .utf8) else {
+                AKError("require(): Unable to read \(expandedPath)")
+                return nil
+            }
+
+            return context.evaluateScript(fileContent)
+        }
+
+        context.setObject(require, forKeyedSubscript: "require" as NSString)
+    }
+
     // MARK: - JSContext Managing
     private func createContext() throws(HammerspoonError) {
         AKTrace("createContext()")
@@ -44,11 +70,21 @@ class JSEngine {
         id = UUID()
         context.name = "Hammerspoon \(id)"
 
-        context.injectTypeBridges()
-//        context.injectLogging()
+        // This is our startup sequence.
+
+        // First ensure the console namespace is populated
         self["console"] = ConsoleModule()
+
+        // Now ensure that require() exists
+        injectRequire()
+
+        // Inject custom types we want to bridge between JS and Swift
+        context.injectTypeBridges()
+
+        // Load and run engine.js
         injectEngineJS()
 
+        // Prepare the hs namespace
         self["hs"] = ModuleRoot()
     }
 

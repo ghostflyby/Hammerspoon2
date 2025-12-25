@@ -15,6 +15,13 @@ protocol FileSystemProtocol {
     /// - Returns: true if the file exists, false otherwise
     func fileExists(atPath path: String) -> Bool
 
+    /// Checks if a file or directory exists at the given path
+    /// - Parameters:
+    ///   - path:The file path to check
+    ///   - isDirectory: Upon return, will be true if path is a directory
+    /// - Returns: true if the file exists, false otherwise
+    func fileExists(atPath path: String, isDirectory: UnsafeMutablePointer<ObjCBool>?) -> Bool
+
     /// Reads the contents of a file as a string
     /// - Parameter url: The URL of the file to read
     /// - Returns: The contents of the file as a string

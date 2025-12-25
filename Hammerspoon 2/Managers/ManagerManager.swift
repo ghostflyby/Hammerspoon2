@@ -34,6 +34,17 @@ class ManagerManager {
     func boot() throws {
         try engine.resetContext()
 
+        let configDir = settings.configLocation.deletingLastPathComponent()
+        var configDirExists = ObjCBool(booleanLiteral: false)
+        unsafe _ = fileSystem.fileExists(atPath: configDir.path, isDirectory: &configDirExists)
+
+        if !configDirExists.boolValue {
+            AKError("Configuration directory does not exist at: \(configDir.path)")
+            return
+        }
+
+        FileManager.default.changeCurrentDirectoryPath(configDir.path)
+
         if !fileSystem.fileExists(atPath: settings.configLocation.path) {
             AKError("No config file found at: \(settings.configLocation.path)")
             return
